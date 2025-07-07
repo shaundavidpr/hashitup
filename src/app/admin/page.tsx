@@ -1,3 +1,5 @@
+import { DeadlineManagement } from '@/components/admin/DeadlineManagement'
+import { ProjectIdeaManagement } from '@/components/admin/ProjectIdeaManagement'
 import { Card } from '@/components/ui/Card'
 import { authOptions } from '@/lib/auth'
 import { db } from '@/lib/db'
@@ -8,6 +10,7 @@ import { redirect } from 'next/navigation'
 // Define Role enum locally
 enum Role {
   ADMIN = 'ADMIN',
+  SUPERADMIN = 'SUPERADMIN',
   LEADER = 'LEADER',
   MEMBER = 'MEMBER'
 }
@@ -19,7 +22,7 @@ export default async function AdminPage() {
     redirect('/auth/signin')
   }
 
-  if (session.user.role !== Role.ADMIN) {
+  if (session.user.role !== Role.ADMIN && session.user.role !== Role.SUPERADMIN) {
     redirect('/dashboard')
   }
 
@@ -38,52 +41,27 @@ export default async function AdminPage() {
         role: { in: [Role.LEADER, Role.MEMBER] }
       }
     }),
-    db.projectSubmission.count(),
-    db.projectSubmission.count({
-      where: { status: 'SELECTED' }
+    db.projectIdea.count(),
+    db.projectIdea.count({
+      where: { status: 'ACCEPTED' }
     }),
-    db.projectSubmission.count({
+    db.projectIdea.count({
       where: { status: 'REJECTED' }
     }),
-    db.projectSubmission.count({
-      where: { status: 'WAITING' }
+    db.projectIdea.count({
+      where: { status: 'WAITLIST' }
     }),
   ])
 
-  // Get teams with their details
-  const teams = await db.team.findMany({
-    include: {
-      leader: {
-        select: {
-          id: true,
-          name: true,
-          email: true,
-        },
-      },
-      members: {
-        select: {
-          id: true,
-          name: true,
-          email: true,
-        },
-      },
-      submission: {
-        select: {
-          id: true,
-          projectName: true,
-          theme: true,
-          status: true,
-          createdAt: true,
-        },
-      },
-    },
+  // Get deadlines
+  const deadlines = await db.deadline.findMany({
     orderBy: {
-      createdAt: 'desc',
-    },
+      startDate: 'asc'
+    }
   })
 
-  // Get submissions with team details
-  const submissions = await db.projectSubmission.findMany({
+  // Get project ideas
+  const projectIdeas = await db.projectIdea.findMany({
     include: {
       team: {
         include: {
@@ -91,22 +69,29 @@ export default async function AdminPage() {
             select: {
               id: true,
               name: true,
-              email: true,
-            },
-          },
-          members: {
-            select: {
-              id: true,
-              name: true,
-              email: true,
-            },
-          },
-        },
+              email: true
+            }
+          }
+        }
       },
+      submittedBy: {
+        select: {
+          id: true,
+          name: true,
+          email: true
+        }
+      },
+      updatedBy: {
+        select: {
+          id: true,
+          name: true,
+          email: true
+        }
+      }
     },
     orderBy: {
-      createdAt: 'desc',
-    },
+      createdAt: 'desc'
+    }
   })
 
   const stats = {
@@ -147,15 +132,15 @@ export default async function AdminPage() {
               iconColor: 'from-emerald-400 to-emerald-600'
             },
             {
-              title: 'Active Projects',
-              value: '82',
+              title: 'Selected Teams',
+              value: selectedSubmissions.toString(),
               icon: Target,
               color: 'from-purple-500/20 to-purple-600/20 border-purple-500/20',
               iconColor: 'from-purple-400 to-purple-600'
             },
             {
               title: 'Finalists',
-              value: '12',
+              value: waitingSubmissions.toString(),
               icon: Award,
               color: 'from-amber-500/20 to-amber-600/20 border-amber-500/20',
               iconColor: 'from-amber-400 to-amber-600'
@@ -179,59 +164,20 @@ export default async function AdminPage() {
           ))}
         </div>
 
-        {/* Main Content Grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          {/* Submission Stats */}
-          <Card variant="glass" className="lg:col-span-2 p-8 bg-gradient-to-br from-blue-500/10 to-purple-500/10 border-blue-500/20">
-            <h2 className="text-2xl font-bold mb-6">Submission Statistics</h2>
-            <div className="space-y-6">
-              {[
-                { category: 'Web Development', count: selectedSubmissions, total: totalSubmissions },
-                { category: 'Mobile Apps', count: 28, total: totalSubmissions },
-                { category: 'AI/ML', count: 15, total: totalSubmissions },
-                { category: 'Blockchain', count: 8, total: totalSubmissions }
-              ].map((stat, index) => (
-                <div key={index}>
-                  <div className="flex justify-between mb-2">
-                    <span className="text-slate-300">{stat.category}</span>
-                    <span className="text-slate-400">{Math.round((stat.count / stat.total) * 100)}%</span>
-                  </div>
-                  <div className="h-2 bg-slate-800/50 rounded-full overflow-hidden">
-                    <div 
-                      className="h-full bg-gradient-to-r from-blue-500 to-purple-500 rounded-full"
-                      style={{ width: `${(stat.count / stat.total) * 100}%` }}
-                    />
-                  </div>
-                </div>
-              ))}
-            </div>
-          </Card>
+        {/* Deadline Management */}
+        <div className="mb-12">
+          <DeadlineManagement 
+            currentUser={session.user}
+            deadlines={deadlines}
+          />
+        </div>
 
-          {/* Recent Activity */}
-          <Card variant="glass" className="p-8 bg-gradient-to-br from-slate-500/10 to-slate-600/10 border-slate-500/20">
-            <h2 className="text-2xl font-bold mb-6">Recent Activity</h2>
-            <div className="space-y-6">
-              {[
-                { team: 'Team Alpha', action: 'submitted project', time: '2h ago' },
-                { team: 'Team Beta', action: 'updated submission', time: '4h ago' },
-                { team: 'Team Gamma', action: 'registered', time: '6h ago' },
-                { team: 'Team Delta', action: 'completed profile', time: '8h ago' }
-              ].map((activity, index) => (
-                <div key={index} className="flex items-center gap-4">
-                  <div className="w-8 h-8 rounded-full bg-gradient-to-br from-slate-400 to-slate-600 flex items-center justify-center text-sm font-medium">
-                    {activity.team[5]}
-                  </div>
-                  <div>
-                    <div className="text-sm">
-                      <span className="font-medium text-slate-200">{activity.team}</span>
-                      <span className="text-slate-400"> {activity.action}</span>
-                    </div>
-                    <div className="text-xs text-slate-500">{activity.time}</div>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </Card>
+        {/* Project Idea Management */}
+        <div className="mb-12">
+          <ProjectIdeaManagement 
+            currentUser={session.user}
+            projectIdeas={projectIdeas}
+          />
         </div>
       </div>
     </div>

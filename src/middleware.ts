@@ -19,7 +19,7 @@ export async function middleware(request: NextRequest) {
   // If user is signed in and trying to access home page
   if (token && pathname === '/') {
     const role = token.role as string
-    if (role === 'ADMIN') {
+    if (role === 'ADMIN' || role === 'SUPERADMIN') {
       return NextResponse.redirect(new URL('/admin', request.url))
     }
     return NextResponse.redirect(new URL('/dashboard', request.url))

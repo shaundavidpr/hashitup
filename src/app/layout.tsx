@@ -6,7 +6,13 @@ import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import './globals.css'
 
-const inter = Inter({ subsets: ['latin'] })
+const inter = Inter({
+  subsets: ['latin'],
+  display: 'swap',
+  preload: true,
+  fallback: ['system-ui', 'arial'],
+  adjustFontFallback: true
+})
 
 export const metadata: Metadata = {
   title: 'CodeNChip - National Hackathon Platform',
@@ -32,8 +38,6 @@ export default function RootLayout({
           <Navigation />
           {children}
         </SessionProvider>
-
-        
       </body>
     </html>
   )

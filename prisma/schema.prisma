@@ -15,50 +15,23 @@ datasource db {
   directUrl = env("DIRECT_URL") // Used for migrations and local development
 }
 
-model User {
-  id            String   @id @default(cuid())
-  email         String   @unique
-  name          String?
-  image         String?
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
-  role          String   @default("MEMBER") // SUPERADMIN, ADMIN, LEADER, MEMBER
-  
-  // Admin management
-  addedByAdmin  User?    @relation("AdminAddedBy", fields: [addedById], references: [id])
-  addedById     String?
-  addedAdmins   User[]   @relation("AdminAddedBy")
-  
-  // Team relationships
-  leadingTeam   Team?    @relation("TeamLeader")
-  memberOfTeam  Team?    @relation("TeamMembers", fields: [teamId], references: [id])
-  teamId        String?
-  
-  // NextAuth.js required fields
-  accounts      Account[]
-  sessions      Session[]
-  
-  @@map("users")
-}
-
 model Account {
   id                String  @id @default(cuid())
   userId            String
   type              String
   provider          String
   providerAccountId String
-  refresh_token     String?
-  access_token      String?
+  refresh_token     String? @db.Text
+  access_token      String? @db.Text
   expires_at        Int?
   token_type        String?
   scope             String?
-  id_token          String?
+  id_token          String? @db.Text
   session_state     String?
-  
+
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
-  
+
   @@unique([provider, providerAccountId])
-  @@map("accounts")
 }
 
 model Session {
@@ -67,32 +40,81 @@ model Session {
   userId       String
   expires      DateTime
   user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  
-  @@map("sessions")
+}
+
+model User {
+  id            String    @id @default(cuid())
+  name          String?
+  email         String?   @unique
+  emailVerified DateTime?
+  image         String?
+  phone         String?
+  role          String    @default("USER")
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  accounts Account[]
+  sessions Session[]
+
+  // Team relationships
+  leadingTeam  Team?    @relation("TeamLeader")
+  memberOfTeam Team?    @relation("TeamMember", fields: [teamId], references: [id])
+  teamId       String?
+
+  // Added by relationship (for team members)
+  addedBy   User?   @relation("AddedByUser", fields: [addedById], references: [id])
+  addedById String?
+  addedUsers User[] @relation("AddedByUser")
+
+  // Project idea relationships
+  submittedIdeas ProjectIdea[] @relation("SubmittedBy")
+  updatedIdeas   ProjectIdea[] @relation("UpdatedBy")
+
+  @@index([email])
 }
 
 model Team {
+  id             String   @id @default(cuid())
+  name           String
+  collegeName    String
+  university     String
+  address        String
+  state          String
+  numberOfMembers Int      @default(1)
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  // Leader relationship
+  leader   User   @relation("TeamLeader", fields: [leaderId], references: [id])
+  leaderId String @unique
+
+  // Members relationship
+  members User[] @relation("TeamMember")
+
+  // Project idea relationship
+  projectIdea ProjectIdea?
+}
+
+model ProjectIdea {
   id              String   @id @default(cuid())
-  name            String
-  collegeName     String
-  university      String
-  address         String
-  state           String
-  numberOfMembers Int
+  title           String
+  description     String   @db.Text
+  techStack       String   @db.Text
+  problemStatement String   @db.Text
+  solution        String   @db.Text
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt
-  
-  // Team Leader relationship
-  leaderId        String   @unique
-  leader          User     @relation("TeamLeader", fields: [leaderId], references: [id])
-  
-  // Team Members relationship
-  members         User[]   @relation("TeamMembers")
-  
-  // Project submission
-  submission      ProjectSubmission?
-  
-  @@map("teams")
+
+  // Team relationship
+  team   Team   @relation(fields: [teamId], references: [id])
+  teamId String @unique
+
+  // User relationships
+  submittedBy   User   @relation("SubmittedBy", fields: [submittedById], references: [id])
+  submittedById String
+
+  updatedBy   User?   @relation("UpdatedBy", fields: [updatedById], references: [id])
+  updatedById String?
 }
 
 model TeamMember {
@@ -104,26 +126,6 @@ model TeamMember {
   createdAt DateTime @default(now())
   
   @@map("team_members")
-}
-
-model ProjectSubmission {
-  id          String   @id @default(cuid())
-  teamId      String   @unique
-  theme       String   // AI_ML, WEB_DEVELOPMENT, etc.
-  projectName String
-  type        String   // SOFTWARE, HARDWARE, BOTH
-  ideology    String
-  methodology String
-  guideName   String
-  guidePhone  String
-  guideEmail  String
-  status      String   @default("WAITING") // WAITING, SELECTED, REJECTED
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-  
-  team        Team     @relation(fields: [teamId], references: [id], onDelete: Cascade)
-  
-  @@map("project_submissions")
 }
 
 model AdminEmail {

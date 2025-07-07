@@ -179,7 +179,7 @@ export const canAccessTeam = async (userId: string, teamId: string): Promise<boo
   })
 
   if (!user) return false
-  if (user.role === 'ADMIN') return true
+  if (user.role === 'ADMIN' || user.role === 'SUPERADMIN') return true
   if (user.leadingTeam?.id === teamId) return true
   if (user.memberOfTeam?.id === teamId) return true
 

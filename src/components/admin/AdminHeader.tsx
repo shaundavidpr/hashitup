@@ -51,8 +51,12 @@ export function AdminHeader({ user }: AdminHeaderProps) {
           
           <div className="flex items-center space-x-4">
             {/* Admin Badge */}
-            <span className="px-3 py-1 rounded-full text-xs font-medium bg-red-100 text-red-800">
-              Administrator
+            <span className={`px-3 py-1 rounded-full text-xs font-medium ${
+              user.role === 'SUPERADMIN' 
+                ? 'bg-yellow-100 text-yellow-800'
+                : 'bg-red-100 text-red-800'
+            }`}>
+              {user.role === 'SUPERADMIN' ? 'Super Admin' : 'Administrator'}
             </span>
             
             {/* Export Actions */}

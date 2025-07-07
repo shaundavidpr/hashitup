@@ -1,11 +1,62 @@
-import TeamCreationForm from '@/components/dashboard/TeamCreationForm'
-import TeamOverview from '@/components/dashboard/TeamOverview'
+import { ProjectIdeaForm } from '@/components/dashboard/ProjectIdeaForm'
+import { TeamCreationForm } from '@/components/dashboard/TeamCreationForm'
+import { TeamOverview } from '@/components/dashboard/TeamOverview'
 import { Card } from '@/components/ui/Card'
+import { User } from '@/generated/prisma'
 import { authOptions } from '@/lib/auth'
 import { db } from '@/lib/db'
 import { Code, FileCode, GitBranch, Users } from 'lucide-react'
 import { getServerSession } from 'next-auth'
 import { redirect } from 'next/navigation'
+
+type UserWithTeam = User & {
+  leadingTeam: {
+    id: string
+    name: string
+    collegeName: string
+    university: string
+    address: string
+    state: string
+    numberOfMembers: number
+    members: {
+      id: string
+      name: string | null
+      email: string | null
+      phone: string | null
+    }[]
+    projectIdea: {
+      id: string
+      title: string
+      description: string
+      techStack: string
+      problemStatement: string
+      solution: string
+    } | null
+  } | null
+  memberOfTeam: {
+    id: string
+    name: string
+    collegeName: string
+    university: string
+    address: string
+    state: string
+    numberOfMembers: number
+    members: {
+      id: string
+      name: string | null
+      email: string | null
+      phone: string | null
+    }[]
+    projectIdea: {
+      id: string
+      title: string
+      description: string
+      techStack: string
+      problemStatement: string
+      solution: string
+    } | null
+  } | null
+}
 
 export default async function DashboardPage() {
   const session = await getServerSession(authOptions)
@@ -18,13 +69,23 @@ export default async function DashboardPage() {
   const user = await db.user.findUnique({
     where: { id: session.user.id },
     include: {
-      leadingTeam: true,
-      memberOfTeam: true,
-    },
-  })
+      leadingTeam: {
+        include: {
+          members: true,
+          projectIdea: true
+        }
+      },
+      memberOfTeam: {
+        include: {
+          members: true,
+          projectIdea: true
+        }
+      }
+    }
+  }) as UserWithTeam | null
 
-  // If user has no team and is not an admin, show team creation form
-  if (!user?.leadingTeam && !user?.memberOfTeam && user?.role !== 'ADMIN') {
+  // If user has no team and is not an admin/superadmin, show team creation form
+  if (!user?.leadingTeam && !user?.memberOfTeam && !['ADMIN', 'SUPERADMIN'].includes(user?.role || '')) {
     return (
       <div className="min-h-screen bg-slate-950 text-white py-20">
         <div className="container-custom max-w-2xl">
@@ -42,6 +103,9 @@ export default async function DashboardPage() {
     )
   }
 
+  const team = user?.leadingTeam || user?.memberOfTeam
+  const isLeader = !!user?.leadingTeam
+
   // For users with teams or admins, show the dashboard
   return (
     <div className="min-h-screen bg-slate-950 text-white py-20">
@@ -52,16 +116,29 @@ export default async function DashboardPage() {
             Welcome back, {session.user.name}
           </h1>
           <p className="text-slate-400 text-lg">
-            {user?.role === 'ADMIN' 
+            {['ADMIN', 'SUPERADMIN'].includes(user?.role || '') 
               ? 'Manage teams and monitor progress'
               : 'Track your hackathon progress and manage your team'}
           </p>
         </div>
 
-        {/* Team Overview for team leaders/members */}
-        {(user?.leadingTeam || user?.memberOfTeam) && (
+        {/* Team Overview */}
+        {team && (
           <div className="mb-12">
-            <TeamOverview team={user.leadingTeam || user.memberOfTeam} isLeader={!!user.leadingTeam} />
+            <TeamOverview 
+              team={team} 
+              isLeader={isLeader} 
+            />
+          </div>
+        )}
+
+        {/* Project Idea Form */}
+        {team && (
+          <div className="mb-12">
+            <ProjectIdeaForm 
+              teamId={team.id}
+              existingIdea={team.projectIdea || undefined}
+            />
           </div>
         )}
 
@@ -70,7 +147,7 @@ export default async function DashboardPage() {
           {[
             {
               title: 'Team Members',
-              value: '4',
+              value: team?.numberOfMembers.toString() || '0',
               icon: Users,
               color: 'from-blue-500/20 to-blue-600/20 border-blue-500/20',
               iconColor: 'from-blue-400 to-blue-600'

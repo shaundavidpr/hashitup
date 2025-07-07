@@ -1,171 +1,189 @@
-import { Calendar, Mail, MapPin, Phone, School, Users } from 'lucide-react'
+'use client'
 
-interface TeamOverviewProps {
-  team: {
-    id: string
-    name: string
-    collegeName: string
-    university: string
-    address: string
-    state: string
-    numberOfMembers: number
-    createdAt: Date
-    leader: {
-      id: string
-      name: string | null
-      email: string | null
-    }
-    members: {
-      id: string
-      name: string | null
-      email: string | null
-    }[]
-  }
-  teamMembers: {
-    id: string
-    name: string
-    email: string
-    phone: string
-  }[]
-  isLeader: boolean
-  user: {
-    id: string
-    name?: string | null
-    email?: string | null
-  }
+import { Button } from '@/components/ui/Button'
+import { Card } from '@/components/ui/Card'
+import { Pencil, Save, Users, X } from 'lucide-react'
+import { useState } from 'react'
+
+type TeamMember = {
+  id: string
+  name: string | null
+  email: string | null
+  phone: string | null
 }
 
-export function TeamOverview({ team, teamMembers, isLeader, user }: TeamOverviewProps) {
+type TeamWithMembers = {
+  id: string
+  name: string
+  collegeName: string
+  university: string
+  address: string
+  state: string
+  numberOfMembers: number
+  members: TeamMember[]
+  projectIdea: {
+    id: string
+    title: string
+    description: string
+    techStack: string
+    problemStatement: string
+    solution: string
+  } | null
+}
+
+interface TeamOverviewProps {
+  team: TeamWithMembers
+  isLeader: boolean
+}
+
+export function TeamOverview({ team, isLeader }: TeamOverviewProps) {
+  const [editingMemberId, setEditingMemberId] = useState<string | null>(null)
+  const [members, setMembers] = useState<TeamMember[]>(team.members)
+  const [editForm, setEditForm] = useState<TeamMember | null>(null)
+
+  const handleEdit = (member: TeamMember) => {
+    setEditingMemberId(member.id)
+    setEditForm({ ...member })
+  }
+
+  const handleCancel = () => {
+    setEditingMemberId(null)
+    setEditForm(null)
+  }
+
+  const handleSave = async (memberId: string) => {
+    if (!editForm) return
+
+    try {
+      const response = await fetch(`/api/teams/${team.id}/members/${memberId}`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(editForm),
+      })
+
+      if (response.ok) {
+        setMembers(members.map(m => m.id === memberId ? editForm : m))
+        setEditingMemberId(null)
+        setEditForm(null)
+      } else {
+        alert('Failed to update member')
+      }
+    } catch (error) {
+      console.error('Error updating member:', error)
+      alert('Failed to update member')
+    }
+  }
+
   return (
-    <div className="bg-white overflow-hidden shadow rounded-lg">
-      <div className="px-4 py-5 sm:p-6">
-        <div className="flex items-center justify-between mb-6">
-          <h2 className="text-2xl font-bold text-gray-900">{team.name}</h2>
-          {isLeader && (
-            <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-blue-100 text-blue-800">
-              Team Leader
-            </span>
-          )}
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-          <div className="space-y-4">
-            <div className="flex items-center">
-              <School className="h-5 w-5 text-gray-400 mr-3" />
-              <div>
-                <p className="text-sm font-medium text-gray-900">{team.collegeName}</p>
-                <p className="text-sm text-gray-500">{team.university}</p>
-              </div>
-            </div>
-            
-            <div className="flex items-center">
-              <MapPin className="h-5 w-5 text-gray-400 mr-3" />
-              <div>
-                <p className="text-sm text-gray-900">{team.address}</p>
-                <p className="text-sm text-gray-500">{team.state}</p>
-              </div>
-            </div>
-            
-            <div className="flex items-center">
-              <Users className="h-5 w-5 text-gray-400 mr-3" />
-              <div>
-                <p className="text-sm font-medium text-gray-900">
-                  {team.numberOfMembers} Members
-                </p>
-                <p className="text-sm text-gray-500">Including team leader</p>
-              </div>
-            </div>
-            
-            <div className="flex items-center">
-              <Calendar className="h-5 w-5 text-gray-400 mr-3" />
-              <div>
-                <p className="text-sm font-medium text-gray-900">
-                  Created on {new Date(team.createdAt).toLocaleDateString()}
-                </p>
-                <p className="text-sm text-gray-500">Team registration date</p>
-              </div>
-            </div>
+    <div className="space-y-6">
+      <Card variant="glass" className="p-6 bg-gradient-to-br from-blue-500/10 to-purple-500/10 border-blue-500/20">
+        <div className="flex items-start justify-between">
+          <div>
+            <h2 className="text-2xl font-bold mb-2">{team.name}</h2>
+            <p className="text-slate-400">
+              {isLeader ? 'Team Leader' : 'Team Member'} • {team.collegeName}
+            </p>
           </div>
-
-          <div className="bg-gray-50 rounded-lg p-4">
-            <h3 className="text-lg font-medium text-gray-900 mb-4">Team Leader</h3>
-            <div className="space-y-2">
-              <div className="flex items-center">
-                <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center mr-3">
-                  <Users className="h-4 w-4 text-blue-600" />
-                </div>
-                <div>
-                  <p className="text-sm font-medium text-gray-900">
-                    {team.leader.name}
-                  </p>
-                  <p className="text-xs text-gray-500">{team.leader.email}</p>
-                </div>
-              </div>
-            </div>
+          <div className="flex items-center gap-2 bg-slate-800/50 px-3 py-1.5 rounded-full">
+            <Users className="w-4 h-4 text-slate-400" />
+            <span className="text-sm text-slate-300">{team.numberOfMembers} Members</span>
           </div>
         </div>
+        
+        <div className="mt-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          <div className="bg-slate-800/30 rounded-lg p-4">
+            <h3 className="text-sm font-medium text-slate-400 mb-1">University</h3>
+            <p className="text-slate-200">{team.university}</p>
+          </div>
+          <div className="bg-slate-800/30 rounded-lg p-4">
+            <h3 className="text-sm font-medium text-slate-400 mb-1">State</h3>
+            <p className="text-slate-200">{team.state}</p>
+          </div>
+          <div className="bg-slate-800/30 rounded-lg p-4">
+            <h3 className="text-sm font-medium text-slate-400 mb-1">Address</h3>
+            <p className="text-slate-200">{team.address}</p>
+          </div>
+        </div>
+      </Card>
 
-        {/* Team Members */}
-        <div>
-          <h3 className="text-lg font-medium text-gray-900 mb-4">Team Members</h3>
-          {teamMembers.length > 0 ? (
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              {teamMembers.map((member, index) => (
-                <div key={member.id} className="border border-gray-200 rounded-lg p-4">
-                  <div className="flex items-center justify-between mb-2">
-                    <h4 className="font-medium text-gray-900">
-                      {member.name}
-                    </h4>
-                    <span className="text-xs text-gray-500">
-                      Member {index + 1}
-                    </span>
+      {/* Team Members Section */}
+      <Card variant="glass" className="p-6 bg-gradient-to-br from-slate-500/10 to-slate-600/10 border-slate-500/20">
+        <h2 className="text-2xl font-bold mb-6">Team Members</h2>
+        <div className="space-y-4">
+          {members.map((member) => (
+            <div key={member.id} className="bg-slate-800/30 rounded-lg p-4">
+              {editingMemberId === member.id ? (
+                <div className="space-y-4">
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <input
+                      type="text"
+                      value={editForm?.name || ''}
+                      onChange={(e) => setEditForm(prev => prev ? { ...prev, name: e.target.value } : null)}
+                      className="px-3 py-2 bg-slate-800/50 border border-slate-700 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-white"
+                      placeholder="Name"
+                    />
+                    <input
+                      type="email"
+                      value={editForm?.email || ''}
+                      onChange={(e) => setEditForm(prev => prev ? { ...prev, email: e.target.value } : null)}
+                      className="px-3 py-2 bg-slate-800/50 border border-slate-700 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-white"
+                      placeholder="Email"
+                    />
+                    <input
+                      type="tel"
+                      value={editForm?.phone || ''}
+                      onChange={(e) => setEditForm(prev => prev ? { ...prev, phone: e.target.value } : null)}
+                      className="px-3 py-2 bg-slate-800/50 border border-slate-700 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-white"
+                      placeholder="Phone"
+                    />
                   </div>
-                  
-                  <div className="space-y-2">
-                    <div className="flex items-center text-sm text-gray-600">
-                      <Mail className="h-4 w-4 mr-2" />
-                      {member.email}
-                    </div>
-                    <div className="flex items-center text-sm text-gray-600">
-                      <Phone className="h-4 w-4 mr-2" />
-                      {member.phone}
-                    </div>
-                  </div>
-                  
-                  {/* Status indicator */}
-                  <div className="mt-3 flex items-center">
-                    <div className="w-2 h-2 bg-gray-400 rounded-full mr-2"></div>
-                    <span className="text-xs text-gray-500">
-                      Not registered yet
-                    </span>
+                  <div className="flex justify-end gap-2">
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={handleCancel}
+                      className="text-red-400 hover:text-red-300"
+                    >
+                      <X className="w-4 h-4 mr-2" />
+                      Cancel
+                    </Button>
+                    <Button
+                      size="sm"
+                      onClick={() => handleSave(member.id)}
+                      className="bg-blue-500 hover:bg-blue-600"
+                    >
+                      <Save className="w-4 h-4 mr-2" />
+                      Save
+                    </Button>
                   </div>
                 </div>
-              ))}
-            </div>
-          ) : (
-            <div className="text-center py-8 text-gray-500">
-              <Users className="h-12 w-12 mx-auto mb-4 text-gray-300" />
-              <p>No team members added yet</p>
-              {isLeader && (
-                <p className="text-sm mt-2">
-                  Team members will appear here once they register using the emails you provided.
-                </p>
+              ) : (
+                <div className="flex items-center justify-between">
+                  <div>
+                    <h3 className="font-medium text-slate-200">{member.name}</h3>
+                    <div className="text-sm text-slate-400 mt-1">
+                      <p>{member.email}</p>
+                      <p>{member.phone}</p>
+                    </div>
+                  </div>
+                  {isLeader && (
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={() => handleEdit(member)}
+                      className="text-slate-400 hover:text-slate-300"
+                    >
+                      <Pencil className="w-4 h-4" />
+                    </Button>
+                  )}
+                </div>
               )}
             </div>
-          )}
+          ))}
         </div>
-
-        {/* Important Notes */}
-        <div className="mt-8 bg-blue-50 rounded-lg p-4">
-          <h4 className="font-medium text-blue-900 mb-2">Important Notes</h4>
-          <ul className="text-sm text-blue-800 space-y-1">
-            <li>• All team members must register using Google Auth with the emails you provided</li>
-            <li>• Only team leaders can submit project details</li>
-            <li>• Team information cannot be changed after project submission</li>
-            <li>• Make sure all member emails are correct before submission</li>
-          </ul>
-        </div>
-      </div>
+      </Card>
     </div>
   )
 } 

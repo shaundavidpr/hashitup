@@ -81,7 +81,7 @@ export function TeamCreationForm() {
     <form onSubmit={handleSubmit} className="space-y-6">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">
+          <label className="block text-sm font-medium text-slate-300 mb-2">
             Team Name *
           </label>
           <input
@@ -89,13 +89,13 @@ export function TeamCreationForm() {
             required
             value={teamData.name}
             onChange={(e) => setTeamData({ ...teamData, name: e.target.value })}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full px-3 py-2 bg-slate-800/50 border border-slate-700 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-white"
             placeholder="Enter team name"
           />
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">
+          <label className="block text-sm font-medium text-slate-300 mb-2">
             College Name *
           </label>
           <input
@@ -103,13 +103,13 @@ export function TeamCreationForm() {
             required
             value={teamData.collegeName}
             onChange={(e) => setTeamData({ ...teamData, collegeName: e.target.value })}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full px-3 py-2 bg-slate-800/50 border border-slate-700 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-white"
             placeholder="Enter college name"
           />
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">
+          <label className="block text-sm font-medium text-slate-300 mb-2">
             University *
           </label>
           <input
@@ -117,13 +117,13 @@ export function TeamCreationForm() {
             required
             value={teamData.university}
             onChange={(e) => setTeamData({ ...teamData, university: e.target.value })}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full px-3 py-2 bg-slate-800/50 border border-slate-700 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-white"
             placeholder="Enter university name"
           />
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">
+          <label className="block text-sm font-medium text-slate-300 mb-2">
             State *
           </label>
           <input
@@ -131,14 +131,14 @@ export function TeamCreationForm() {
             required
             value={teamData.state}
             onChange={(e) => setTeamData({ ...teamData, state: e.target.value })}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full px-3 py-2 bg-slate-800/50 border border-slate-700 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-white"
             placeholder="Enter state"
           />
         </div>
       </div>
 
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-2">
+        <label className="block text-sm font-medium text-slate-300 mb-2">
           Address *
         </label>
         <textarea
@@ -146,14 +146,14 @@ export function TeamCreationForm() {
           value={teamData.address}
           onChange={(e) => setTeamData({ ...teamData, address: e.target.value })}
           rows={3}
-          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+          className="w-full px-3 py-2 bg-slate-800/50 border border-slate-700 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-white"
           placeholder="Enter complete address"
         />
       </div>
 
       <div>
         <div className="flex justify-between items-center mb-4">
-          <h3 className="text-lg font-medium text-gray-900">
+          <h3 className="text-lg font-medium text-slate-200">
             Team Members ({members.length})
           </h3>
           <Button
@@ -171,16 +171,16 @@ export function TeamCreationForm() {
 
         <div className="space-y-4">
           {members.map((member, index) => (
-            <div key={index} className="border border-gray-200 rounded-lg p-4">
+            <div key={index} className="bg-slate-800/30 border border-slate-700 rounded-lg p-4">
               <div className="flex justify-between items-center mb-3">
-                <h4 className="font-medium text-gray-900">Member {index + 1}</h4>
+                <h4 className="font-medium text-slate-200">Member {index + 1}</h4>
                 {members.length > 1 && (
                   <Button
                     type="button"
                     onClick={() => handleRemoveMember(index)}
                     variant="ghost"
                     size="sm"
-                    className="text-red-600 hover:text-red-700"
+                    className="text-red-400 hover:text-red-300"
                   >
                     <Trash2 className="h-4 w-4" />
                   </Button>
@@ -191,23 +191,26 @@ export function TeamCreationForm() {
                 <input
                   type="text"
                   placeholder="Full Name"
+                  required
                   value={member.name}
                   onChange={(e) => handleMemberChange(index, 'name', e.target.value)}
-                  className="px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="px-3 py-2 bg-slate-800/50 border border-slate-700 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-white"
                 />
                 <input
                   type="email"
                   placeholder="Email Address"
+                  required
                   value={member.email}
                   onChange={(e) => handleMemberChange(index, 'email', e.target.value)}
-                  className="px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="px-3 py-2 bg-slate-800/50 border border-slate-700 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-white"
                 />
                 <input
                   type="tel"
                   placeholder="Phone Number"
+                  required
                   value={member.phone}
                   onChange={(e) => handleMemberChange(index, 'phone', e.target.value)}
-                  className="px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="px-3 py-2 bg-slate-800/50 border border-slate-700 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-white"
                 />
               </div>
             </div>
@@ -216,11 +219,7 @@ export function TeamCreationForm() {
       </div>
 
       <div className="flex justify-end">
-        <Button
-          type="submit"
-          disabled={loading}
-          className="bg-blue-600 hover:bg-blue-700"
-        >
+        <Button type="submit" disabled={loading}>
           {loading ? 'Creating Team...' : 'Create Team'}
         </Button>
       </div>

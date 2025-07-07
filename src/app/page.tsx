@@ -4,9 +4,9 @@ import { Button } from '@/components/ui/Button'
 import { Card } from '@/components/ui/Card'
 import { authOptions } from '@/lib/auth'
 import {
-  Calendar,
-  Gem, Rocket, Sparkles, Target, Trophy,
-  Zap
+    Calendar,
+    Gem, Rocket, Sparkles, Target, Trophy,
+    Zap
 } from 'lucide-react'
 import { getServerSession } from 'next-auth'
 import Link from 'next/link'
@@ -16,11 +16,10 @@ export default async function HomePage() {
   const session = await getServerSession(authOptions)
   
   if (session) {
-    if (session.user.role === 'ADMIN') {
+    if (session.user.role === 'ADMIN' || session.user.role === 'SUPERADMIN') {
       redirect('/admin')
-    } else if (session.user.role === 'LEADER' || session.user.role === 'MEMBER') {
-      redirect('/dashboard')
     }
+    redirect('/dashboard')
   }
 
   return (
