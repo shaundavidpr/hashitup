@@ -1,0 +1,24 @@
+{
+  "name": "CodeNChip - National Hackathon",
+  "short_name": "CodeNChip",
+  "description": "India's premier national hackathon fostering innovation and technological excellence",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0f172a",
+  "theme_color": "#3b82f6",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/favicon.ico",
+      "sizes": "16x16 32x32",
+      "type": "image/x-icon"
+    },
+    {
+      "src": "/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml"
+    }
+  ],
+  "categories": ["technology", "education", "productivity"],
+  "lang": "en-US"
+} 

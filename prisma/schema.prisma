@@ -1,0 +1,135 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL") // Used for migrations and local development
+}
+
+model User {
+  id            String   @id @default(cuid())
+  email         String   @unique
+  name          String?
+  image         String?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  role          String   @default("MEMBER") // SUPERADMIN, ADMIN, LEADER, MEMBER
+  
+  // Admin management
+  addedByAdmin  User?    @relation("AdminAddedBy", fields: [addedById], references: [id])
+  addedById     String?
+  addedAdmins   User[]   @relation("AdminAddedBy")
+  
+  // Team relationships
+  leadingTeam   Team?    @relation("TeamLeader")
+  memberOfTeam  Team?    @relation("TeamMembers", fields: [teamId], references: [id])
+  teamId        String?
+  
+  // NextAuth.js required fields
+  accounts      Account[]
+  sessions      Session[]
+  
+  @@map("users")
+}
+
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String?
+  access_token      String?
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String?
+  session_state     String?
+  
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  @@unique([provider, providerAccountId])
+  @@map("accounts")
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  @@map("sessions")
+}
+
+model Team {
+  id              String   @id @default(cuid())
+  name            String
+  collegeName     String
+  university      String
+  address         String
+  state           String
+  numberOfMembers Int
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+  
+  // Team Leader relationship
+  leaderId        String   @unique
+  leader          User     @relation("TeamLeader", fields: [leaderId], references: [id])
+  
+  // Team Members relationship
+  members         User[]   @relation("TeamMembers")
+  
+  // Project submission
+  submission      ProjectSubmission?
+  
+  @@map("teams")
+}
+
+model TeamMember {
+  id        String   @id @default(cuid())
+  name      String
+  email     String
+  phone     String
+  teamId    String
+  createdAt DateTime @default(now())
+  
+  @@map("team_members")
+}
+
+model ProjectSubmission {
+  id          String   @id @default(cuid())
+  teamId      String   @unique
+  theme       String   // AI_ML, WEB_DEVELOPMENT, etc.
+  projectName String
+  type        String   // SOFTWARE, HARDWARE, BOTH
+  ideology    String
+  methodology String
+  guideName   String
+  guidePhone  String
+  guideEmail  String
+  status      String   @default("WAITING") // WAITING, SELECTED, REJECTED
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  team        Team     @relation(fields: [teamId], references: [id], onDelete: Cascade)
+  
+  @@map("project_submissions")
+}
+
+model AdminEmail {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  createdAt DateTime @default(now())
+  
+  @@map("admin_emails")
+}
