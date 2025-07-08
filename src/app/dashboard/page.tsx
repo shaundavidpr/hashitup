@@ -67,7 +67,7 @@ export default async function DashboardPage() {
 
   // Get user with team information
   const user = await db.user.findUnique({
-    where: { id: session.user.id },
+    where: { email: session.user.email! },
     include: {
       leadingTeam: {
         include: {

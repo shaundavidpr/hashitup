@@ -95,6 +95,13 @@ model Team {
   projectIdea ProjectIdea?
 }
 
+enum ProjectStatus {
+  PENDING
+  ACCEPTED
+  REJECTED
+  WAITLIST
+}
+
 model ProjectIdea {
   id              String   @id @default(cuid())
   title           String
@@ -102,6 +109,7 @@ model ProjectIdea {
   techStack       String   @db.Text
   problemStatement String   @db.Text
   solution        String   @db.Text
+  status          ProjectStatus @default(PENDING)
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt
 
@@ -134,4 +142,16 @@ model AdminEmail {
   createdAt DateTime @default(now())
   
   @@map("admin_emails")
+}
+
+model Deadline {
+  id          String   @id @default(cuid())
+  title       String
+  description String   @db.Text
+  startDate   DateTime
+  endDate     DateTime
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  @@map("deadlines")
 }

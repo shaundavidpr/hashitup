@@ -101,7 +101,7 @@ export const authOptions: NextAuthOptions = {
       }
       return true
     },
-    async session({ session, token, user }) {
+    async session({ session, token }) {
       if (session.user) {
         const dbUser = await db.user.findUnique({
           where: { email: session.user.email! },
