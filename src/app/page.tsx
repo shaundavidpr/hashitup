@@ -16,7 +16,7 @@ export default async function HomePage() {
   const session = await getServerSession(authOptions)
   
   if (session) {
-    if (session.user.role === 'ADMIN' || session.user.role === 'SUPERADMIN') {
+    if (['ADMIN', 'SUPERADMIN'].includes(session.user.role)) {
       redirect('/admin')
     }
     redirect('/dashboard')

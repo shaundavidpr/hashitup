@@ -27,7 +27,7 @@ export function TeamCreationForm() {
   ])
 
   const handleAddMember = () => {
-    if (members.length < 4) {
+    if (members.length < 3) {
       setMembers([...members, { name: '', email: '', phone: '' }])
       setTeamData({ ...teamData, numberOfMembers: members.length + 1 })
     }
