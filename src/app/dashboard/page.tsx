@@ -38,6 +38,7 @@ type UserWithTeam = User & {
       techStack: string
       problemStatement: string
       solution: string
+      isDraft: boolean
     } | null
   } | null
   memberOfTeam: {
@@ -68,6 +69,7 @@ type UserWithTeam = User & {
       techStack: string
       problemStatement: string
       solution: string
+      isDraft: boolean
     } | null
   } | null
 }
@@ -176,6 +178,37 @@ export default async function DashboardPage() {
               existingIdea={team.projectIdea || undefined}
             />
           </div>
+        )}
+
+        {/* Project Status Card */}
+        {team?.projectIdea && (
+          <Card variant="glass" className="p-6 bg-gradient-to-br from-blue-500/10 to-cyan-500/10 border-blue-500/20 mb-12">
+            <div className="flex items-center justify-between">
+              <div>
+                <h3 className="text-xl font-semibold mb-2">Project Status</h3>
+                <p className="text-slate-400">
+                  {team.projectIdea.isDraft 
+                    ? "Your project idea is saved as a draft and can be edited by team members." 
+                    : "Your project idea has been submitted and cannot be edited."
+                  }
+                </p>
+              </div>
+              <div className={`px-4 py-2 rounded-full text-sm font-medium ${
+                team.projectIdea.isDraft
+                  ? 'bg-yellow-900/30 text-yellow-300 border border-yellow-500/30'
+                  : 'bg-green-900/30 text-green-300 border border-green-500/30'
+              }`}>
+                {team.projectIdea.isDraft ? 'Draft' : 'Submitted'}
+              </div>
+            </div>
+            {team.projectIdea.isDraft && (
+              <div className="mt-4 p-3 bg-blue-900/20 border border-blue-500/30 rounded-lg">
+                <p className="text-sm text-blue-300">
+                  💡 <strong>Tip:</strong> All team members can view and edit the draft. Once you submit the project, no further changes will be allowed.
+                </p>
+              </div>
+            )}
+          </Card>
         )}
 
         {/* Stats Grid */}

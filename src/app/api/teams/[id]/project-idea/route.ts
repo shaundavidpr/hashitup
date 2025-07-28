@@ -26,7 +26,7 @@ export async function POST(
       return new NextResponse('Forbidden', { status: 403 })
     }
     const body = await request.json()
-    const { title, description, techStack, problemStatement, solution } = body
+    const { title, description, techStack, problemStatement, solution, isDraft = true } = body
     const projectIdea = await db.projectIdea.create({
       data: {
         title,
@@ -37,6 +37,7 @@ export async function POST(
         teamId: id,
         submittedById: session.user.id,
         status: 'PENDING',
+        isDraft,
       },
     })
     return NextResponse.json(projectIdea)
@@ -71,8 +72,15 @@ export async function PUT(
     if (!team.projectIdea) {
       return new NextResponse('No project idea found', { status: 404 })
     }
+
+    // Check if project is already submitted (not a draft)
+    if (!team.projectIdea.isDraft) {
+      return new NextResponse('Cannot edit submitted project', { status: 403 })
+    }
+
     const body = await request.json()
-    const { title, description, techStack, problemStatement, solution } = body
+    const { title, description, techStack, problemStatement, solution, isDraft = true } = body
+
     const updatedProjectIdea = await db.projectIdea.update({
       where: { id: team.projectIdea.id },
       data: {
@@ -82,6 +90,7 @@ export async function PUT(
         problemStatement,
         solution,
         updatedById: session.user.id,
+        isDraft,
       }
     })
     return NextResponse.json(updatedProjectIdea)

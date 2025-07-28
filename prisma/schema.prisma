@@ -83,6 +83,7 @@ model ProjectIdea {
   problemStatement String
   solution         String
   status           ProjectStatus @default(PENDING)
+  isDraft          Boolean       @default(true)
   createdAt        DateTime      @default(now())
   updatedAt        DateTime      @updatedAt
   teamId           String        @unique
