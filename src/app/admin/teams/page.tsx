@@ -18,6 +18,7 @@ async function getTeams() {
             id: true,
             name: true,
             email: true,
+            phone: true,
           },
         },
         members: {
@@ -25,6 +26,7 @@ async function getTeams() {
             id: true,
             name: true,
             email: true,
+            phone: true,
           },
         },
         projectIdea: {
