@@ -8,18 +8,25 @@ import {
     Gem, Rocket, Sparkles, Target, Trophy,
     Zap
 } from 'lucide-react'
-import { getServerSession } from 'next-auth'
 import Link from 'next/link'
+import { getServerSession } from 'next-auth'
 import { redirect } from 'next/navigation'
 
 export default async function HomePage() {
-  const session = await getServerSession(authOptions)
+  let session = null
   
-  if (session) {
-    if (['ADMIN', 'SUPERADMIN'].includes(session.user.role)) {
-      redirect('/admin')
+  try {
+    session = await getServerSession(authOptions)
+    
+    if (session) {
+      if (['ADMIN', 'SUPERADMIN'].includes(session.user.role)) {
+        redirect('/admin')
+      }
+      redirect('/dashboard')
     }
-    redirect('/dashboard')
+  } catch (error) {
+    console.error('Auth error:', error)
+    // Continue to render the page if auth fails
   }
 
   return (

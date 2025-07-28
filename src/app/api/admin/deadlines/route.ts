@@ -18,14 +18,14 @@ export async function POST(request: NextRequest) {
     }
 
     const body = await request.json()
-    const { name, startDate, endDate } = body
+    const { title, description, startDate, endDate } = body
 
     const deadline = await db.deadline.create({
       data: {
-        name,
+        title,
+        description,
         startDate: new Date(startDate),
         endDate: new Date(endDate),
-        createdById: session.user.id
       }
     })
 

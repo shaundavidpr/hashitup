@@ -1,6 +1,6 @@
 import 'next-auth'
 
-type Role = 'ADMIN' | 'LEADER' | 'MEMBER'
+type Role = 'ADMIN' | 'SUPERADMIN' | 'LEADER' | 'MEMBER' | 'USER'
 
 declare module 'next-auth' {
   interface Session {

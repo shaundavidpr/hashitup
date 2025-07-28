@@ -1,9 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider = "prisma-client-js"
   output   = "../src/generated/prisma"
@@ -12,7 +6,7 @@ generator client {
 datasource db {
   provider  = "postgresql"
   url       = env("DATABASE_URL")
-  directUrl = env("DIRECT_URL") // Used for migrations and local development
+  directUrl = env("DIRECT_URL")
 }
 
 model Account {
@@ -21,15 +15,14 @@ model Account {
   type              String
   provider          String
   providerAccountId String
-  refresh_token     String? @db.Text
-  access_token      String? @db.Text
+  refresh_token     String?
+  access_token      String?
   expires_at        Int?
   token_type        String?
   scope             String?
-  id_token          String? @db.Text
+  id_token          String?
   session_state     String?
-
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([provider, providerAccountId])
 }
@@ -43,86 +36,61 @@ model Session {
 }
 
 model User {
-  id            String    @id @default(cuid())
-  name          String?
-  email         String?   @unique
-  emailVerified DateTime?
-  image         String?
-  phone         String?
-  role          String    @default("USER")
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
-
-  accounts Account[]
-  sessions Session[]
-
-  // Team relationships
-  leadingTeam  Team?    @relation("TeamLeader")
-  memberOfTeam Team?    @relation("TeamMember", fields: [teamId], references: [id])
-  teamId       String?
-
-  // Added by relationship (for team members)
-  addedBy   User?   @relation("AddedByUser", fields: [addedById], references: [id])
-  addedById String?
-  addedUsers User[] @relation("AddedByUser")
-
-  // Project idea relationships
+  id             String        @id @default(cuid())
+  name           String?
+  email          String?       @unique
+  emailVerified  DateTime?
+  image          String?
+  phone          String?
+  role           String        @default("USER")
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime      @updatedAt
+  teamId         String?
+  addedById      String?
+  accounts       Account[]
   submittedIdeas ProjectIdea[] @relation("SubmittedBy")
   updatedIdeas   ProjectIdea[] @relation("UpdatedBy")
+  sessions       Session[]
+  leadingTeam    Team?         @relation("TeamLeader")
+  addedBy        User?         @relation("AddedByUser", fields: [addedById], references: [id])
+  addedUsers     User[]        @relation("AddedByUser")
+  memberOfTeam   Team?         @relation("TeamMember", fields: [teamId], references: [id])
 
   @@index([email])
 }
 
 model Team {
-  id             String   @id @default(cuid())
-  name           String
-  collegeName    String
-  university     String
-  address        String
-  state          String
-  numberOfMembers Int      @default(1)
-  createdAt      DateTime @default(now())
-  updatedAt      DateTime @updatedAt
-
-  // Leader relationship
-  leader   User   @relation("TeamLeader", fields: [leaderId], references: [id])
-  leaderId String @unique
-
-  // Members relationship
-  members User[] @relation("TeamMember")
-
-  // Project idea relationship
-  projectIdea ProjectIdea?
-}
-
-enum ProjectStatus {
-  PENDING
-  ACCEPTED
-  REJECTED
-  WAITLIST
+  id              String       @id @default(cuid())
+  name            String
+  collegeName     String
+  university      String
+  address         String
+  state           String
+  numberOfMembers Int          @default(1)
+  createdAt       DateTime     @default(now())
+  updatedAt       DateTime     @updatedAt
+  leaderId        String       @unique
+  projectIdea     ProjectIdea?
+  leader          User         @relation("TeamLeader", fields: [leaderId], references: [id])
+  members         User[]       @relation("TeamMember")
 }
 
 model ProjectIdea {
-  id              String   @id @default(cuid())
-  title           String
-  description     String   @db.Text
-  techStack       String   @db.Text
-  problemStatement String   @db.Text
-  solution        String   @db.Text
-  status          ProjectStatus @default(PENDING)
-  createdAt       DateTime @default(now())
-  updatedAt       DateTime @updatedAt
-
-  // Team relationship
-  team   Team   @relation(fields: [teamId], references: [id])
-  teamId String @unique
-
-  // User relationships
-  submittedBy   User   @relation("SubmittedBy", fields: [submittedById], references: [id])
-  submittedById String
-
-  updatedBy   User?   @relation("UpdatedBy", fields: [updatedById], references: [id])
-  updatedById String?
+  id               String        @id @default(cuid())
+  title            String
+  description      String
+  techStack        String
+  problemStatement String
+  solution         String
+  status           ProjectStatus @default(PENDING)
+  createdAt        DateTime      @default(now())
+  updatedAt        DateTime      @updatedAt
+  teamId           String        @unique
+  submittedById    String
+  updatedById      String?
+  submittedBy      User          @relation("SubmittedBy", fields: [submittedById], references: [id])
+  team             Team          @relation(fields: [teamId], references: [id])
+  updatedBy        User?         @relation("UpdatedBy", fields: [updatedById], references: [id])
 }
 
 model TeamMember {
@@ -132,7 +100,7 @@ model TeamMember {
   phone     String
   teamId    String
   createdAt DateTime @default(now())
-  
+
   @@map("team_members")
 }
 
@@ -140,18 +108,25 @@ model AdminEmail {
   id        String   @id @default(cuid())
   email     String   @unique
   createdAt DateTime @default(now())
-  
+
   @@map("admin_emails")
 }
 
 model Deadline {
   id          String   @id @default(cuid())
   title       String
-  description String   @db.Text
+  description String
   startDate   DateTime
   endDate     DateTime
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
-  
+
   @@map("deadlines")
+}
+
+enum ProjectStatus {
+  PENDING
+  ACCEPTED
+  REJECTED
+  WAITLIST
 }

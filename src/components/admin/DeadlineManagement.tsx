@@ -14,10 +14,12 @@ interface DeadlineManagementProps {
   }
   deadlines: Array<{
     id: string
-    name: string
-    startDate: string
-    endDate: string
-    isActive: boolean
+    title: string
+    description: string
+    startDate: Date
+    endDate: Date
+    createdAt: Date
+    updatedAt: Date
   }>
 }
 
@@ -154,7 +156,7 @@ export function DeadlineManagement({ currentUser, deadlines }: DeadlineManagemen
               <div className="flex items-center space-x-4">
                 <Clock className="w-5 h-5 text-blue-500" />
                 <div>
-                  <p className="font-medium">{deadline.name}</p>
+                  <p className="font-medium">{deadline.title}</p>
                   <p className="text-sm text-slate-400">
                     {new Date(deadline.startDate).toLocaleString()} - {new Date(deadline.endDate).toLocaleString()}
                   </p>
@@ -162,15 +164,20 @@ export function DeadlineManagement({ currentUser, deadlines }: DeadlineManagemen
               </div>
 
               <div className="flex items-center space-x-2">
-                <Button
-                  variant={deadline.isActive ? 'default' : 'outline'}
-                  size="sm"
-                  onClick={() => handleUpdateDeadline(deadline.id, !deadline.isActive)}
-                  disabled={isLoading}
-                >
-                  <Save className="w-4 h-4 mr-2" />
-                  {deadline.isActive ? 'Active' : 'Inactive'}
-                </Button>
+                {(() => {
+                  const now = new Date()
+                  const isActive = now >= deadline.startDate && now <= deadline.endDate
+                  return (
+                    <Button
+                      variant={isActive ? 'default' : 'outline'}
+                      size="sm"
+                      disabled={true}
+                    >
+                      <Save className="w-4 h-4 mr-2" />
+                      {isActive ? 'Active' : 'Inactive'}
+                    </Button>
+                  )
+                })()}
 
                 {currentUser.role === 'SUPERADMIN' && (
                   <Button

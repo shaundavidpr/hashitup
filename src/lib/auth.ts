@@ -1,10 +1,14 @@
 import { PrismaAdapter } from '@auth/prisma-adapter'
-import { NextAuthOptions } from 'next-auth'
+import NextAuth, { NextAuthOptions } from 'next-auth'
 import GoogleProvider from 'next-auth/providers/google'
 import { db } from './db'
 
+console.log('Initializing NextAuth v4 with environment variables:')
+console.log('GOOGLE_CLIENT_ID:', process.env.GOOGLE_CLIENT_ID ? 'Set' : 'Not set')
+console.log('GOOGLE_CLIENT_SECRET:', process.env.GOOGLE_CLIENT_SECRET ? 'Set' : 'Not set')
+console.log('NEXTAUTH_SECRET:', process.env.NEXTAUTH_SECRET ? 'Set' : 'Not set')
+
 export const authOptions: NextAuthOptions = {
-  adapter: PrismaAdapter(db) as any,
   providers: [
     GoogleProvider({
       clientId: process.env.GOOGLE_CLIENT_ID!,
@@ -12,144 +16,58 @@ export const authOptions: NextAuthOptions = {
     })
   ],
   secret: process.env.NEXTAUTH_SECRET,
-  jwt: {
-    secret: process.env.NEXTAUTH_SECRET,
-  },
   callbacks: {
     async signIn({ user, account, profile }) {
-      if (account?.provider === 'google') {
-        try {
-          // Check if user exists
-          const existingUser = await db.user.findFirst({
-            where: {
-              email: user.email || '',
-            },
-            include: {
-              accounts: true,
-              leadingTeam: true,
+      try {
+        // Check if user exists, if not create them
+        const existingUser = await db.user.findUnique({
+          where: { email: user.email! }
+        })
+        
+        if (!existingUser) {
+          // Create new user
+          await db.user.create({
+            data: {
+              email: user.email!,
+              name: user.name,
+              image: user.image,
+              role: 'USER' // Default role
             }
           })
-
-          if (!existingUser) {
-            // Check if this is the first admin user (will be superadmin)
-            const adminCount = await db.user.count({
-              where: {
-                role: { in: ['ADMIN', 'SUPERADMIN'] }
-              }
-            })
-
-            const adminEmails = process.env.ADMIN_EMAILS?.split(',') || []
-            const isAdmin = adminEmails.includes(user.email!)
-            
-            // If this is the first admin, make them a superadmin
-            const role = adminCount === 0 && isAdmin ? 'SUPERADMIN' : isAdmin ? 'ADMIN' : 'MEMBER'
-
-            // Create the user
-            const newUser = await db.user.create({
-              data: {
-                email: user.email!,
-                name: user.name,
-                image: user.image,
-                role,
-              },
-            })
-
-            // Also create the account link
-            await db.account.create({
-              data: {
-                userId: newUser.id,
-                type: account.type,
-                provider: account.provider,
-                providerAccountId: account.providerAccountId,
-                access_token: account.access_token,
-                expires_at: account.expires_at,
-                token_type: account.token_type,
-                scope: account.scope,
-                id_token: account.id_token,
-              },
-            })
-
-            return true
-          }
-
-          // If user exists but doesn't have this account linked, link it
-          const hasAccount = existingUser.accounts.some(
-            (acc) => acc.provider === account.provider && acc.providerAccountId === account.providerAccountId
-          )
-
-          if (!hasAccount) {
-            await db.account.create({
-              data: {
-                userId: existingUser.id,
-                type: account.type,
-                provider: account.provider,
-                providerAccountId: account.providerAccountId,
-                access_token: account.access_token,
-                expires_at: account.expires_at,
-                token_type: account.token_type,
-                scope: account.scope,
-                id_token: account.id_token,
-              },
-            })
-          }
-
-          return true
-        } catch (error) {
-          console.error('Error during sign in:', error)
-          return false
         }
+        return true
+      } catch (error) {
+        console.error('Error in signIn callback:', error)
+        return true // Still allow sign in even if DB operation fails
       }
-      return true
     },
     async session({ session, token }) {
-      if (session.user) {
-        const dbUser = await db.user.findUnique({
-          where: { email: session.user.email! },
-          include: {
-            leadingTeam: true,
-            memberOfTeam: true,
-          },
-        })
-
-        if (dbUser) {
-          session.user.id = dbUser.id
-          session.user.role = dbUser.role
-          session.user.teamId = dbUser.teamId
-          session.user.leadingTeam = dbUser.leadingTeam
-          session.user.memberOfTeam = dbUser.memberOfTeam
+      if (session.user?.email) {
+        try {
+          // Get user from database to get the latest role and info
+          const dbUser = await db.user.findUnique({
+            where: { email: session.user.email }
+          })
+          
+          if (dbUser) {
+            session.user.id = dbUser.id
+            session.user.role = dbUser.role as any // Cast to avoid type issues
+          }
+        } catch (error) {
+          console.error('Error in session callback:', error)
+          // Fallback values if DB query fails
+          session.user.id = token.sub!
+          session.user.role = 'USER'
         }
       }
       return session
     },
-    async jwt({ token, user, account, profile }) {
+    async jwt({ token, user }) {
       if (user) {
         token.id = user.id
-        token.role = user.role
       }
       return token
     },
-    async redirect({ url, baseUrl }) {
-      // Special handling for first-time users
-      if (url.startsWith('/api/auth/callback')) {
-        const user = await db.user.findFirst({
-          where: { email: token?.email },
-          include: { leadingTeam: true, memberOfTeam: true }
-        })
-        
-        // If user has no team association, redirect to team creation
-        if (user && !user.leadingTeam && !user.memberOfTeam && user.role !== 'ADMIN') {
-          return `${baseUrl}/dashboard`
-        }
-      }
-
-      // Default redirect logic
-      if (url.startsWith('/')) {
-        return `${baseUrl}${url}`
-      } else if (url.startsWith(baseUrl)) {
-        return url
-      }
-      return baseUrl
-    }
   },
   pages: {
     signIn: '/',
@@ -161,6 +79,8 @@ export const authOptions: NextAuthOptions = {
   },
   debug: process.env.NODE_ENV === 'development'
 }
+
+export default NextAuth(authOptions)
 
 // Helper function to check if user is admin
 export const isAdmin = (userEmail: string): boolean => {
@@ -184,4 +104,4 @@ export const canAccessTeam = async (userId: string, teamId: string): Promise<boo
   if (user.memberOfTeam?.id === teamId) return true
 
   return false
-} 
+}

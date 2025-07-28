@@ -15,14 +15,11 @@ export async function POST(request: NextRequest) {
     const body = await request.json()
     const {
       teamId,
-      theme,
-      projectName,
-      type,
-      ideology,
-      methodology,
-      guideName,
-      guidePhone,
-      guideEmail,
+      title,
+      description,
+      techStack,
+      problemStatement,
+      solution,
     } = body
 
     // Check if user is team leader or admin
@@ -40,7 +37,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Check if submission already exists
-    const existingSubmission = await db.projectSubmission.findUnique({
+    const existingSubmission = await db.projectIdea.findUnique({
       where: { teamId },
     })
 
@@ -49,22 +46,21 @@ export async function POST(request: NextRequest) {
     }
 
     // Create submission
-    const submission = await db.projectSubmission.create({
+    const submission = await db.projectIdea.create({
       data: {
         teamId,
-        theme,
-        projectName,
-        type,
-        ideology,
-        methodology,
-        guideName,
-        guidePhone,
-        guideEmail,
+        title,
+        description,
+        techStack,
+        problemStatement,
+        solution,
+        submittedById: session.user.id,
+        status: 'PENDING',
       },
     })
 
     // Send confirmation email
-    const emailTemplate = emailTemplates.submissionReceived(team.name, projectName)
+    const emailTemplate = emailTemplates.submissionReceived(team.name, title)
     await sendEmail({
       to: team.leader.email!,
       subject: emailTemplate.subject,
@@ -91,7 +87,7 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
     }
 
-    const submissions = await db.projectSubmission.findMany({
+    const submissions = await db.projectIdea.findMany({
       include: {
         team: {
           include: {

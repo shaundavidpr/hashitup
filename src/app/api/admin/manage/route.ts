@@ -69,7 +69,7 @@ export async function GET(request: NextRequest) {
         role: { in: ['ADMIN', 'SUPERADMIN'] }
       },
       include: {
-        addedByAdmin: {
+        addedBy: {
           select: {
             id: true,
             name: true,

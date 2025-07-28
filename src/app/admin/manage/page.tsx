@@ -26,7 +26,7 @@ export default async function AdminManagePage() {
       role: { in: ['ADMIN', 'SUPERADMIN'] }
     },
     include: {
-      addedByAdmin: {
+      addedBy: {
         select: {
           id: true,
           name: true,
@@ -129,12 +129,12 @@ export default async function AdminManagePage() {
         </section>
 
         {/* Submissions Management */}
-        <section>
+        {/* <section>
           <h2 className="text-2xl font-semibold mb-6">Submissions Management</h2>
           <SubmissionsManagement 
             submissions={submissions}
           />
-        </section>
+        </section> */}
 
         {/* Teams Management */}
         <section>

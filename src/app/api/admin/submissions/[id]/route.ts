@@ -44,7 +44,7 @@ export async function PUT(
     }
 
     // Get submission with team details
-    const submission = await db.projectSubmission.findUnique({
+    const submission = await db.projectIdea.findUnique({
       where: { id: submissionId },
       include: {
         team: {
@@ -61,7 +61,7 @@ export async function PUT(
     }
 
     // Update submission status
-    const updatedSubmission = await db.projectSubmission.update({
+    const updatedSubmission = await db.projectIdea.update({
       where: { id: submissionId },
       data: { status },
     })
@@ -69,7 +69,7 @@ export async function PUT(
     // Send status update email to team leader
     const emailTemplate = emailTemplates.statusUpdate(
       submission.team.name,
-      submission.projectName,
+      submission.title,
       status
     )
     

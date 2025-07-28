@@ -117,7 +117,7 @@ export async function GET(request: NextRequest) {
             email: true,
           },
         },
-        submission: true,
+        projectIdea: true,
       },
     })
 

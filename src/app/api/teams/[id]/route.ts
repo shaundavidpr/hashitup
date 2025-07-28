@@ -39,7 +39,7 @@ export async function GET(
             email: true,
           },
         },
-        submission: true,
+        projectIdea: true,
       },
     })
 

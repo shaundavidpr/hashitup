@@ -17,12 +17,12 @@ interface AdminManagementProps {
   admins: Array<{
     id: string
     name: string | null
-    email: string
+    email: string | null
     role: string
-    addedByAdmin: {
+    addedBy: {
       id: string
       name: string | null
-      email: string
+      email: string | null
     } | null
   }>
 }
@@ -124,9 +124,9 @@ export function AdminManagement({ currentUser, admins }: AdminManagementProps) {
                 <div>
                   <p className="font-medium">{admin.name || admin.email}</p>
                   <p className="text-sm text-slate-400">{admin.email}</p>
-                  {admin.addedByAdmin && (
+                  {admin.addedBy && (
                     <p className="text-xs text-slate-500">
-                      Added by {admin.addedByAdmin.name || admin.addedByAdmin.email}
+                      Added by {admin.addedBy.name || admin.addedBy.email}
                     </p>
                   )}
                 </div>
@@ -139,11 +139,11 @@ export function AdminManagement({ currentUser, admins }: AdminManagementProps) {
               {admin.role !== 'SUPERADMIN' &&
                 (currentUser.role === 'SUPERADMIN' ||
                   (currentUser.role === 'ADMIN' &&
-                    admin.addedByAdmin?.id === currentUser.id)) && (
+                    admin.addedBy?.id === currentUser.id)) && (
                   <Button
                     variant="destructive"
                     size="sm"
-                    onClick={() => handleRemoveAdmin(admin.email)}
+                    onClick={() => admin.email && handleRemoveAdmin(admin.email)}
                     disabled={isLoading}
                   >
                     <Trash2 className="w-4 h-4" />

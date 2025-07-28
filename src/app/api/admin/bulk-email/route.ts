@@ -4,19 +4,6 @@ import { sendBulkEmail } from '@/lib/email'
 import { getServerSession } from 'next-auth'
 import { NextRequest, NextResponse } from 'next/server'
 
-// Define enums locally since Prisma client might not be generated yet
-enum Role {
-  ADMIN = 'ADMIN',
-  LEADER = 'LEADER',
-  MEMBER = 'MEMBER'
-}
-
-enum SubmissionStatus {
-  WAITING = 'WAITING',
-  SELECTED = 'SELECTED',
-  REJECTED = 'REJECTED'
-}
-
 export async function POST(request: NextRequest) {
   try {
     const session = await getServerSession(authOptions)
@@ -24,15 +11,14 @@ export async function POST(request: NextRequest) {
     if (!session || !session.user) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
-
+    
     // Only admins can send bulk emails
-    if (session.user.role !== Role.ADMIN) {
+    if (session.user.role !== 'ADMIN' && session.user.role !== 'SUPERADMIN') {
       return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
     }
 
     const body = await request.json()
     const { subject, message, targetGroup, customEmails } = body
-
     let recipients: string[] = []
 
     if (targetGroup) {
@@ -46,14 +32,14 @@ export async function POST(request: NextRequest) {
 
         case 'all_members':
           const allMembers = await db.user.findMany({
-            where: { role: { in: [Role.LEADER, Role.MEMBER] } },
+            where: { role: { in: ['LEADER', 'MEMBER'] } },
           })
           recipients = allMembers.map((user: any) => user.email!).filter(Boolean)
           break
 
         case 'selected_teams':
-          const selectedSubmissions = await db.projectSubmission.findMany({
-            where: { status: SubmissionStatus.SELECTED },
+          const selectedIdeas = await db.projectIdea.findMany({
+            where: { status: 'ACCEPTED' },
             include: {
               team: {
                 include: {
@@ -63,15 +49,15 @@ export async function POST(request: NextRequest) {
               },
             },
           })
-          recipients = selectedSubmissions.flatMap((submission: any) => [
-            submission.team.leader.email!,
-            ...submission.team.members.map((member: any) => member.email!),
+          recipients = selectedIdeas.flatMap((idea: any) => [
+            idea.team.leader.email!,
+            ...idea.team.members.map((member: any) => member.email!),
           ]).filter(Boolean)
           break
 
         case 'rejected_teams':
-          const rejectedSubmissions = await db.projectSubmission.findMany({
-            where: { status: SubmissionStatus.REJECTED },
+          const rejectedIdeas = await db.projectIdea.findMany({
+            where: { status: 'REJECTED' },
             include: {
               team: {
                 include: {
@@ -81,15 +67,15 @@ export async function POST(request: NextRequest) {
               },
             },
           })
-          recipients = rejectedSubmissions.flatMap((submission: any) => [
-            submission.team.leader.email!,
-            ...submission.team.members.map((member: any) => member.email!),
+          recipients = rejectedIdeas.flatMap((idea: any) => [
+            idea.team.leader.email!,
+            ...idea.team.members.map((member: any) => member.email!),
           ]).filter(Boolean)
           break
 
         case 'waiting_teams':
-          const waitingSubmissions = await db.projectSubmission.findMany({
-            where: { status: SubmissionStatus.WAITING },
+          const waitingIdeas = await db.projectIdea.findMany({
+            where: { status: 'PENDING' },
             include: {
               team: {
                 include: {
@@ -99,17 +85,17 @@ export async function POST(request: NextRequest) {
               },
             },
           })
-          recipients = waitingSubmissions.flatMap((submission: any) => [
-            submission.team.leader.email!,
-            ...submission.team.members.map((member: any) => member.email!),
+          recipients = waitingIdeas.flatMap((idea: any) => [
+            idea.team.leader.email!,
+            ...idea.team.members.map((member: any) => member.email!),
           ]).filter(Boolean)
           break
 
         case 'teams_without_submission':
-          const teamsWithSubmission = await db.projectSubmission.findMany({
+          const teamsWithIdeas = await db.projectIdea.findMany({
             select: { teamId: true },
           })
-          const submittedTeamIds = teamsWithSubmission.map((s: any) => s.teamId)
+          const submittedTeamIds = teamsWithIdeas.map((s: any) => s.teamId)
           
           const teamsWithoutSubmission = await db.team.findMany({
             where: { id: { notIn: submittedTeamIds } },
@@ -136,7 +122,6 @@ export async function POST(request: NextRequest) {
 
     // Remove duplicates
     recipients = [...new Set(recipients)]
-
     if (recipients.length === 0) {
       return NextResponse.json({ error: 'No recipients found' }, { status: 400 })
     }
@@ -158,4 +143,4 @@ export async function POST(request: NextRequest) {
     console.error('Error sending bulk email:', error)
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
   }
-} 
+}

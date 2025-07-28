@@ -35,11 +35,11 @@ export async function GET(request: NextRequest) {
               email: true,
             },
           },
-          submission: {
+          projectIdea: {
             select: {
-              projectName: true,
-              theme: true,
-              type: true,
+              title: true,
+              description: true,
+              techStack: true,
               status: true,
               createdAt: true,
             },
@@ -99,7 +99,7 @@ export async function GET(request: NextRequest) {
       })
     } else if (type === 'submissions') {
       // Export submissions data
-      const submissions = await db.projectSubmission.findMany({
+      const submissions = await db.projectIdea.findMany({
         include: {
           team: {
             include: {

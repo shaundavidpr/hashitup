@@ -1,8 +1,8 @@
 import { AdminHeader } from '@/components/admin/AdminHeader'
 import { authOptions } from '@/lib/auth'
 import { Crown, LayoutDashboard, Shield, Users } from 'lucide-react'
-import { getServerSession } from 'next-auth'
 import Link from 'next/link'
+import { getServerSession } from 'next-auth'
 import { redirect } from 'next/navigation'
 
 export default async function AdminLayout({
