@@ -20,6 +20,7 @@ export async function POST(request: NextRequest) {
       address,
       state,
       numberOfMembers,
+      leaderPhone,
       members,
     } = body
 
@@ -55,10 +56,13 @@ export async function POST(request: NextRequest) {
       },
     })
 
-    // Update user role to LEADER
+    // Update user role to LEADER and add phone number
     await db.user.update({
       where: { id: session.user.id },
-      data: { role: 'LEADER' },
+      data: { 
+        role: 'LEADER',
+        phone: leaderPhone,
+      },
     })
 
     // Create team member records

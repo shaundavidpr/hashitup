@@ -1,6 +1,7 @@
 import { ProjectIdeaForm } from '@/components/dashboard/ProjectIdeaForm'
 import { TeamCreationForm } from '@/components/dashboard/TeamCreationForm'
 import { TeamOverview } from '@/components/dashboard/TeamOverview'
+import TeamMemberView from '@/components/dashboard/TeamMemberView'
 import { Card } from '@/components/ui/Card'
 import { User } from '@/generated/prisma'
 import { authOptions } from '@/lib/auth'
@@ -18,6 +19,13 @@ type UserWithTeam = User & {
     address: string
     state: string
     numberOfMembers: number
+    createdAt: Date
+    leader: {
+      id: string
+      name: string | null
+      email: string | null
+      phone: string | null
+    }
     members: {
       id: string
       name: string | null
@@ -41,6 +49,13 @@ type UserWithTeam = User & {
     address: string
     state: string
     numberOfMembers: number
+    createdAt: Date
+    leader: {
+      id: string
+      name: string | null
+      email: string | null
+      phone: string | null
+    }
     members: {
       id: string
       name: string | null
@@ -72,13 +87,15 @@ export default async function DashboardPage() {
       leadingTeam: {
         include: {
           members: true,
-          projectIdea: true
+          projectIdea: true,
+          leader: true
         }
       },
       memberOfTeam: {
         include: {
           members: true,
-          projectIdea: true
+          projectIdea: true,
+          leader: true
         }
       }
     }
@@ -125,8 +142,28 @@ export default async function DashboardPage() {
         {/* Team Overview */}
         {team && (
           <div className="mb-12">
-            <TeamOverview 
-              team={team} 
+            <TeamMemberView 
+              team={{
+                id: team.id,
+                name: team.name,
+                collegeName: team.collegeName,
+                university: team.university,
+                address: team.address,
+                state: team.state,
+                numberOfMembers: team.numberOfMembers,
+                createdAt: team.createdAt.toISOString(),
+                leader: {
+                  name: team.leader.name || 'Unknown',
+                  email: team.leader.email || '',
+                  phone: team.leader.phone || undefined
+                },
+                members: team.members.map(member => ({
+                  id: member.id,
+                  name: member.name || 'Unknown',
+                  email: member.email || '',
+                  phone: member.phone || undefined
+                }))
+              }}
               isLeader={isLeader} 
             />
           </div>

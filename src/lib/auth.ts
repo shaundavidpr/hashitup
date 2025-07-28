@@ -25,16 +25,48 @@ export const authOptions: NextAuthOptions = {
         })
         
         if (!existingUser) {
+          // Check if this email is in any team member list
+          const teamMember = await db.teamMember.findFirst({
+            where: { email: user.email! }
+          })
+          
+          let userData: any = {
+            email: user.email!,
+            name: user.name,
+            image: user.image,
+            role: 'USER' // Default role
+          }
+          
+          // If they're a team member, assign them to that team
+          if (teamMember) {
+            userData.teamId = teamMember.teamId
+            userData.phone = teamMember.phone // Use phone from team member record
+            userData.name = teamMember.name || user.name // Use team member name if provided
+          }
+          
           // Create new user
           await db.user.create({
-            data: {
-              email: user.email!,
-              name: user.name,
-              image: user.image,
-              role: 'USER' // Default role
-            }
+            data: userData
           })
+        } else if (!existingUser.teamId) {
+          // User exists but not assigned to team yet, check if they should be
+          const teamMember = await db.teamMember.findFirst({
+            where: { email: user.email! }
+          })
+          
+          if (teamMember) {
+            // Update existing user to assign them to the team
+            await db.user.update({
+              where: { email: user.email! },
+              data: {
+                teamId: teamMember.teamId,
+                phone: teamMember.phone,
+                name: teamMember.name || existingUser.name
+              }
+            })
+          }
         }
+        
         return true
       } catch (error) {
         console.error('Error in signIn callback:', error)

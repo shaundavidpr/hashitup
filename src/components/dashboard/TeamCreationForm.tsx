@@ -20,6 +20,7 @@ export function TeamCreationForm() {
     university: '',
     address: '',
     state: '',
+    leaderPhone: '',
     numberOfMembers: 2,
   })
   const [members, setMembers] = useState<TeamMember[]>([
@@ -110,6 +111,20 @@ export function TeamCreationForm() {
 
         <div>
           <label className="block text-sm font-medium text-slate-300 mb-2">
+            Your Phone Number *
+          </label>
+          <input
+            type="tel"
+            required
+            value={teamData.leaderPhone}
+            onChange={(e) => setTeamData({ ...teamData, leaderPhone: e.target.value })}
+            className="w-full px-3 py-2 bg-slate-800/50 border border-slate-700 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-white"
+            placeholder="Enter your phone number"
+          />
+        </div>
+
+        <div>
+          <label className="block text-sm font-medium text-slate-300 mb-2">
             University *
           </label>
           <input
@@ -167,6 +182,13 @@ export function TeamCreationForm() {
             <Plus className="h-4 w-4" />
             Add Member
           </Button>
+        </div>
+
+        <div className="mb-4 p-3 bg-blue-900/20 border border-blue-700/50 rounded-lg">
+          <p className="text-sm text-blue-200">
+            <strong>💡 How member login works:</strong> After you create the team, your members can sign in 
+            using Google with the email addresses you provide below. They will automatically be added to your team.
+          </p>
         </div>
 
         <div className="space-y-4">
