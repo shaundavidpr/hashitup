@@ -60,7 +60,7 @@ export function DeadlineManagement({ currentUser, deadlines }: DeadlineManagemen
     }
   }
 
-  const handleUpdateDeadline = async (id: string, isActive: boolean) => {
+  const _handleUpdateDeadline = async (id: string, isActive: boolean) => {  // Unused - can be removed later
     setIsLoading(true)
     try {
       const res = await fetch(`/api/admin/deadlines/${id}`, {

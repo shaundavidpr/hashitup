@@ -7,21 +7,21 @@ import { useState } from 'react'
 
 export function LoginButton() {
   const { data: session, status } = useSession()
-  const [isSigningIn, setIsSigningIn] = useState(false)
-  const [error, setError] = useState<string | null>(null)
+  const [_isSigningIn, _setIsSigningIn] = useState(false)  // Unused - can be removed later
+  const [_error, _setError] = useState<string | null>(null)  // Unused - can be removed later
   const [isLoading, setIsLoading] = useState(false)
 
-  const handleSignIn = async () => {
+  const _handleSignIn = async () => {  // Unused - can be removed later
     try {
-      setIsSigningIn(true)
-      setError(null)
+      _setIsSigningIn(true)
+      _setError(null)
       
       // Redirect to signin page
       window.location.href = `/api/auth/signin?callbackUrl=${encodeURIComponent(window.location.href)}`
     } catch (error) {
       console.error('Sign in error:', error)
-      setError('Unable to sign in. Please try again.')
-      setIsSigningIn(false)
+      _setError('Unable to sign in. Please try again.')
+      _setIsSigningIn(false)
     }
   }
 

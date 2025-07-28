@@ -1,12 +1,14 @@
-import { PrismaAdapter } from '@auth/prisma-adapter'
-import NextAuth, { NextAuthOptions } from 'next-auth'
+import { NextAuthOptions } from 'next-auth'
 import GoogleProvider from 'next-auth/providers/google'
 import { db } from './db'
 
-console.log('Initializing NextAuth v4 with environment variables:')
-console.log('GOOGLE_CLIENT_ID:', process.env.GOOGLE_CLIENT_ID ? 'Set' : 'Not set')
-console.log('GOOGLE_CLIENT_SECRET:', process.env.GOOGLE_CLIENT_SECRET ? 'Set' : 'Not set')
-console.log('NEXTAUTH_SECRET:', process.env.NEXTAUTH_SECRET ? 'Set' : 'Not set')
+// Only log during development to reduce build noise
+if (process.env.NODE_ENV === 'development') {
+  console.log('Initializing NextAuth v4 with environment variables:')
+  console.log('GOOGLE_CLIENT_ID:', process.env.GOOGLE_CLIENT_ID ? 'Set' : 'Not set')
+  console.log('GOOGLE_CLIENT_SECRET:', process.env.GOOGLE_CLIENT_SECRET ? 'Set' : 'Not set')
+  console.log('NEXTAUTH_SECRET:', process.env.NEXTAUTH_SECRET ? 'Set' : 'Not set')
+}
 
 export const authOptions: NextAuthOptions = {
   providers: [
@@ -17,7 +19,7 @@ export const authOptions: NextAuthOptions = {
   ],
   secret: process.env.NEXTAUTH_SECRET,
   callbacks: {
-    async signIn({ user, account, profile }) {
+    async signIn({ user, account: _account, profile: _profile }) {
       try {
         // Check if user exists, if not create them
         const existingUser = await db.user.findUnique({
@@ -30,10 +32,17 @@ export const authOptions: NextAuthOptions = {
             where: { email: user.email! }
           })
           
-          let userData: any = {
+          const userData: {
+            email: string;
+            name: string | null;
+            image: string | null;
+            role: string;
+            teamId?: string;
+            phone?: string;
+          } = {
             email: user.email!,
-            name: user.name,
-            image: user.image,
+            name: user.name || null,
+            image: user.image || null,
             role: 'USER' // Default role
           }
           
@@ -41,7 +50,7 @@ export const authOptions: NextAuthOptions = {
           if (teamMember) {
             userData.teamId = teamMember.teamId
             userData.phone = teamMember.phone // Use phone from team member record
-            userData.name = teamMember.name || user.name // Use team member name if provided
+            userData.name = teamMember.name || user.name || null // Use team member name if provided
           }
           
           // Create new user
@@ -83,7 +92,7 @@ export const authOptions: NextAuthOptions = {
           
           if (dbUser) {
             session.user.id = dbUser.id
-            session.user.role = dbUser.role as any // Cast to avoid type issues
+            session.user.role = dbUser.role as 'USER' | 'ADMIN' | 'SUPERADMIN' // Type-safe cast
           }
         } catch (error) {
           console.error('Error in session callback:', error)
@@ -111,8 +120,6 @@ export const authOptions: NextAuthOptions = {
   },
   debug: process.env.NODE_ENV === 'development'
 }
-
-export default NextAuth(authOptions)
 
 // Helper function to check if user is admin
 export const isAdmin = (userEmail: string): boolean => {

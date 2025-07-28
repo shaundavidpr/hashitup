@@ -24,9 +24,12 @@ export default async function HomePage() {
       }
       redirect('/dashboard')
     }
-  } catch (error) {
-    console.error('Auth error:', error)
-    // Continue to render the page if auth fails
+  } catch (error: any) {
+    // Suppress the expected dynamic server usage message during build
+    if (error?.digest !== 'DYNAMIC_SERVER_USAGE') {
+      console.error('Auth error:', error)
+    }
+    // Continue to render the page if auth fails or during build
   }
 
   return (

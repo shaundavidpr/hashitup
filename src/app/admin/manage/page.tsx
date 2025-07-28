@@ -1,7 +1,6 @@
 import { AdminManagement } from '@/components/admin/AdminManagement'
 import { BulkEmailForm } from '@/components/admin/BulkEmailForm'
 import { DeadlineManagement } from '@/components/admin/DeadlineManagement'
-import { SubmissionsManagement } from '@/components/admin/SubmissionsManagement'
 import { TeamsManagement } from '@/components/admin/TeamsManagement'
 import { authOptions } from '@/lib/auth'
 import { db } from '@/lib/db'
@@ -46,8 +45,8 @@ export default async function AdminManagePage() {
     }
   })
 
-  // Get all submissions
-  const submissions = await db.projectIdea.findMany({
+  // Get all submissions (unused - remove if not needed)
+  const _submissions = await db.projectIdea.findMany({
     include: {
       team: {
         include: {

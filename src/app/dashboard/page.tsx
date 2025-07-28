@@ -1,6 +1,5 @@
 import { ProjectIdeaForm } from '@/components/dashboard/ProjectIdeaForm'
 import { TeamCreationForm } from '@/components/dashboard/TeamCreationForm'
-import { TeamOverview } from '@/components/dashboard/TeamOverview'
 import TeamMemberView from '@/components/dashboard/TeamMemberView'
 import { Card } from '@/components/ui/Card'
 import { User } from '@/generated/prisma'

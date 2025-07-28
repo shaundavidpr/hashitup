@@ -20,7 +20,10 @@ interface SubmissionStatusProps {
   isLeader: boolean
 }
 
-export function SubmissionStatus({ submission, isLeader }: SubmissionStatusProps) {
+export function SubmissionStatus({ 
+  submission, 
+  isLeader: _isLeader 
+}: SubmissionStatusProps) {
   const getStatusIcon = (status: Status) => {
     switch (status) {
       case 'WAITING':

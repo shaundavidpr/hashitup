@@ -3,6 +3,7 @@
 import { Button } from '@/components/ui/Button'
 import { AlertTriangle, Home, RefreshCw } from 'lucide-react'
 import { useRouter, useSearchParams } from 'next/navigation'
+import { Suspense } from 'react'
 
 const errorMessages: Record<string, { title: string; description: string }> = {
   Configuration: {
@@ -59,7 +60,7 @@ const errorMessages: Record<string, { title: string; description: string }> = {
   }
 }
 
-export default function AuthError() {
+function AuthErrorContent() {
   const router = useRouter()
   const searchParams = useSearchParams()
   const error = searchParams.get('error') || 'Default'
@@ -140,5 +141,17 @@ export default function AuthError() {
         </div>
       </div>
     </div>
+  )
+}
+
+export default function AuthError() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900">
+        <div className="text-white">Loading...</div>
+      </div>
+    }>
+      <AuthErrorContent />
+    </Suspense>
   )
 }

@@ -166,7 +166,7 @@ export default function TeamMemberView({ team, isLeader }: TeamMemberViewProps) 
           <div className="space-y-2 text-blue-200">
             <p>Share these instructions with your team members:</p>
             <ol className="list-decimal list-inside space-y-1 ml-4">
-              <li>Go to the website and click "Sign In"</li>
+              <li>Go to the website and click &quot;Sign In&quot;</li>
               <li>Sign in with Google using the email address you provided</li>
               <li>They will automatically be added to your team</li>
               <li>They can then access the team dashboard and submit project ideas</li>

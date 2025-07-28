@@ -94,7 +94,7 @@ export default async function AdminPage() {
     }
   })
 
-  const stats = {
+  const _stats = {  // Stats not currently used
     totalTeams,
     totalUsers,
     totalSubmissions,

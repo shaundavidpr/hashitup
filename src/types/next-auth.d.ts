@@ -11,8 +11,8 @@ declare module 'next-auth' {
       image?: string | null
       role: Role
       teamId?: string | null
-      leadingTeam?: any
-      memberOfTeam?: any
+      leadingTeam?: object
+      memberOfTeam?: object
     }
   }
 
@@ -20,8 +20,8 @@ declare module 'next-auth' {
     id: string
     role: Role
     teamId?: string | null
-    leadingTeam?: any
-    memberOfTeam?: any
+    leadingTeam?: object
+    memberOfTeam?: object
   }
 }
 
