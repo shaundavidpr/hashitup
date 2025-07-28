@@ -36,6 +36,7 @@ async function getTeams() {
             description: true,
             techStack: true,
             status: true,
+            isDraft: true,
             createdAt: true,
           },
         },
@@ -53,6 +54,7 @@ async function getTeams() {
         projectName: team.projectIdea.title,
         theme: team.projectIdea.description,
         status: team.projectIdea.status,
+        isDraft: team.projectIdea.isDraft,
         createdAt: team.projectIdea.createdAt,
       } : null
     }))

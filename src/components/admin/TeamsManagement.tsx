@@ -1,7 +1,7 @@
 'use client'
 
 import { Button } from '@/components/ui/Button'
-import { Eye, Mail, Users, CheckCircle, XCircle, Clock, Star, Download } from 'lucide-react'
+import { Eye, Mail, Users, CheckCircle, XCircle, Clock, Star, Download, RotateCcw } from 'lucide-react'
 import { useState } from 'react'
 
 interface Team {
@@ -30,6 +30,7 @@ interface Team {
     projectName: string
     theme: string
     status: string
+    isDraft: boolean
     createdAt: Date
   } | null
 }
@@ -52,7 +53,9 @@ export function TeamsManagement({ teams }: TeamsManagementProps) {
     
     const matchesStatus = filterStatus === 'all' || 
       (team.submission?.status === filterStatus) ||
-      (filterStatus === 'no-submission' && !team.submission)
+      (filterStatus === 'no-submission' && !team.submission) ||
+      (filterStatus === 'draft' && team.submission?.isDraft) ||
+      (filterStatus === 'submitted' && team.submission && !team.submission.isDraft)
     
     return matchesSearch && matchesStatus
   })
@@ -83,9 +86,26 @@ export function TeamsManagement({ teams }: TeamsManagementProps) {
   const handleBulkStatusUpdate = async (status: string) => {
     if (selectedTeams.size === 0) return
 
+    // Filter out teams with draft submissions
+    const validTeamIds = Array.from(selectedTeams).filter(teamId => {
+      const team = filteredTeams.find(t => t.id === teamId)
+      return team?.submission && !team.submission.isDraft
+    })
+
+    if (validTeamIds.length === 0) {
+      alert('No valid teams selected. Only teams with submitted (non-draft) ideas can be evaluated.')
+      return
+    }
+
+    if (validTeamIds.length !== selectedTeams.size) {
+      if (!confirm(`${selectedTeams.size - validTeamIds.length} team(s) with draft submissions will be skipped. Continue with ${validTeamIds.length} team(s)?`)) {
+        return
+      }
+    }
+
     setIsUpdating(true)
     try {
-      const promises = Array.from(selectedTeams).map(teamId =>
+      const promises = validTeamIds.map(teamId =>
         fetch(`/api/admin/teams/${teamId}/status`, {
           method: 'PATCH',
           headers: { 'Content-Type': 'application/json' },
@@ -129,6 +149,34 @@ export function TeamsManagement({ teams }: TeamsManagementProps) {
     }
   }
 
+  const handleResetStatus = async (teamId: string) => {
+    if (!confirm('Are you sure you want to reset this team\'s evaluation status to PENDING?')) {
+      return
+    }
+
+    setIsUpdating(true)
+    try {
+      const response = await fetch(`/api/admin/teams/${teamId}/status`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ status: 'PENDING' }),
+      })
+
+      if (response.ok) {
+        window.location.reload()
+      } else {
+        alert('Failed to reset team status')
+      }
+    } catch (error) {
+      console.error('Error resetting team status:', error)
+      alert('Error resetting team status')
+    } finally {
+      setIsUpdating(false)
+    }
+  }
+
   const getStatusColor = (status: string) => {
     switch (status) {
       case 'ACCEPTED':
@@ -150,10 +198,22 @@ export function TeamsManagement({ teams }: TeamsManagementProps) {
     <div className="bg-white overflow-hidden shadow rounded-lg">
       <div className="px-4 py-5 sm:p-6">
         {/* Stats Overview */}
-        <div className="grid grid-cols-2 md:grid-cols-5 gap-4 mb-6">
+        <div className="grid grid-cols-2 md:grid-cols-6 gap-4 mb-6">
           <div className="bg-gray-50 rounded-lg p-3">
             <div className="text-sm font-medium text-gray-500">Total Teams</div>
             <div className="text-2xl font-bold text-gray-900">{teams.length}</div>
+          </div>
+          <div className="bg-orange-50 rounded-lg p-3">
+            <div className="text-sm font-medium text-orange-600">Draft Ideas</div>
+            <div className="text-2xl font-bold text-orange-900">
+              {teams.filter(t => t.submission?.isDraft).length}
+            </div>
+          </div>
+          <div className="bg-blue-50 rounded-lg p-3">
+            <div className="text-sm font-medium text-blue-600">Pending</div>
+            <div className="text-2xl font-bold text-blue-900">
+              {teams.filter(t => t.submission && !t.submission.isDraft && t.submission.status === 'PENDING').length}
+            </div>
           </div>
           <div className="bg-green-50 rounded-lg p-3">
             <div className="text-sm font-medium text-green-600">Accepted</div>
@@ -171,12 +231,6 @@ export function TeamsManagement({ teams }: TeamsManagementProps) {
             <div className="text-sm font-medium text-red-600">Rejected</div>
             <div className="text-2xl font-bold text-red-900">
               {teams.filter(t => t.submission?.status === 'REJECTED').length}
-            </div>
-          </div>
-          <div className="bg-blue-50 rounded-lg p-3">
-            <div className="text-sm font-medium text-blue-600">Pending</div>
-            <div className="text-2xl font-bold text-blue-900">
-              {teams.filter(t => t.submission?.status === 'PENDING' || !t.submission).length}
             </div>
           </div>
         </div>
@@ -198,7 +252,9 @@ export function TeamsManagement({ teams }: TeamsManagementProps) {
               className="px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
             >
               <option value="all">All Statuses</option>
-              <option value="PENDING">Pending</option>
+              <option value="draft">Draft Ideas</option>
+              <option value="submitted">Submitted Ideas</option>
+              <option value="PENDING">Pending Review</option>
               <option value="ACCEPTED">Accepted</option>
               <option value="WAITLIST">Waitlisted</option>
               <option value="REJECTED">Rejected</option>
@@ -337,9 +393,17 @@ export function TeamsManagement({ teams }: TeamsManagementProps) {
                     {team.submission ? (
                       <div>
                         <div className="text-sm font-medium text-gray-900">{team.submission.projectName}</div>
-                        <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${getStatusColor(team.submission.status)}`}>
-                          {team.submission.status}
-                        </span>
+                        <div className="flex items-center space-x-2">
+                          {team.submission.isDraft ? (
+                            <span className="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-orange-100 text-orange-800">
+                              DRAFT
+                            </span>
+                          ) : (
+                            <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${getStatusColor(team.submission.status)}`}>
+                              {team.submission.status}
+                            </span>
+                          )}
+                        </div>
                       </div>
                     ) : (
                       <span className="text-sm text-gray-500">No submission</span>
@@ -360,7 +424,7 @@ export function TeamsManagement({ teams }: TeamsManagementProps) {
                         View
                       </Button>
                       
-                      {team.submission && (
+                      {team.submission && !team.submission.isDraft && (
                         <>
                           <Button
                             onClick={() => handleStatusUpdate(team.id, 'ACCEPTED')}
@@ -394,7 +458,26 @@ export function TeamsManagement({ teams }: TeamsManagementProps) {
                             <XCircle className="h-4 w-4" />
                             Reject
                           </Button>
+                          
+                          {team.submission.status !== 'PENDING' && (
+                            <Button
+                              onClick={() => handleResetStatus(team.id)}
+                              variant="ghost"
+                              size="sm"
+                              className="flex items-center gap-1 text-blue-600 hover:text-blue-700"
+                              disabled={isUpdating}
+                            >
+                              <RotateCcw className="h-4 w-4" />
+                              Reset
+                            </Button>
+                          )}
                         </>
+                      )}
+                      
+                      {team.submission?.isDraft && (
+                        <span className="text-xs text-orange-600 italic">
+                          Cannot evaluate draft
+                        </span>
                       )}
                     </div>
                   </td>
@@ -480,9 +563,17 @@ export function TeamsManagement({ teams }: TeamsManagementProps) {
                       <div className="bg-gray-50 rounded-lg p-3">
                         <p className="text-sm font-medium">{selectedTeam.submission.projectName}</p>
                         <p className="text-sm text-gray-500">Theme: {selectedTeam.submission.theme}</p>
-                        <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${getStatusColor(selectedTeam.submission.status)}`}>
-                          {selectedTeam.submission.status}
-                        </span>
+                        <div className="mt-2">
+                          {selectedTeam.submission.isDraft ? (
+                            <span className="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-orange-100 text-orange-800">
+                              DRAFT - Cannot be evaluated
+                            </span>
+                          ) : (
+                            <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${getStatusColor(selectedTeam.submission.status)}`}>
+                              {selectedTeam.submission.status}
+                            </span>
+                          )}
+                        </div>
                       </div>
                     </div>
                   )}
@@ -493,7 +584,7 @@ export function TeamsManagement({ teams }: TeamsManagementProps) {
                     <p className="text-sm text-gray-600">{selectedTeam.state}</p>
                   </div>
                   
-                  {selectedTeam.submission && (
+                  {selectedTeam.submission && !selectedTeam.submission.isDraft && (
                     <div>
                       <h5 className="font-medium text-gray-900 mb-2">Admin Actions</h5>
                       <div className="flex flex-wrap gap-2">
@@ -533,6 +624,20 @@ export function TeamsManagement({ teams }: TeamsManagementProps) {
                           <XCircle className="h-4 w-4 mr-1" />
                           Reject Team
                         </Button>
+                        {selectedTeam.submission.status !== 'PENDING' && (
+                          <Button
+                            onClick={() => {
+                              handleResetStatus(selectedTeam.id)
+                              setSelectedTeam(null)
+                            }}
+                            size="sm"
+                            className="bg-blue-600 hover:bg-blue-700 text-white"
+                            disabled={isUpdating}
+                          >
+                            <RotateCcw className="h-4 w-4 mr-1" />
+                            Reset Status
+                          </Button>
+                        )}
                       </div>
                     </div>
                   )}

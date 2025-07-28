@@ -1,6 +1,7 @@
 import { AdminManagement } from '@/components/admin/AdminManagement'
 import { BulkEmailForm } from '@/components/admin/BulkEmailForm'
 import { DeadlineManagement } from '@/components/admin/DeadlineManagement'
+import { ResultsPublishing } from '@/components/admin/ResultsPublishing'
 import { TeamsManagement } from '@/components/admin/TeamsManagement'
 import { authOptions } from '@/lib/auth'
 import { db } from '@/lib/db'
@@ -96,6 +97,14 @@ export default async function AdminManagePage() {
     }
   })
 
+  // Calculate stats for results publishing
+  const resultsStats = {
+    totalTeams: teams.length,
+    totalEvaluatedTeams: teams.filter(t => t.projectIdea && !t.projectIdea.isDraft).length,
+    acceptedTeams: teams.filter(t => t.projectIdea && !t.projectIdea.isDraft && t.projectIdea.status === 'ACCEPTED').length,
+    waitlistedTeams: teams.filter(t => t.projectIdea && !t.projectIdea.isDraft && t.projectIdea.status === 'WAITLIST').length,
+  }
+
   return (
     <div className="min-h-screen bg-slate-950 text-white py-20">
       <div className="container-custom space-y-12">
@@ -106,6 +115,17 @@ export default async function AdminManagePage() {
             Comprehensive admin control panel
           </p>
         </div>
+
+        {/* Results Publishing - Only visible to superadmin */}
+        {session.user.role === 'SUPERADMIN' && (
+          <section>
+            <h2 className="text-2xl font-semibold mb-6">Results Publishing</h2>
+            <ResultsPublishing 
+              currentUser={session.user}
+              stats={resultsStats}
+            />
+          </section>
+        )}
 
         {/* Admin Management - Only visible to superadmin */}
         {session.user.role === 'SUPERADMIN' && (

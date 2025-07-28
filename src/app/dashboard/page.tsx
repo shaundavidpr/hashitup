@@ -1,4 +1,5 @@
 import { ProjectIdeaForm } from '@/components/dashboard/ProjectIdeaForm'
+import { ProjectResults } from '@/components/dashboard/ProjectResults'
 import { TeamCreationForm } from '@/components/dashboard/TeamCreationForm'
 import TeamMemberView from '@/components/dashboard/TeamMemberView'
 import { Card } from '@/components/ui/Card'
@@ -38,6 +39,7 @@ type UserWithTeam = User & {
       techStack: string
       problemStatement: string
       solution: string
+      status: string
       isDraft: boolean
     } | null
   } | null
@@ -69,6 +71,7 @@ type UserWithTeam = User & {
       techStack: string
       problemStatement: string
       solution: string
+      status: string
       isDraft: boolean
     } | null
   } | null
@@ -88,14 +91,36 @@ export default async function DashboardPage() {
       leadingTeam: {
         include: {
           members: true,
-          projectIdea: true,
+          projectIdea: {
+            select: {
+              id: true,
+              title: true,
+              description: true,
+              techStack: true,
+              problemStatement: true,
+              solution: true,
+              status: true,
+              isDraft: true
+            }
+          },
           leader: true
         }
       },
       memberOfTeam: {
         include: {
           members: true,
-          projectIdea: true,
+          projectIdea: {
+            select: {
+              id: true,
+              title: true,
+              description: true,
+              techStack: true,
+              problemStatement: true,
+              solution: true,
+              status: true,
+              isDraft: true
+            }
+          },
           leader: true
         }
       }
@@ -168,6 +193,11 @@ export default async function DashboardPage() {
               isLeader={isLeader} 
             />
           </div>
+        )}
+
+        {/* Project Results - Show evaluation results if project is submitted */}
+        {team?.projectIdea && (
+          <ProjectResults projectIdea={team.projectIdea} />
         )}
 
         {/* Project Idea Form */}
