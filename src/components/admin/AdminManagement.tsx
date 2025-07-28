@@ -36,13 +36,51 @@ export function AdminManagement({ currentUser, admins }: AdminManagementProps) {
     if (!newAdminEmail) return
 
     setIsLoading(true)
+    
+    // Enhanced retry logic for development mode compilation issues
+    const makeRequestWithRetry = async (retryCount = 0): Promise<Response> => {
+      try {
+        const res = await fetch('/api/admin/manage', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email: newAdminEmail }),
+          credentials: 'include' // Ensure cookies are sent
+        })
+        
+        // If we get a 404 and have retries left, wait and retry
+        if (res.status === 404 && retryCount < 3) {
+          if (retryCount === 0) {
+            toast.info('Route compiling, retrying...', { duration: 2000 })
+          }
+          const delay = Math.min(1000 * Math.pow(2, retryCount), 3000) // Exponential backoff, max 3s
+          await new Promise(resolve => setTimeout(resolve, delay))
+          return makeRequestWithRetry(retryCount + 1)
+        }
+        
+        // If we've exhausted retries and still get 404, throw a specific error
+        if (res.status === 404) {
+          throw new Error('API route not available after retries. Please try again in a moment.')
+        }
+        
+        return res
+      } catch (error) {
+        // If it's our custom error, re-throw it
+        if (error instanceof Error && error.message.includes('API route not available')) {
+          throw error
+        }
+        
+        // Network error - retry if we have retries left
+        if (retryCount < 3) {
+          const delay = Math.min(1000 * Math.pow(2, retryCount), 3000)
+          await new Promise(resolve => setTimeout(resolve, delay))
+          return makeRequestWithRetry(retryCount + 1)
+        }
+        throw error
+      }
+    }
+    
     try {
-      const res = await fetch('/api/admin/manage', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email: newAdminEmail })
-      })
-
+      const res = await makeRequestWithRetry()
       const data = await res.json()
       
       if (!res.ok) {
@@ -54,7 +92,8 @@ export function AdminManagement({ currentUser, admins }: AdminManagementProps) {
       // Refresh the page to update the admin list
       window.location.reload()
     } catch (error) {
-      toast.error(error instanceof Error ? error.message : 'Failed to add admin')
+      console.error('Error adding admin:', error)
+      toast.error(error instanceof Error ? error.message : 'Failed to add admin. Please try again.')
     } finally {
       setIsLoading(false)
     }
@@ -64,11 +103,41 @@ export function AdminManagement({ currentUser, admins }: AdminManagementProps) {
     if (!confirm('Are you sure you want to remove this admin?')) return
 
     setIsLoading(true)
+    
+    // Enhanced retry logic for development mode compilation issues
+    const makeRequestWithRetry = async (retryCount = 0): Promise<Response> => {
+      try {
+        const res = await fetch('/api/admin/manage', {
+          method: 'DELETE',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email }),
+          credentials: 'include' // Ensure cookies are sent
+        })
+        
+        // If we get a 404 and have retries left, wait and retry
+        if (res.status === 404 && retryCount < 3) {
+          if (retryCount === 0) {
+            toast.info('Route compiling, retrying...', { duration: 2000 })
+          }
+          const delay = Math.min(1000 * Math.pow(2, retryCount), 3000) // Exponential backoff, max 3s
+          await new Promise(resolve => setTimeout(resolve, delay))
+          return makeRequestWithRetry(retryCount + 1)
+        }
+        
+        return res
+      } catch (error) {
+        // Network error - retry if we have retries left
+        if (retryCount < 3) {
+          const delay = Math.min(1000 * Math.pow(2, retryCount), 3000)
+          await new Promise(resolve => setTimeout(resolve, delay))
+          return makeRequestWithRetry(retryCount + 1)
+        }
+        throw error
+      }
+    }
+    
     try {
-      const res = await fetch(`/api/admin/manage?email=${encodeURIComponent(email)}`, {
-        method: 'DELETE'
-      })
-
+      const res = await makeRequestWithRetry()
       const data = await res.json()
       
       if (!res.ok) {
@@ -79,7 +148,8 @@ export function AdminManagement({ currentUser, admins }: AdminManagementProps) {
       // Refresh the page to update the admin list
       window.location.reload()
     } catch (error) {
-      toast.error(error instanceof Error ? error.message : 'Failed to remove admin')
+      console.error('Error removing admin:', error)
+      toast.error(error instanceof Error ? error.message : 'Failed to remove admin. Please try again.')
     } finally {
       setIsLoading(false)
     }

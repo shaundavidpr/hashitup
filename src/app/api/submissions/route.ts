@@ -4,12 +4,21 @@ import { emailTemplates, sendEmail } from '@/lib/email'
 import { getServerSession } from 'next-auth'
 import { NextRequest, NextResponse } from 'next/server'
 
-export async function POST(request: NextRequest) {
+export async function POST(request: Request) {
   try {
     const session = await getServerSession(authOptions)
     
     if (!session || !session.user) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+    }
+
+    // Get user from database using email to ensure we have the correct ID
+    const currentUser = await db.user.findUnique({
+      where: { email: session.user.email! }
+    })
+
+    if (!currentUser) {
+      return NextResponse.json({ error: 'User not found' }, { status: 404 })
     }
 
     const body = await request.json()
@@ -32,7 +41,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Team not found' }, { status: 404 })
     }
 
-    if (team.leaderId !== session.user.id && session.user.role !== 'ADMIN') {
+    if (team.leaderId !== currentUser.id && currentUser.role !== 'ADMIN') {
       return NextResponse.json({ error: 'Only team leaders can submit projects' }, { status: 403 })
     }
 
@@ -54,7 +63,7 @@ export async function POST(request: NextRequest) {
         techStack,
         problemStatement,
         solution,
-        submittedById: session.user.id,
+        submittedById: currentUser.id,
         status: 'PENDING',
       },
     })

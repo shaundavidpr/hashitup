@@ -12,13 +12,26 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
 
+    // Get user from database using email to ensure we have the correct ID
+    const currentUser = await db.user.findUnique({
+      where: { email: session.user.email! }
+    })
+
+    if (!currentUser) {
+      return NextResponse.json({ error: 'Current user not found in database' }, { status: 404 })
+    }
+
     // Only superadmin and admins can add new admins
-    if (session.user.role !== 'SUPERADMIN' && session.user.role !== 'ADMIN') {
+    if (currentUser.role !== 'SUPERADMIN' && currentUser.role !== 'ADMIN') {
       return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
     }
 
     const body = await request.json()
     const { email } = body
+
+    if (!email) {
+      return NextResponse.json({ error: 'Email is required' }, { status: 400 })
+    }
 
     // Check if user exists
     let user = await db.user.findUnique({
@@ -26,11 +39,11 @@ export async function POST(request: NextRequest) {
     })
 
     if (!user) {
-      return NextResponse.json({ error: 'User not found' }, { status: 404 })
+      return NextResponse.json({ error: `User with email ${email} not found in database` }, { status: 404 })
     }
 
     // Regular admins cannot modify other admins or create superadmins
-    if (session.user.role === 'ADMIN' && (user.role === 'ADMIN' || user.role === 'SUPERADMIN')) {
+    if (currentUser.role === 'ADMIN' && (user.role === 'ADMIN' || user.role === 'SUPERADMIN')) {
       return NextResponse.json({ error: 'Insufficient permissions' }, { status: 403 })
     }
 
@@ -39,7 +52,7 @@ export async function POST(request: NextRequest) {
       where: { email },
       data: {
         role: 'ADMIN',
-        addedById: session.user.id
+        addedById: currentUser.id
       }
     })
 
@@ -59,23 +72,42 @@ export async function GET(_request: Request) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
 
+    // Get user from database using email to ensure we have the correct ID
+    const currentUser = await db.user.findUnique({
+      where: { email: session.user.email! }
+    })
+
+    if (!currentUser) {
+      return NextResponse.json({ error: 'User not found' }, { status: 404 })
+    }
+
     // Only superadmin and admins can view admin list
-    if (session.user.role !== 'SUPERADMIN' && session.user.role !== 'ADMIN') {
+    if (currentUser.role !== 'SUPERADMIN' && currentUser.role !== 'ADMIN') {
       return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
     }
 
     const admins = await db.user.findMany({
       where: {
-        role: { in: ['ADMIN', 'SUPERADMIN'] }
+        role: {
+          in: ['ADMIN', 'SUPERADMIN']
+        }
       },
-      include: {
+      select: {
+        id: true,
+        name: true,
+        email: true,
+        role: true,
+        createdAt: true,
+        addedById: true,
         addedBy: {
           select: {
-            id: true,
             name: true,
             email: true
           }
         }
+      },
+      orderBy: {
+        createdAt: 'desc'
       }
     })
 
@@ -95,19 +127,24 @@ export async function DELETE(request: NextRequest) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
 
-    // Only superadmin and admins can remove admins
-    if (session.user.role !== 'SUPERADMIN' && session.user.role !== 'ADMIN') {
-      return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
+    // Get user from database using email to ensure we have the correct ID
+    const currentUser = await db.user.findUnique({
+      where: { email: session.user.email! }
+    })
+
+    if (!currentUser) {
+      return NextResponse.json({ error: 'User not found' }, { status: 404 })
     }
 
-    const url = new URL(request.url)
-    const email = url.searchParams.get('email')
-
-    if (!email) {
-      return NextResponse.json({ error: 'Email is required' }, { status: 400 })
+    // Only superadmin can remove admins
+    if (currentUser.role !== 'SUPERADMIN') {
+      return NextResponse.json({ error: 'Only superadmin can remove admins' }, { status: 403 })
     }
 
-    // Get user to remove
+    const body = await request.json()
+    const { email } = body
+
+    // Check if user exists
     const user = await db.user.findUnique({
       where: { email }
     })
@@ -116,17 +153,12 @@ export async function DELETE(request: NextRequest) {
       return NextResponse.json({ error: 'User not found' }, { status: 404 })
     }
 
-    // Regular admins cannot remove other admins or superadmins
-    if (session.user.role === 'ADMIN' && (user.role === 'ADMIN' || user.role === 'SUPERADMIN')) {
-      return NextResponse.json({ error: 'Insufficient permissions' }, { status: 403 })
+    // Cannot remove self
+    if (user.email === currentUser.email) {
+      return NextResponse.json({ error: 'Cannot remove yourself' }, { status: 400 })
     }
 
-    // Cannot remove superadmin
-    if (user.role === 'SUPERADMIN') {
-      return NextResponse.json({ error: 'Cannot remove superadmin' }, { status: 403 })
-    }
-
-    // Update user role back to MEMBER
+    // Update user role back to member
     await db.user.update({
       where: { email },
       data: {
@@ -140,4 +172,4 @@ export async function DELETE(request: NextRequest) {
     console.error('Error removing admin:', error)
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
   }
-} 
+}

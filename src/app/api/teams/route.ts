@@ -4,7 +4,7 @@ import { emailTemplates, sendEmail } from '@/lib/email'
 import { getServerSession } from 'next-auth'
 import { NextRequest, NextResponse } from 'next/server'
 
-export async function POST(request: NextRequest) {
+export async function POST(request: Request) {
   try {
     const session = await getServerSession(authOptions)
     
@@ -12,21 +12,31 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
 
+    // Get user from database using email to ensure we have the correct ID
+    const currentUser = await db.user.findUnique({
+      where: { email: session.user.email! },
+      include: { memberOfTeam: true }
+    })
+
+    if (!currentUser) {
+      return NextResponse.json({ error: 'User not found' }, { status: 404 })
+    }
+
     const body = await request.json()
-    const {
-      name,
-      collegeName,
-      university,
-      address,
-      state,
-      numberOfMembers,
-      leaderPhone,
+    const { 
+      name, 
+      collegeName, 
+      university, 
+      address, 
+      state, 
+      numberOfMembers, 
       members,
+      leaderPhone
     } = body
 
     // Check if user is already a team leader
     const existingTeam = await db.team.findFirst({
-      where: { leaderId: session.user.id },
+      where: { leaderId: currentUser.id },
     })
 
     if (existingTeam) {
@@ -34,12 +44,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Check if user is already a member of another team
-    const existingMembership = await db.user.findUnique({
-      where: { id: session.user.id },
-      include: { memberOfTeam: true },
-    })
-
-    if (existingMembership?.memberOfTeam) {
+    if (currentUser.memberOfTeam) {
       return NextResponse.json({ error: 'User is already a member of another team' }, { status: 400 })
     }
 
@@ -52,13 +57,13 @@ export async function POST(request: NextRequest) {
         address,
         state,
         numberOfMembers,
-        leaderId: session.user.id,
+        leaderId: currentUser.id,
       },
     })
 
     // Update user role to LEADER and add phone number
     await db.user.update({
-      where: { id: session.user.id },
+      where: { id: currentUser.id },
       data: { 
         role: 'LEADER',
         phone: leaderPhone,
@@ -78,9 +83,9 @@ export async function POST(request: NextRequest) {
     }
 
     // Send welcome email
-    const emailTemplate = emailTemplates.teamCreated(team.name, session.user.name || 'Team Leader')
+    const emailTemplate = emailTemplates.teamCreated(team.name, currentUser.name || 'Team Leader')
     await sendEmail({
-      to: session.user.email!,
+      to: currentUser.email!,
       subject: emailTemplate.subject,
       html: emailTemplate.html,
     })

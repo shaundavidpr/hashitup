@@ -10,9 +10,19 @@ export async function POST(
   try {
     const { id } = await params
     const session = await getServerSession(authOptions)
-    if (!session) {
+    if (!session || !session.user) {
       return new NextResponse('Unauthorized', { status: 401 })
     }
+
+    // Get user from database using email to ensure we have the correct ID
+    const currentUser = await db.user.findUnique({
+      where: { email: session.user.email! }
+    })
+
+    if (!currentUser) {
+      return new NextResponse('User not found', { status: 404 })
+    }
+
     const team = await db.team.findUnique({
       where: { id },
       include: { members: true }
@@ -20,13 +30,16 @@ export async function POST(
     if (!team) {
       return new NextResponse('Team not found', { status: 404 })
     }
+    
     // Check if user is part of the team
-    const isMember = team.members.some((member: any) => member.id === session.user.id) || team.leaderId === session.user.id
+    const isMember = team.members.some((member: any) => member.id === currentUser.id) || team.leaderId === currentUser.id
     if (!isMember) {
       return new NextResponse('Forbidden', { status: 403 })
     }
+    
     const body = await request.json()
     const { title, description, techStack, problemStatement, solution, isDraft = true } = body
+    
     const projectIdea = await db.projectIdea.create({
       data: {
         title,
@@ -35,11 +48,12 @@ export async function POST(
         problemStatement,
         solution,
         teamId: id,
-        submittedById: session.user.id,
+        submittedById: currentUser.id,
         status: 'PENDING',
         isDraft,
       },
     })
+    
     return NextResponse.json(projectIdea)
   } catch (error) {
     console.error('[PROJECT_IDEA_CREATE]', error)
@@ -54,9 +68,19 @@ export async function PUT(
   try {
     const { id } = await params
     const session = await getServerSession(authOptions)
-    if (!session) {
+    if (!session || !session.user) {
       return new NextResponse('Unauthorized', { status: 401 })
     }
+
+    // Get user from database using email to ensure we have the correct ID
+    const currentUser = await db.user.findUnique({
+      where: { email: session.user.email! }
+    })
+
+    if (!currentUser) {
+      return new NextResponse('User not found', { status: 404 })
+    }
+
     const team = await db.team.findUnique({
       where: { id },
       include: { members: true, projectIdea: true }
@@ -64,11 +88,13 @@ export async function PUT(
     if (!team) {
       return new NextResponse('Team not found', { status: 404 })
     }
+    
     // Check if user is part of the team
-    const isMember = team.members.some((member: any) => member.id === session.user.id) || team.leaderId === session.user.id
+    const isMember = team.members.some((member: any) => member.id === currentUser.id) || team.leaderId === currentUser.id
     if (!isMember) {
       return new NextResponse('Forbidden', { status: 403 })
     }
+    
     if (!team.projectIdea) {
       return new NextResponse('No project idea found', { status: 404 })
     }
@@ -89,7 +115,7 @@ export async function PUT(
         techStack,
         problemStatement,
         solution,
-        updatedById: session.user.id,
+        updatedById: currentUser.id,
         isDraft,
       }
     })

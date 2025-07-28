@@ -14,11 +14,20 @@ export async function GET(
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
 
+    // Get user from database using email to ensure we have the correct ID
+    const currentUser = await db.user.findUnique({
+      where: { email: session.user.email! }
+    })
+
+    if (!currentUser) {
+      return NextResponse.json({ error: 'User not found' }, { status: 404 })
+    }
+
     const params = await context.params
     const teamId = params.id
 
     // Check if user can access this team
-    const hasAccess = await canAccessTeam(session.user.id, teamId)
+    const hasAccess = await canAccessTeam(currentUser.id, teamId)
     if (!hasAccess) {
       return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
     }
@@ -71,6 +80,15 @@ export async function PUT(
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
 
+    // Get user from database using email to ensure we have the correct ID
+    const currentUser = await db.user.findUnique({
+      where: { email: session.user.email! }
+    })
+
+    if (!currentUser) {
+      return NextResponse.json({ error: 'User not found' }, { status: 404 })
+    }
+
     const params = await context.params
     const teamId = params.id
     const body = await request.json()
@@ -85,7 +103,7 @@ export async function PUT(
       return NextResponse.json({ error: 'Team not found' }, { status: 404 })
     }
 
-    if (team.leaderId !== session.user.id && session.user.role !== 'ADMIN') {
+    if (team.leaderId !== currentUser.id && currentUser.role !== 'ADMIN') {
       return NextResponse.json({ error: 'Only team leaders can update team details' }, { status: 403 })
     }
 
