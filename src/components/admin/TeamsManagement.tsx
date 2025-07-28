@@ -1,7 +1,7 @@
 'use client'
 
 import { Button } from '@/components/ui/Button'
-import { Eye, Mail, Users, CheckCircle, XCircle, Clock, Star, Download, RotateCcw } from 'lucide-react'
+import { Eye, Mail, Users, CheckCircle, XCircle, Star, Download, RotateCcw } from 'lucide-react'
 import { useState } from 'react'
 
 interface Team {
@@ -534,7 +534,7 @@ export function TeamsManagement({ teams }: TeamsManagementProps) {
                   <div>
                     <h5 className="font-medium text-gray-900 mb-2">Team Members ({selectedTeam.members.length})</h5>
                     <div className="space-y-2">
-                      {selectedTeam.members.map((member, index) => (
+                      {selectedTeam.members.map((member, _index) => (
                         <div key={member.id} className="bg-gray-50 rounded-lg p-3">
                           <div className="space-y-1">
                             <div className="flex items-center space-x-2">

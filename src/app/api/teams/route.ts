@@ -2,7 +2,7 @@ import { authOptions } from '@/lib/auth'
 import { db } from '@/lib/db'
 import { emailTemplates, sendEmail } from '@/lib/email'
 import { getServerSession } from 'next-auth'
-import { NextRequest, NextResponse } from 'next/server'
+import { NextResponse } from 'next/server'
 
 export async function POST(request: Request) {
   try {

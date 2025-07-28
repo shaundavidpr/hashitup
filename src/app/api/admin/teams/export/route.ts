@@ -19,7 +19,7 @@ export async function GET(request: NextRequest) {
     const format = searchParams.get('format') || 'json'
     const status = searchParams.get('status')
 
-    let whereClause: any = {}
+    const whereClause: any = {}
     if (status && status !== 'all') {
       if (status === 'no-submission') {
         whereClause.projectIdea = null
