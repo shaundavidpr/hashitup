@@ -106,14 +106,16 @@ export async function POST(request: NextRequest) {
       message: `Thank you for your submission! Your team "${team.name}" has been waitlisted. We'll notify you if a spot becomes available.`
     }))
 
-    // Log the publication event (you might want to create a separate table for this)
-    const publicationRecord = {
-      publishedAt: new Date(),
-      publishedBy: publishedBy,
-      acceptedTeamsCount: acceptedTeams.length,
-      waitlistedTeamsCount: waitlistedTeams.length,
-      totalNotificationsSent: acceptedTeams.length + waitlistedTeams.length
-    }
+    // Log the publication event
+    const publicationRecord = await db.resultPublication.create({
+      data: {
+        publishedById: publishedBy,
+        acceptedTeamsCount: acceptedTeams.length,
+        waitlistedTeamsCount: waitlistedTeams.length,
+        rejectedTeamsCount: 0, // We'll add this if needed
+        totalNotifications: acceptedTeams.length + waitlistedTeams.length
+      }
+    })
 
     // TODO: Implement actual email sending logic here
     // For now, we'll just return the notifications that would be sent
@@ -121,10 +123,16 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({
       success: true,
       message: 'Results published successfully',
-      notificationsSent: publicationRecord.totalNotificationsSent,
+      notificationsSent: publicationRecord.totalNotifications,
       acceptedTeams: acceptedNotifications,
       waitlistedTeams: waitlistNotifications,
-      publicationRecord
+      publicationRecord: {
+        id: publicationRecord.id,
+        publishedAt: publicationRecord.publishedAt,
+        acceptedTeamsCount: publicationRecord.acceptedTeamsCount,
+        waitlistedTeamsCount: publicationRecord.waitlistedTeamsCount,
+        totalNotifications: publicationRecord.totalNotifications
+      }
     })
 
   } catch (error) {

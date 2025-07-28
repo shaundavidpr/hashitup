@@ -6,6 +6,7 @@ import { Card } from '@/components/ui/Card'
 import { User } from '@/generated/prisma'
 import { authOptions } from '@/lib/auth'
 import { db } from '@/lib/db'
+import { areResultsPublished } from '@/lib/results'
 import { Code, FileCode, GitBranch, Users } from 'lucide-react'
 import { getServerSession } from 'next-auth'
 import { redirect } from 'next/navigation'
@@ -86,7 +87,7 @@ export default async function DashboardPage() {
 
   // Get user with team information
   const user = await db.user.findUnique({
-    where: { email: session.user.email! },
+    where: { id: session.user.id },
     include: {
       leadingTeam: {
         include: {
@@ -126,6 +127,9 @@ export default async function DashboardPage() {
       }
     }
   }) as UserWithTeam | null
+
+  // Check if results have been published
+  const resultsPublished = await areResultsPublished()
 
   // If user has no team and is not an admin/superadmin, show team creation form
   if (!user?.leadingTeam && !user?.memberOfTeam && !['ADMIN', 'SUPERADMIN'].includes(user?.role || '')) {
@@ -197,7 +201,10 @@ export default async function DashboardPage() {
 
         {/* Project Results - Show evaluation results if project is submitted */}
         {team?.projectIdea && (
-          <ProjectResults projectIdea={team.projectIdea} />
+          <ProjectResults 
+            projectIdea={team.projectIdea} 
+            resultsPublished={resultsPublished}
+          />
         )}
 
         {/* Project Idea Form */}

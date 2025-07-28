@@ -55,6 +55,7 @@ model User {
   addedBy        User?         @relation("AddedByUser", fields: [addedById], references: [id])
   addedUsers     User[]        @relation("AddedByUser")
   memberOfTeam   Team?         @relation("TeamMember", fields: [teamId], references: [id])
+  publishedResults ResultPublication[]
 
   @@index([email])
 }
@@ -123,6 +124,19 @@ model Deadline {
   updatedAt   DateTime @updatedAt
 
   @@map("deadlines")
+}
+
+model ResultPublication {
+  id                  String   @id @default(cuid())
+  publishedAt         DateTime @default(now())
+  publishedById       String
+  acceptedTeamsCount  Int      @default(0)
+  waitlistedTeamsCount Int     @default(0)
+  rejectedTeamsCount  Int      @default(0)
+  totalNotifications  Int      @default(0)
+  publishedBy         User     @relation(fields: [publishedById], references: [id])
+  
+  @@map("result_publications")
 }
 
 enum ProjectStatus {

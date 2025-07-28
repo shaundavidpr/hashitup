@@ -10,10 +10,41 @@ interface ProjectResultsProps {
     status: string
     isDraft: boolean
   } | null
+  resultsPublished: boolean
 }
 
-export function ProjectResults({ projectIdea }: ProjectResultsProps) {
+export function ProjectResults({ projectIdea, resultsPublished }: ProjectResultsProps) {
   if (!projectIdea || projectIdea.isDraft) {
+    return null
+  }
+
+  // Only show results if they have been published by super admin
+  if (!resultsPublished) {
+    // Show a message for teams that have been evaluated but results aren't published yet
+    if (projectIdea.status !== 'PENDING') {
+      return (
+        <Card className="p-6 bg-gradient-to-r from-blue-100 to-indigo-100 border-blue-300 border-2 mb-8">
+          <div className="flex items-center space-x-4">
+            <Clock className="h-8 w-8 text-blue-600" />
+            <div>
+              <h3 className="text-xl font-bold text-blue-900 mb-2">
+                🔍 Evaluation Complete - Results Pending
+              </h3>
+              <p className="text-blue-800 leading-relaxed">
+                Your project "{projectIdea.title}" has been evaluated by our judges. 
+                Results will be announced once the evaluation process is finalized. 
+                Stay tuned for the official announcement!
+              </p>
+              <div className="mt-3 p-3 bg-blue-50 border border-blue-200 rounded-lg">
+                <p className="text-sm text-blue-700">
+                  💡 <strong>What's next:</strong> Keep an eye on your email and dashboard for the official results announcement.
+                </p>
+              </div>
+            </div>
+          </div>
+        </Card>
+      )
+    }
     return null
   }
 

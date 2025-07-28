@@ -18,11 +18,23 @@ interface ResultsPublishingProps {
     totalEvaluatedTeams: number
     totalTeams: number
   }
+  latestPublication?: {
+    id: string
+    publishedAt: Date
+    acceptedTeamsCount: number
+    waitlistedTeamsCount: number
+    totalNotifications: number
+    publishedBy: {
+      id: string
+      name: string | null
+      email: string | null
+    }
+  } | null
 }
 
-export function ResultsPublishing({ currentUser, stats }: ResultsPublishingProps) {
+export function ResultsPublishing({ currentUser, stats, latestPublication }: ResultsPublishingProps) {
   const [isPublishing, setIsPublishing] = useState(false)
-  const [publishedAt, setPublishedAt] = useState<Date | null>(null)
+  const [publishedAt, setPublishedAt] = useState<Date | null>(latestPublication?.publishedAt || null)
 
   const handlePublishResults = async () => {
     if (!confirm(
@@ -138,17 +150,63 @@ export function ResultsPublishing({ currentUser, stats }: ResultsPublishingProps
             <div>
               <h4 className="font-medium text-gray-900 mb-2">Ready to Publish Results?</h4>
               <p className="text-sm text-gray-600 mb-4">
+                Publishing results will make evaluation outcomes visible to teams on their dashboards. 
                 This will send congratulation messages to accepted teams, waitlist notifications to waitlisted teams, 
                 and make results visible on their dashboards.
               </p>
+              
+              {!publishedAt && (
+                <div className="bg-yellow-50 border border-yellow-200 p-3 rounded-lg mb-4">
+                  <p className="text-sm text-yellow-800">
+                    <strong>⚠️ Important:</strong> Teams can currently see their evaluation status internally, 
+                    but results are not officially visible to them until you publish them here.
+                  </p>
+                </div>
+              )}
             </div>
 
             {publishedAt ? (
-              <div className="flex items-center space-x-2 text-green-600 bg-green-50 p-3 rounded-lg">
-                <CheckCircle className="h-5 w-5" />
-                <span className="font-medium">
-                  Results published on {publishedAt.toLocaleString()}
-                </span>
+              <div className="space-y-3">
+                <div className="flex items-center space-x-2 text-green-600 bg-green-50 p-4 rounded-lg">
+                  <CheckCircle className="h-5 w-5" />
+                  <div>
+                    <span className="font-medium block">
+                      Results Published Successfully
+                    </span>
+                    <span className="text-sm text-green-700">
+                      Published on {publishedAt.toLocaleString()} by {latestPublication?.publishedBy.name || 'Unknown'}
+                    </span>
+                  </div>
+                </div>
+                
+                {latestPublication && (
+                  <div className="bg-gray-50 p-4 rounded-lg">
+                    <h5 className="font-medium text-gray-900 mb-2">Publication Summary</h5>
+                    <div className="grid grid-cols-3 gap-4 text-sm">
+                      <div>
+                        <span className="text-gray-500">Accepted:</span>
+                        <span className="font-medium text-green-600 ml-1">{latestPublication.acceptedTeamsCount}</span>
+                      </div>
+                      <div>
+                        <span className="text-gray-500">Waitlisted:</span>
+                        <span className="font-medium text-yellow-600 ml-1">{latestPublication.waitlistedTeamsCount}</span>
+                      </div>
+                      <div>
+                        <span className="text-gray-500">Notifications:</span>
+                        <span className="font-medium text-blue-600 ml-1">{latestPublication.totalNotifications}</span>
+                      </div>
+                    </div>
+                  </div>
+                )}
+                
+                <Button
+                  onClick={handlePublishResults}
+                  disabled={isPublishing}
+                  className="bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-medium px-6 py-3"
+                >
+                  <Megaphone className="h-5 w-5 mr-2" />
+                  {isPublishing ? 'Publishing Results...' : 'Republish Results'}
+                </Button>
               </div>
             ) : (
               <Button

@@ -5,6 +5,7 @@ import { ResultsPublishing } from '@/components/admin/ResultsPublishing'
 import { TeamsManagement } from '@/components/admin/TeamsManagement'
 import { authOptions } from '@/lib/auth'
 import { db } from '@/lib/db'
+import { getLatestResultPublication } from '@/lib/results'
 import { getServerSession } from 'next-auth'
 import { redirect } from 'next/navigation'
 
@@ -105,6 +106,9 @@ export default async function AdminManagePage() {
     waitlistedTeams: teams.filter(t => t.projectIdea && !t.projectIdea.isDraft && t.projectIdea.status === 'WAITLIST').length,
   }
 
+  // Get latest result publication
+  const latestPublication = await getLatestResultPublication()
+
   return (
     <div className="min-h-screen bg-slate-950 text-white py-20">
       <div className="container-custom space-y-12">
@@ -123,6 +127,7 @@ export default async function AdminManagePage() {
             <ResultsPublishing 
               currentUser={session.user}
               stats={resultsStats}
+              latestPublication={latestPublication}
             />
           </section>
         )}
