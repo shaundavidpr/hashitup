@@ -12,7 +12,7 @@ export async function GET() {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
 
-    if (session.user.role !== 'ADMIN') {
+    if (session.user.role !== 'ADMIN' && session.user.role !== 'SUPERADMIN') {
       return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
     }
 
@@ -45,7 +45,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
 
-    if (session.user.role !== 'ADMIN') {
+    if (session.user.role !== 'ADMIN' && session.user.role !== 'SUPERADMIN') {
       return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
     }
 
@@ -57,19 +57,29 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'isRegistrationOpen must be a boolean' }, { status: 400 })
     }
 
-    if (registrationEndDate && new Date(registrationEndDate) <= new Date()) {
-      return NextResponse.json({ error: 'Registration end date must be in the future' }, { status: 400 })
+    // Only validate date if it's provided and not empty
+    if (registrationEndDate && registrationEndDate.trim() !== '') {
+      const endDate = new Date(registrationEndDate)
+      if (isNaN(endDate.getTime())) {
+        return NextResponse.json({ error: 'Invalid date format' }, { status: 400 })
+      }
+      // Allow dates in the past for flexibility (admin might want to close registration immediately)
     }
 
     // Check if settings exist
     let settings = await db.registrationSettings.findFirst()
+
+    // Process the date - handle empty strings and null values
+    const processedEndDate = registrationEndDate && registrationEndDate.trim() !== '' 
+      ? new Date(registrationEndDate) 
+      : null
 
     if (settings) {
       // Update existing settings
       settings = await db.registrationSettings.update({
         where: { id: settings.id },
         data: {
-          registrationEndDate: registrationEndDate ? new Date(registrationEndDate) : null,
+          registrationEndDate: processedEndDate,
           isRegistrationOpen,
         },
       })
@@ -77,7 +87,7 @@ export async function POST(request: NextRequest) {
       // Create new settings
       settings = await db.registrationSettings.create({
         data: {
-          registrationEndDate: registrationEndDate ? new Date(registrationEndDate) : null,
+          registrationEndDate: processedEndDate,
           isRegistrationOpen,
         },
       })

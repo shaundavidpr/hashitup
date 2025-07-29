@@ -43,7 +43,8 @@ export function RegistrationManagement({ initialSettings }: RegistrationManageme
       })
 
       if (!response.ok) {
-        throw new Error('Failed to update registration settings')
+        const errorData = await response.json().catch(() => ({ error: 'Unknown error' }))
+        throw new Error(errorData.error || `HTTP ${response.status}: Failed to update registration settings`)
       }
 
       const data = await response.json()
@@ -51,7 +52,8 @@ export function RegistrationManagement({ initialSettings }: RegistrationManageme
       toast.success('Registration settings updated successfully!')
     } catch (error) {
       console.error('Error updating registration settings:', error)
-      toast.error('Failed to update registration settings')
+      const errorMessage = error instanceof Error ? error.message : 'Failed to update registration settings'
+      toast.error(errorMessage)
     } finally {
       setIsLoading(false)
     }
