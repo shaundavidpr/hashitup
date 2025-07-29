@@ -1,9 +1,9 @@
 'use client'
 
 import { Button } from '@/components/ui/Button'
-import { Plus, Trash2 } from 'lucide-react'
+import { Plus, Trash2, AlertCircle, Clock } from 'lucide-react'
 import { useRouter } from 'next/navigation'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 
 interface TeamMember {
   name: string
@@ -11,9 +11,17 @@ interface TeamMember {
   phone: string
 }
 
+interface RegistrationStatus {
+  isOpen: boolean
+  message?: string
+  endDate?: string
+}
+
 export function TeamCreationForm() {
   const router = useRouter()
   const [loading, setLoading] = useState(false)
+  const [registrationStatus, setRegistrationStatus] = useState<RegistrationStatus>({ isOpen: true })
+  const [checkingStatus, setCheckingStatus] = useState(true)
   const [teamData, setTeamData] = useState({
     name: '',
     collegeName: '',
@@ -26,6 +34,51 @@ export function TeamCreationForm() {
   const [members, setMembers] = useState<TeamMember[]>([
     { name: '', email: '', phone: '' },
   ])
+
+  // Check registration status on component mount
+  useEffect(() => {
+    const checkRegistrationStatus = async () => {
+      try {
+        const response = await fetch('/api/admin/registration-settings', {
+          method: 'HEAD'
+        })
+        
+        if (response.status === 423) {
+          // Registration is closed
+          setRegistrationStatus({ 
+            isOpen: false, 
+            message: 'Team registration is currently closed.' 
+          })
+        } else if (response.status === 200) {
+          // Registration is open, get details
+          const settingsResponse = await fetch('/api/admin/registration-settings')
+          if (settingsResponse.ok) {
+            const { settings } = await settingsResponse.json()
+            if (settings?.registrationEndDate) {
+              setRegistrationStatus({
+                isOpen: true,
+                endDate: settings.registrationEndDate,
+                message: `Registration closes on ${new Date(settings.registrationEndDate).toLocaleString()}`
+              })
+            } else {
+              setRegistrationStatus({ isOpen: true })
+            }
+          }
+        }
+      } catch (error) {
+        console.error('Error checking registration status:', error)
+        // Default to open on error, but show warning
+        setRegistrationStatus({ 
+          isOpen: true, 
+          message: 'Unable to verify registration status. Please try again if you encounter issues.' 
+        })
+      } finally {
+        setCheckingStatus(false)
+      }
+    }
+
+    checkRegistrationStatus()
+  }, [])
 
   const handleAddMember = () => {
     if (members.length < 3) {
@@ -50,6 +103,13 @@ export function TeamCreationForm() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
+    
+    // Double-check registration status before submitting
+    if (!registrationStatus.isOpen) {
+      alert('Team registration is currently closed.')
+      return
+    }
+    
     setLoading(true)
 
     try {
@@ -68,6 +128,10 @@ export function TeamCreationForm() {
         router.refresh()
       } else {
         const error = await response.json()
+        if (response.status === 423) {
+          // Registration closed
+          setRegistrationStatus({ isOpen: false, message: error.error })
+        }
         alert(error.error || 'Failed to create team')
       }
     } catch (error) {
@@ -79,8 +143,43 @@ export function TeamCreationForm() {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-6">
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+    <div className="space-y-6">
+      {/* Registration Status Display */}
+      {checkingStatus ? (
+        <div className="bg-slate-800/50 border border-slate-700 rounded-lg p-4">
+          <div className="flex items-center space-x-3">
+            <Clock className="h-5 w-5 text-blue-400 animate-spin" />
+            <span className="text-slate-300">Checking registration status...</span>
+          </div>
+        </div>
+      ) : !registrationStatus.isOpen ? (
+        <div className="bg-red-900/50 border border-red-700 rounded-lg p-4">
+          <div className="flex items-center space-x-3">
+            <AlertCircle className="h-5 w-5 text-red-400" />
+            <div>
+              <h3 className="text-red-200 font-medium">Registration Closed</h3>
+              <p className="text-red-300 text-sm mt-1">
+                {registrationStatus.message || 'Team registration is currently closed. Please contact the administrators for more information.'}
+              </p>
+            </div>
+          </div>
+        </div>
+      ) : registrationStatus.message && registrationStatus.endDate ? (
+        <div className="bg-yellow-900/50 border border-yellow-700 rounded-lg p-4">
+          <div className="flex items-center space-x-3">
+            <Clock className="h-5 w-5 text-yellow-400" />
+            <div>
+              <h3 className="text-yellow-200 font-medium">Registration Deadline</h3>
+              <p className="text-yellow-300 text-sm mt-1">
+                {registrationStatus.message}
+              </p>
+            </div>
+          </div>
+        </div>
+      ) : null}
+
+      <form onSubmit={handleSubmit} className="space-y-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div>
           <label className="block text-sm font-medium text-slate-300 mb-2">
             Team Name *
@@ -241,10 +340,15 @@ export function TeamCreationForm() {
       </div>
 
       <div className="flex justify-end">
-        <Button type="submit" disabled={loading}>
+        <Button 
+          type="submit" 
+          disabled={loading || !registrationStatus.isOpen}
+          className={!registrationStatus.isOpen ? 'opacity-50 cursor-not-allowed' : ''}
+        >
           {loading ? 'Creating Team...' : 'Create Team'}
         </Button>
       </div>
     </form>
+    </div>
   )
 } 

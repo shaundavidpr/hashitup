@@ -1,6 +1,7 @@
 import { authOptions } from '@/lib/auth'
 import { db } from '@/lib/db'
 import { emailTemplates, sendEmail } from '@/lib/email'
+import { isRegistrationOpen } from '@/lib/registration'
 import { getServerSession } from 'next-auth'
 import { NextResponse } from 'next/server'
 
@@ -10,6 +11,14 @@ export async function POST(request: Request) {
     
     if (!session || !session.user) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+    }
+
+    // Check if registration is open
+    const registrationIsOpen = await isRegistrationOpen()
+    if (!registrationIsOpen) {
+      return NextResponse.json({ 
+        error: 'Team registration is currently closed. Please check back later or contact the administrators.' 
+      }, { status: 423 }) // 423 Locked
     }
 
     // Get user from database using email to ensure we have the correct ID

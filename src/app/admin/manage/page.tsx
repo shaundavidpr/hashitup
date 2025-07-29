@@ -1,6 +1,7 @@
 import { AdminManagement } from '@/components/admin/AdminManagement'
 import { BulkEmailForm } from '@/components/admin/BulkEmailForm'
 import { DeadlineManagement } from '@/components/admin/DeadlineManagement'
+import { RegistrationManagement } from '@/components/admin/RegistrationManagement'
 import { ResultsPublishing } from '@/components/admin/ResultsPublishing'
 import { TeamsManagement } from '@/components/admin/TeamsManagement'
 import { authOptions } from '@/lib/auth'
@@ -109,6 +110,12 @@ export default async function AdminManagePage() {
   // Get latest result publication
   const latestPublication = await getLatestResultPublication()
 
+  // Get registration settings (only for superadmin)
+  let registrationSettings = null
+  if (session.user.role === 'SUPERADMIN') {
+    registrationSettings = await db.registrationSettings.findFirst()
+  }
+
   return (
     <div className="min-h-screen bg-slate-950 text-white py-20">
       <div className="container-custom space-y-12">
@@ -139,6 +146,20 @@ export default async function AdminManagePage() {
             <AdminManagement 
               currentUser={session.user}
               admins={admins}
+            />
+          </section>
+        )}
+
+        {/* Registration Management - Only visible to superadmin */}
+        {session.user.role === 'SUPERADMIN' && (
+          <section>
+            <h2 className="text-2xl font-semibold mb-6">Registration Management</h2>
+            <RegistrationManagement 
+              initialSettings={registrationSettings ? {
+                id: registrationSettings.id,
+                registrationEndDate: registrationSettings.registrationEndDate?.toISOString(),
+                isRegistrationOpen: registrationSettings.isRegistrationOpen
+              } : undefined}
             />
           </section>
         )}

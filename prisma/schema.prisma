@@ -139,6 +139,16 @@ model ResultPublication {
   @@map("result_publications")
 }
 
+model RegistrationSettings {
+  id                    String   @id @default(cuid())
+  registrationEndDate   DateTime?
+  isRegistrationOpen    Boolean  @default(true)
+  createdAt            DateTime @default(now())
+  updatedAt            DateTime @updatedAt
+
+  @@map("registration_settings")
+}
+
 enum ProjectStatus {
   PENDING
   ACCEPTED
