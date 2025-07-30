@@ -42,7 +42,7 @@ export function RulesAndRegulations() {
           <div className="space-y-3 text-slate-300">
             <p>• Each team must consist of a <strong>minimum of 2 and maximum of 4 student members</strong>.</p>
             <p>• Participants from any academic background (engineering, arts, science) are eligible.</p>
-            <p>• External participants/visitors may accompany the team for support but will not be counted in the official team name or for evaluation.</p>
+            <p>• External project guide/visitors may accompany the team for support but will not be counted in the official team's name or for evaluation.</p>
             <p>• <strong>No change in team composition is allowed after final registration.</strong></p>
           </div>
         </Card>
@@ -99,7 +99,8 @@ export function RulesAndRegulations() {
             <p>• All code and documentation must be <strong>pushed to GitHub</strong> before final submission.</p>
             <p>• A technical report must be submitted if any team uses pre-developed components such as custom-built frameworks or previously created modules, detailing their purpose, integration, and relevance to the project.</p>
             <div className="bg-red-900/20 border border-red-700 p-3 rounded-lg">
-              <p className="text-red-300">⚠️ <strong>Any plagiarized or pre-built project submissions will lead to disqualification.</strong></p>
+              <p className="text-red-300">⚠️ <strong>Any plagiarized or fully pre-built project submissions will lead to disqualification.</strong></p>
+              <p className="text-red-300 mt-1">Teams have the freedom to partially build the project, but the team must complete it on the venue.</p>
             </div>
           </div>
         </Card>
@@ -308,6 +309,9 @@ export function RulesAndRegulations() {
             <div className="bg-emerald-900/20 border border-emerald-700 p-4 rounded-lg mt-4">
               <p className="text-emerald-300 font-medium text-center">
                 🚀 Most importantly, have fun and build something impactful!
+              </p>
+              <p className="text-emerald-300 font-medium text-center mt-2">
+                Let's innovate, collaborate, and hack for change!
               </p>
             </div>
           </div>
