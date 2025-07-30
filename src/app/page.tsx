@@ -1,4 +1,5 @@
 import { LoginButton } from '@/components/LoginButton'
+import { RulesAndRegulations } from '@/components/RulesAndRegulations'
 import { Badge } from '@/components/ui/Badge'
 import { Button } from '@/components/ui/Button'
 import { Card } from '@/components/ui/Card'
@@ -199,6 +200,11 @@ export default async function HomePage() {
             </Card>
           </div>
 
+        </div>
+
+        {/* Rules and Regulations Section */}
+        <div className="mt-20">
+          <RulesAndRegulations />
         </div>
 
         {/* Enhanced Call to Action */}

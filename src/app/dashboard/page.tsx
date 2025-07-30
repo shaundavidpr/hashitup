@@ -1,5 +1,6 @@
 import { ProjectIdeaForm } from '@/components/dashboard/ProjectIdeaForm'
 import { ProjectResults } from '@/components/dashboard/ProjectResults'
+import { RulesAndRegulations } from '@/components/RulesAndRegulations'
 import { TeamCreationForm } from '@/components/dashboard/TeamCreationForm'
 import TeamMemberView from '@/components/dashboard/TeamMemberView'
 import { Card } from '@/components/ui/Card'
@@ -198,6 +199,11 @@ export default async function DashboardPage() {
             />
           </div>
         )}
+
+        {/* Rules and Regulations Section */}
+        <div className="mb-12">
+          <RulesAndRegulations />
+        </div>
 
         {/* Project Results - Show evaluation results if project is submitted */}
         {team?.projectIdea && (
