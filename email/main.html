@@ -1,0 +1,970 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Hackathon 2025 - Build the Future</title>
+
+    <style>
+      /* ===== GLOBAL STYLES ===== */
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI",
+          sans-serif;
+        background: #0a0a0a;
+        color: #fff;
+        line-height: 1.6;
+        overflow-x: hidden;
+      }
+
+      /* Background animation */
+      body::before {
+        content: "";
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: radial-gradient(
+            ellipse at center,
+            rgba(255, 0, 204, 0.03) 0%,
+            transparent 70%
+          ),
+          radial-gradient(
+            ellipse at 80% 20%,
+            rgba(0, 255, 255, 0.05) 0%,
+            transparent 50%
+          );
+        z-index: -1;
+        animation: pulse 4s ease-in-out infinite alternate;
+      }
+
+      @keyframes pulse {
+        0% {
+          opacity: 0.3;
+        }
+        100% {
+          opacity: 0.7;
+        }
+      }
+
+      a {
+        text-decoration: none;
+        transition: all 0.3s ease;
+      }
+
+      .highlight {
+        background: linear-gradient(135deg, #ff00cc, #00ffff, #ff00cc);
+        background-size: 200% 200%;
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+        animation: gradientShift 3s ease infinite;
+      }
+
+      @keyframes gradientShift {
+        0% {
+          background-position: 0% 50%;
+        }
+        50% {
+          background-position: 100% 50%;
+        }
+        100% {
+          background-position: 0% 50%;
+        }
+      }
+
+      /* ===== HEADER ===== */
+      header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 20px 8%;
+        background: rgba(10, 10, 10, 0.95);
+        backdrop-filter: blur(20px);
+        position: sticky;
+        top: 0;
+        z-index: 1000;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      }
+
+      .logo {
+        font-size: 1.5rem;
+        font-weight: 800;
+        background: linear-gradient(135deg, #ff00cc, #00ffff);
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+        letter-spacing: -0.5px;
+      }
+
+      nav {
+        display: flex;
+        gap: 30px;
+      }
+
+      nav a {
+        color: #ccc;
+        font-weight: 500;
+        font-size: 0.95rem;
+        position: relative;
+        padding: 5px 0;
+      }
+
+      nav a::after {
+        content: "";
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 0;
+        height: 2px;
+        background: linear-gradient(90deg, #ff00cc, #00ffff);
+        transition: width 0.3s ease;
+      }
+
+      nav a:hover::after {
+        width: 100%;
+      }
+
+      nav a:hover {
+        color: #fff;
+      }
+
+      /* Mobile menu */
+      .mobile-menu {
+        display: none;
+        flex-direction: column;
+        cursor: pointer;
+        gap: 4px;
+      }
+
+      .mobile-menu span {
+        width: 25px;
+        height: 3px;
+        background: #fff;
+        transition: all 0.3s ease;
+        border-radius: 3px;
+      }
+
+      /* ===== HERO SECTION ===== */
+      .hero {
+        padding: 120px 8% 80px;
+        max-width: 1200px;
+        margin: auto;
+        text-align: center;
+        position: relative;
+      }
+
+      .hero h1 {
+        font-size: clamp(2.5rem, 6vw, 4.5rem);
+        font-weight: 900;
+        margin-bottom: 20px;
+        line-height: 1.1;
+        letter-spacing: -2px;
+      }
+
+      .hero .subtitle {
+        font-size: clamp(1.1rem, 2.5vw, 1.4rem);
+        color: #888;
+        margin-bottom: 30px;
+        max-width: 700px;
+        margin-left: auto;
+        margin-right: auto;
+      }
+
+      .hero-stats {
+        display: flex;
+        justify-content: center;
+        gap: 40px;
+        margin: 40px 0;
+        flex-wrap: wrap;
+      }
+
+      .stat {
+        text-align: center;
+      }
+
+      .stat-number {
+        font-size: 2.5rem;
+        font-weight: 800;
+        background: linear-gradient(135deg, #ff00cc, #00ffff);
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+        display: block;
+      }
+
+      .stat-label {
+        color: #666;
+        font-size: 0.9rem;
+        font-weight: 500;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+      }
+
+      /* ===== BUTTONS ===== */
+      .btn {
+        display: inline-block;
+        padding: 16px 32px;
+        font-size: 1rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        color: #fff;
+        border-radius: 50px;
+        position: relative;
+        overflow: hidden;
+        background: linear-gradient(135deg, #ff00cc, #00ffff);
+        transition: all 0.3s ease;
+        margin: 10px;
+      }
+
+      .btn::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(
+          90deg,
+          transparent,
+          rgba(255, 255, 255, 0.2),
+          transparent
+        );
+        transition: left 0.5s;
+      }
+
+      .btn:hover::before {
+        left: 100%;
+      }
+
+      .btn:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 15px 35px rgba(255, 0, 204, 0.4);
+      }
+
+      .btn-secondary {
+        background: transparent;
+        border: 2px solid rgba(255, 255, 255, 0.2);
+      }
+
+      .btn-secondary:hover {
+        background: rgba(255, 255, 255, 0.1);
+        box-shadow: 0 15px 35px rgba(0, 255, 255, 0.2);
+      }
+
+      /* ===== CONTENT SECTIONS ===== */
+      section {
+        padding: 80px 8%;
+        max-width: 1200px;
+        margin: auto;
+      }
+
+      .section-title {
+        font-size: clamp(2rem, 4vw, 3rem);
+        font-weight: 800;
+        margin-bottom: 20px;
+        text-align: center;
+        letter-spacing: -1px;
+      }
+
+      .section-subtitle {
+        text-align: center;
+        color: #888;
+        font-size: 1.1rem;
+        margin-bottom: 60px;
+        max-width: 600px;
+        margin-left: auto;
+        margin-right: auto;
+      }
+
+      /* ===== CARDS ===== */
+      .cards-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 30px;
+        margin-top: 40px;
+      }
+
+      .card {
+        background: rgba(255, 255, 255, 0.02);
+        backdrop-filter: blur(10px);
+        border-radius: 20px;
+        padding: 30px;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .card::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 1px;
+        background: linear-gradient(
+          90deg,
+          transparent,
+          #ff00cc,
+          #00ffff,
+          transparent
+        );
+        transform: translateX(-100%);
+        transition: transform 0.3s ease;
+      }
+
+      .card:hover::before {
+        transform: translateX(100%);
+      }
+
+      .card:hover {
+        transform: translateY(-5px);
+        border-color: rgba(255, 255, 255, 0.2);
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+      }
+
+      .card-icon {
+        font-size: 2.5rem;
+        margin-bottom: 15px;
+        display: block;
+      }
+
+      .card h3 {
+        font-size: 1.3rem;
+        font-weight: 700;
+        margin-bottom: 15px;
+        color: #fff;
+      }
+
+      .card p {
+        color: #aaa;
+        line-height: 1.6;
+      }
+
+      /* ===== TIMELINE ===== */
+      .timeline {
+        position: relative;
+        margin: 40px 0;
+      }
+
+      .timeline::before {
+        content: "";
+        position: absolute;
+        left: 50%;
+        top: 0;
+        bottom: 0;
+        width: 2px;
+        background: linear-gradient(180deg, #ff00cc, #00ffff);
+        transform: translateX(-50%);
+      }
+
+      .timeline-item {
+        display: flex;
+        align-items: center;
+        margin: 30px 0;
+        position: relative;
+      }
+
+      .timeline-item:nth-child(odd) {
+        flex-direction: row-reverse;
+      }
+
+      .timeline-content {
+        flex: 1;
+        max-width: 45%;
+        background: rgba(255, 255, 255, 0.05);
+        padding: 25px;
+        border-radius: 15px;
+        margin: 0 20px;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+      }
+
+      .timeline-dot {
+        width: 20px;
+        height: 20px;
+        background: linear-gradient(135deg, #ff00cc, #00ffff);
+        border-radius: 50%;
+        position: absolute;
+        left: 50%;
+        transform: translateX(-50%);
+        z-index: 2;
+        box-shadow: 0 0 20px rgba(255, 0, 204, 0.5);
+      }
+
+      /* ===== PRIZES SECTION ===== */
+      .prizes {
+        background: rgba(255, 255, 255, 0.02);
+        border-radius: 30px;
+        padding: 60px;
+        margin: 80px 0;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+      }
+
+      .prize-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 30px;
+        margin-top: 40px;
+      }
+
+      .prize-card {
+        text-align: center;
+        padding: 40px 20px;
+        background: rgba(255, 255, 255, 0.02);
+        border-radius: 20px;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .prize-card:first-child {
+        border-color: rgba(255, 215, 0, 0.3);
+        box-shadow: 0 0 30px rgba(255, 215, 0, 0.1);
+      }
+
+      .prize-card:first-child::before {
+        content: "👑";
+        position: absolute;
+        top: -10px;
+        right: -10px;
+        font-size: 2rem;
+        animation: bounce 2s infinite;
+      }
+
+      @keyframes bounce {
+        0%,
+        20%,
+        50%,
+        80%,
+        100% {
+          transform: translateY(0);
+        }
+        40% {
+          transform: translateY(-10px);
+        }
+        60% {
+          transform: translateY(-5px);
+        }
+      }
+
+      .prize-amount {
+        font-size: 2.5rem;
+        font-weight: 800;
+        background: linear-gradient(135deg, #ff00cc, #00ffff);
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+        margin-bottom: 10px;
+      }
+
+      .prize-place {
+        color: #888;
+        font-size: 1.1rem;
+        font-weight: 600;
+        margin-bottom: 15px;
+      }
+
+      /* ===== FOOTER ===== */
+      footer {
+        text-align: center;
+        padding: 60px 8% 40px;
+        border-top: 1px solid rgba(255, 255, 255, 0.1);
+        margin-top: 80px;
+      }
+
+      .footer-content {
+        max-width: 600px;
+        margin: auto;
+      }
+
+      .social-links {
+        display: flex;
+        justify-content: center;
+        gap: 20px;
+        margin: 30px 0;
+      }
+
+      .social-links a {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 50px;
+        height: 50px;
+        background: rgba(255, 255, 255, 0.05);
+        border-radius: 15px;
+        font-size: 1.5rem;
+        transition: all 0.3s ease;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+      }
+
+      .social-links a:hover {
+        background: rgba(255, 255, 255, 0.1);
+        transform: translateY(-3px);
+      }
+
+      /* ===== RESPONSIVE ===== */
+      @media (max-width: 768px) {
+        nav {
+          display: none;
+        }
+
+        .mobile-menu {
+          display: flex;
+        }
+
+        .hero-stats {
+          gap: 20px;
+        }
+
+        .timeline::before {
+          left: 20px;
+        }
+
+        .timeline-item {
+          flex-direction: row !important;
+        }
+
+        .timeline-content {
+          max-width: none;
+          margin-left: 50px;
+        }
+
+        .timeline-dot {
+          left: 20px;
+        }
+
+        .prizes {
+          padding: 40px 20px;
+        }
+
+        section {
+          padding: 60px 8%;
+        }
+      }
+
+      @media (max-width: 480px) {
+        header {
+          padding: 15px 5%;
+        }
+
+        .hero {
+          padding: 80px 5% 60px;
+        }
+
+        section {
+          padding: 40px 5%;
+        }
+      }
+
+      /* ===== SCROLL ANIMATIONS ===== */
+      @keyframes fadeInUp {
+        from {
+          opacity: 0;
+          transform: translateY(50px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      .animate-on-scroll {
+        opacity: 0;
+        animation: fadeInUp 0.8s ease forwards;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- ===== HEADER ===== -->
+    <header>
+      <div class="logo">Hackathon 2025</div>
+      <nav>
+        <a href="#about">About</a>
+        <a href="#schedule">Schedule</a>
+        <a href="#prizes">Prizes</a>
+        <a href="#sponsors">Sponsors</a>
+        <a href="#contact">Contact</a>
+      </nav>
+      <div class="mobile-menu">
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
+    </header>
+
+    <!-- ===== HERO SECTION ===== -->
+    <div class="hero">
+      <h1>Build the <span class="highlight">Future</span><br />in 12 Hours</h1>
+      <p class="subtitle">
+        Join 500+ innovators, developers, and creators for the most epic
+        hackathon of 2025. Transform ideas into reality, win amazing prizes, and
+        shape tomorrow's technology.
+      </p>
+
+      <div class="hero-stats">
+        <div class="stat">
+          <span class="stat-number">$50K</span>
+          <span class="stat-label">Prize Pool</span>
+        </div>
+        <div class="stat">
+          <span class="stat-number">500+</span>
+          <span class="stat-label">Participants</span>
+        </div>
+        <div class="stat">
+          <span class="stat-number">12</span>
+          <span class="stat-label">Hours</span>
+        </div>
+        <div class="stat">
+          <span class="stat-number">25+</span>
+          <span class="stat-label">Mentors</span>
+        </div>
+      </div>
+
+      <div>
+        <a href="#register" class="btn">Register Now - Free!</a>
+        <a href="#about" class="btn btn-secondary">Learn More</a>
+      </div>
+    </div>
+
+    <!-- ===== ABOUT SECTION ===== -->
+    <section id="about">
+      <h2 class="section-title">
+        Why <span class="highlight">Participate?</span>
+      </h2>
+      <p class="section-subtitle">
+        Experience the thrill of innovation, learn from industry experts, and
+        build solutions that matter.
+      </p>
+
+      <div class="cards-grid">
+        <div class="card animate-on-scroll">
+          <span class="card-icon">🚀</span>
+          <h3>Launch Your Ideas</h3>
+          <p>
+            Turn your wildest concepts into working prototypes. Get mentorship
+            from industry leaders and access to cutting-edge tools.
+          </p>
+        </div>
+        <div class="card animate-on-scroll">
+          <span class="card-icon">🤝</span>
+          <h3>Network & Collaborate</h3>
+          <p>
+            Connect with like-minded innovators, potential co-founders, and
+            hiring managers from top tech companies.
+          </p>
+        </div>
+        <div class="card animate-on-scroll">
+          <span class="card-icon">🏆</span>
+          <h3>Win Big Prizes</h3>
+          <p>
+            Compete for $50,000 in prizes including cash, startup resources,
+            internships, and exclusive tech swag.
+          </p>
+        </div>
+        <div class="card animate-on-scroll">
+          <span class="card-icon">⚡</span>
+          <h3>Learn & Grow</h3>
+          <p>
+            Attend workshops, masterclasses, and tech talks from industry
+            pioneers. Level up your skills in just 12 hours.
+          </p>
+        </div>
+        <div class="card animate-on-scroll">
+          <span class="card-icon">🌟</span>
+          <h3>Career Opportunities</h3>
+          <p>
+            Get noticed by recruiters from Google, Microsoft, Amazon, and 50+
+            other companies actively seeking talent.
+          </p>
+        </div>
+        <div class="card animate-on-scroll">
+          <span class="card-icon">🎉</span>
+          <h3>Unforgettable Experience</h3>
+          <p>
+            Enjoy free food, drinks, entertainment, gaming zones, and memories
+            that will last a lifetime.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== SCHEDULE SECTION ===== -->
+    <section id="schedule">
+      <h2 class="section-title">
+        Event <span class="highlight">Schedule</span>
+      </h2>
+      <p class="section-subtitle">August 30, 2025 • Innovation Hub, Downtown</p>
+
+      <div class="timeline">
+        <div class="timeline-item">
+          <div class="timeline-content">
+            <h3>Registration & Welcome</h3>
+            <p>
+              <strong>9:00 AM - 10:00 AM</strong><br />Check-in, breakfast, team
+              formation, and opening ceremony
+            </p>
+          </div>
+          <div class="timeline-dot"></div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-content">
+            <h3>Hacking Begins!</h3>
+            <p>
+              <strong>10:00 AM</strong><br />Theme announcement and 12-hour
+              coding marathon starts
+            </p>
+          </div>
+          <div class="timeline-dot"></div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-content">
+            <h3>Workshops & Mentoring</h3>
+            <p>
+              <strong>12:00 PM - 6:00 PM</strong><br />Tech workshops, mentor
+              sessions, and skill-building activities
+            </p>
+          </div>
+          <div class="timeline-dot"></div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-content">
+            <h3>Submissions & Demos</h3>
+            <p>
+              <strong>8:00 PM - 9:30 PM</strong><br />Project submissions and
+              3-minute demo presentations
+            </p>
+          </div>
+          <div class="timeline-dot"></div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-content">
+            <h3>Awards & Closing</h3>
+            <p>
+              <strong>9:30 PM - 10:00 PM</strong><br />Winner announcements,
+              prize distribution, and celebration
+            </p>
+          </div>
+          <div class="timeline-dot"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== PRIZES SECTION ===== -->
+    <section id="prizes">
+      <div class="prizes">
+        <h2 class="section-title">
+          Amazing <span class="highlight">Prizes</span>
+        </h2>
+        <p class="section-subtitle">
+          $50,000+ total prize pool with rewards for everyone
+        </p>
+
+        <div class="prize-grid">
+          <div class="prize-card">
+            <div class="prize-amount">$20,000</div>
+            <div class="prize-place">1st Place</div>
+            <p>Grand Prize + YC Interview + Startup Resources</p>
+          </div>
+          <div class="prize-card">
+            <div class="prize-amount">$15,000</div>
+            <div class="prize-place">2nd Place</div>
+            <p>Cash Prize + Mentorship + Tech Package</p>
+          </div>
+          <div class="prize-card">
+            <div class="prize-amount">$10,000</div>
+            <div class="prize-place">3rd Place</div>
+            <p>Cash Prize + Internship Opportunities</p>
+          </div>
+        </div>
+
+        <div style="margin-top: 40px; text-align: center">
+          <p>
+            <strong>Special Categories:</strong> Best AI/ML Project, Most
+            Creative Solution, Social Impact Award, Best Student Team
+          </p>
+          <p style="color: #888; margin-top: 15px">
+            Plus internship opportunities, startup credits, and exclusive
+            merchandise for all participants!
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== TIPS SECTION ===== -->
+    <section>
+      <h2 class="section-title">
+        Pro Tips to <span class="highlight">Win</span>
+      </h2>
+      <p class="section-subtitle">
+        Insider strategies from previous winners and industry experts
+      </p>
+
+      <div class="cards-grid">
+        <div class="card">
+          <span class="card-icon">💡</span>
+          <h3>Solve Real Problems</h3>
+          <p>
+            Focus on genuine user pain points. The best projects address
+            real-world issues with practical, scalable solutions.
+          </p>
+        </div>
+        <div class="card">
+          <span class="card-icon">🎯</span>
+          <h3>Keep It Simple</h3>
+          <p>
+            Better to have a polished MVP than an incomplete complex system.
+            Focus on core features that demonstrate your concept clearly.
+          </p>
+        </div>
+        <div class="card">
+          <span class="card-icon">📊</span>
+          <h3>Demo Like a Pro</h3>
+          <p>
+            Practice your pitch beforehand. Tell a compelling story, show the
+            problem, your solution, and impact in under 3 minutes.
+          </p>
+        </div>
+        <div class="card">
+          <span class="card-icon">🔧</span>
+          <h3>Use Familiar Tech</h3>
+          <p>
+            Stick to technologies you know well. Hackathons aren't the time to
+            learn new frameworks—save that for after!
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== SPONSORS SECTION ===== -->
+    <section id="sponsors">
+      <h2 class="section-title">Our <span class="highlight">Sponsors</span></h2>
+      <p class="section-subtitle">
+        Supported by industry leaders who believe in innovation
+      </p>
+
+      <div style="text-align: center; margin-top: 40px">
+        <p style="color: #888">
+          Partnership opportunities available •
+          <a href="mailto:sponsors@hackathon2025.com" style="color: #00ffff"
+            >Contact us</a
+          >
+        </p>
+      </div>
+    </section>
+
+    <!-- ===== CTA SECTION ===== -->
+    <section style="text-align: center; padding: 80px 8%">
+      <h2 class="section-title">
+        Ready to <span class="highlight">Build the Future?</span>
+      </h2>
+      <p class="section-subtitle" style="margin-bottom: 40px">
+        Join 500+ innovators for the most exciting hackathon of 2025.
+        Registration closes soon!
+      </p>
+      <a
+        href="https://your-hackathon-signup-link.com"
+        class="btn"
+        style="font-size: 1.1rem; padding: 20px 40px"
+      >
+        Register Now - It's Free! 🚀
+      </a>
+      <p style="color: #666; margin-top: 20px; font-size: 0.9rem">
+        Limited spots available • First come, first served
+      </p>
+    </section>
+
+    <!-- ===== FOOTER ===== -->
+    <footer id="contact">
+      <div class="footer-content">
+        <h3 style="margin-bottom: 20px">Stay Connected</h3>
+        <div class="social-links">
+          <a href="#" title="Twitter">🐦</a>
+          <a href="#" title="LinkedIn">💼</a>
+          <a href="#" title="Discord">💬</a>
+          <a href="#" title="Instagram">📸</a>
+        </div>
+        <p style="color: #666; font-size: 0.9rem; margin: 30px 0">
+          Questions? Email us at
+          <a href="mailto:hello@hackathon2025.com" style="color: #00ffff"
+            >hello@hackathon2025.com</a
+          ><br />
+          Follow <a href="#" style="color: #ff00cc">@hackathon2025</a> for
+          updates and behind-the-scenes content
+        </p>
+        <p style="color: #444; font-size: 0.8rem">
+          Powered by <span class="highlight">Codenchip</span> — See you at the
+          hackathon! 🎉
+        </p>
+      </div>
+    </footer>
+
+    <script>
+      // Smooth scrolling for navigation links
+      document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
+        anchor.addEventListener("click", function (e) {
+          e.preventDefault();
+          const target = document.querySelector(this.getAttribute("href"));
+          if (target) {
+            target.scrollIntoView({ behavior: "smooth", block: "start" });
+          }
+        });
+      });
+
+      // Animate elements on scroll
+      const observerOptions = {
+        threshold: 0.1,
+        rootMargin: "0px 0px -50px 0px",
+      };
+
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.style.animation = "fadeInUp 0.8s ease forwards";
+            observer.unobserve(entry.target);
+          }
+        });
+      }, observerOptions);
+
+      // Observe all cards for animation
+      document.querySelectorAll(".card").forEach((card) => {
+        observer.observe(card);
+      });
+
+      // Mobile menu toggle
+      const mobileMenu = document.querySelector(".mobile-menu");
+      const nav = document.querySelector("nav");
+
+      mobileMenu.addEventListener("click", () => {
+        nav.style.display = nav.style.display === "flex" ? "none" : "flex";
+        nav.style.position = "absolute";
+        nav.style.top = "100%";
+        nav.style.left = "0";
+        nav.style.right = "0";
+        nav.style.background = "rgba(10, 10, 10, 0.98)";
+        nav.style.flexDirection = "column";
+        nav.style.padding = "20px";
+        nav.style.borderTop = "1px solid rgba(255, 255, 255, 0.1)";
+      });
+
+      // Add some interactive elements
+      document.querySelectorAll(".card").forEach((card) => {
+        card.addEventListener("mouseenter", () => {
+          card.style.background = "rgba(255, 255, 255, 0.05)";
+        });
+
+        card.addEventListener("mouseleave", () => {
+          card.style.background = "rgba(255, 255, 255, 0.02)";
+        });
+      });
+    </script>
+  </body>
+</html>
