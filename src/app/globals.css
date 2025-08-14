@@ -316,3 +316,8 @@
 .animate-infinity-right {
   filter: drop-shadow(0 0 8px rgba(59, 130, 246, 0.6));
 }
+
+/* Radial gradient utility */
+.bg-gradient-radial {
+  background: radial-gradient(circle, var(--tw-gradient-stops));
+}

@@ -93,7 +93,7 @@ export function BulkEmailForm() {
 
   return (
     <div className="bg-white overflow-hidden shadow rounded-lg">
-      <div className="px-4 py-5 sm:p-6">
+      <div className="px-4 py-5 sm:p-6 text-black">
         <div className="flex items-center mb-6">
           <Mail className="h-6 w-6 text-blue-600 mr-3" />
           <h2 className="text-xl font-semibold text-gray-900">Bulk Email System</h2>
