@@ -73,116 +73,107 @@ export function ProjectIdeaForm({ teamId, existingIdea }: ProjectIdeaFormProps) 
   }
 
   return (
-    <Card variant="glass" className="p-6 bg-gradient-to-br from-purple-500/10 to-pink-500/10 border-purple-500/20">
-      <div className="flex items-center gap-3 mb-6">
-        <div className="w-10 h-10 rounded-2xl bg-gradient-to-br from-purple-400 to-pink-600 flex items-center justify-center">
-          <Lightbulb className="w-5 h-5 text-white" />
-        </div>
-        <div>
-          <h2 className="text-2xl font-bold">Project Idea</h2>
-          <p className="text-slate-400">Share your hackathon project idea</p>
-        </div>
-      </div>
-
-      <form onSubmit={(e) => handleSubmit(e, false)} className="space-y-6">
-        <div>
-          <label className="block text-sm font-medium text-slate-300 mb-2">
-            Project Title *
-          </label>
-          <input
-            type="text"
-            disabled={isSubmitted}
-            value={formData.title}
-            onChange={(e) => setFormData({ ...formData, title: e.target.value })}
-            className="w-full px-3 py-2 bg-slate-800/50 border border-slate-700 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500 text-white disabled:opacity-50 disabled:cursor-not-allowed"
-            placeholder="Enter a catchy title for your project"
-          />
-        </div>
-
-        <div>
-          <label className="block text-sm font-medium text-slate-300 mb-2">
-            Problem Statement *
-          </label>
-          <textarea
-            disabled={isSubmitted}
-            value={formData.problemStatement}
-            onChange={(e) => setFormData({ ...formData, problemStatement: e.target.value })}
-            rows={3}
-            className="w-full px-3 py-2 bg-slate-800/50 border border-slate-700 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500 text-white disabled:opacity-50 disabled:cursor-not-allowed"
-            placeholder="What problem are you trying to solve?"
-          />
-        </div>
-
-        <div>
-          <label className="block text-sm font-medium text-slate-300 mb-2">
-            Solution Description *
-          </label>
-          <textarea
-            disabled={isSubmitted}
-            value={formData.solution}
-            onChange={(e) => setFormData({ ...formData, solution: e.target.value })}
-            rows={4}
-            className="w-full px-3 py-2 bg-slate-800/50 border border-slate-700 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500 text-white disabled:opacity-50 disabled:cursor-not-allowed"
-            placeholder="How does your solution address the problem?"
-          />
-        </div>
-
-        <div>
-          <label className="block text-sm font-medium text-slate-300 mb-2">
-            Detailed Description *
-          </label>
-          <textarea
-            disabled={isSubmitted}
-            value={formData.description}
-            onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-            rows={6}
-            className="w-full px-3 py-2 bg-slate-800/50 border border-slate-700 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500 text-white disabled:opacity-50 disabled:cursor-not-allowed"
-            placeholder="Provide a detailed description of your project, including features, architecture, and implementation details"
-          />
-        </div>
-
-        <div>
-          <label className="block text-sm font-medium text-slate-300 mb-2">
-            Tech Stack *
-          </label>
-          <textarea
-            disabled={isSubmitted}
-            value={formData.techStack}
-            onChange={(e) => setFormData({ ...formData, techStack: e.target.value })}
-            rows={3}
-            className="w-full px-3 py-2 bg-slate-800/50 border border-slate-700 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500 text-white disabled:opacity-50 disabled:cursor-not-allowed"
-            placeholder="List the technologies, frameworks, and tools you plan to use"
-          />
-        </div>
-
-        {isSubmitted ? (
-          <div className="bg-green-900/20 border border-green-500/30 rounded-lg p-4">
-            <div className="flex items-center gap-2 text-green-400">
-              <FileText className="w-5 h-5" />
-              <span className="font-medium">Project Submitted</span>
+    <Card className="backdrop-blur-sm bg-slate-900/40 rounded-xl border border-slate-700/50 shadow-lg p-6 relative overflow-hidden">
+      {/* Decorative gradient elements */}
+      <div className="absolute -top-32 -right-32 w-64 h-64 bg-blue-500/10 rounded-full blur-3xl"></div>
+      <div className="absolute -bottom-32 -left-32 w-64 h-64 bg-pink-500/10 rounded-full blur-3xl"></div>
+      
+      <div className="relative">
+        <div className="flex items-center gap-3 mb-6">
+          <div className="w-12 h-12 rounded-2xl bg-gradient-to-r from-pink-500 via-cyan-400 to-blue-500 p-0.5">
+            <div className="w-full h-full rounded-[14px] bg-slate-900 flex items-center justify-center">
+              <Lightbulb className="w-6 h-6 text-cyan-400" />
             </div>
-            <p className="text-sm text-green-300 mt-1">
-              Your project idea has been submitted and cannot be edited.
-            </p>
           </div>
-        ) : (
-          <div className="flex gap-3 justify-end">
+          <div>
+            <h2 className="text-2xl font-bold bg-gradient-to-r from-pink-500 via-cyan-400 to-blue-500 bg-clip-text text-transparent">Project Idea</h2>
+            <p className="text-slate-400">Share your hackathon project idea</p>
+          </div>
+        </div>
+
+        <form onSubmit={handleSubmit} className="space-y-6">
+          <div>
+            <label className="block text-sm font-medium text-slate-300 mb-2">
+              Project Title *
+            </label>
+            <input
+              type="text"
+              required
+              value={formData.title}
+              onChange={(e) => setFormData({ ...formData, title: e.target.value })}
+              className="w-full px-4 py-2.5 bg-slate-800/50 border border-slate-700/50 rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500/50 focus:border-cyan-400/50 text-white transition-all duration-200 placeholder-slate-500"
+              placeholder="Enter a catchy title for your project"
+            />
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-slate-300 mb-2">
+              Problem Statement *
+            </label>
+            <textarea
+              required
+              value={formData.problemStatement}
+              onChange={(e) => setFormData({ ...formData, problemStatement: e.target.value })}
+              rows={3}
+              className="w-full px-4 py-2.5 bg-slate-800/50 border border-slate-700/50 rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500/50 focus:border-cyan-400/50 text-white transition-all duration-200 placeholder-slate-500"
+              placeholder="What problem are you trying to solve?"
+            />
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-slate-300 mb-2">
+              Solution Description *
+            </label>
+            <textarea
+              required
+              value={formData.solution}
+              onChange={(e) => setFormData({ ...formData, solution: e.target.value })}
+              rows={4}
+              className="w-full px-4 py-2.5 bg-slate-800/50 border border-slate-700/50 rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500/50 focus:border-cyan-400/50 text-white transition-all duration-200 placeholder-slate-500"
+              placeholder="How does your solution address the problem?"
+            />
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-slate-300 mb-2">
+              Detailed Description *
+            </label>
+            <textarea
+              required
+              value={formData.description}
+              onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+              rows={6}
+              className="w-full px-4 py-2.5 bg-slate-800/50 border border-slate-700/50 rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500/50 focus:border-cyan-400/50 text-white transition-all duration-200 placeholder-slate-500"
+              placeholder="Provide a detailed description of your project, including features, architecture, and implementation details"
+            />
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-slate-300 mb-2">
+              Tech Stack *
+            </label>
+            <textarea
+              required
+              value={formData.techStack}
+              onChange={(e) => setFormData({ ...formData, techStack: e.target.value })}
+              rows={3}
+              className="w-full px-4 py-2.5 bg-slate-800/50 border border-slate-700/50 rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500/50 focus:border-cyan-400/50 text-white transition-all duration-200 placeholder-slate-500"
+              placeholder="List the technologies, frameworks, and tools you plan to use"
+            /> 
+          </div>
+
+          <div className="flex justify-end pt-2">
             <Button 
-              type="button" 
-              variant="outline" 
+              type="submit" 
               disabled={loading}
-              onClick={(e) => handleSubmit(e as any, true)}
+              className="bg-gradient-to-r from-pink-500 via-cyan-400 to-blue-500 hover:from-pink-600 hover:via-cyan-500 hover:to-blue-600 text-white font-medium py-2.5 px-6 rounded-lg transition-all duration-300 transform hover:scale-[1.02] active:scale-[0.98] shadow-lg hover:shadow-cyan-500/25 flex items-center gap-2"
             >
-              <Save className="w-4 h-4 mr-2" />
-              {loading ? 'Saving...' : 'Save Draft'}
-            </Button>
-            <Button type="submit" disabled={loading}>
-              <FileText className="w-4 h-4 mr-2" />
-              {loading ? 'Submitting...' : 'Submit Project'}
+              <Save className="w-4 h-4" />
+              {loading ? 'Saving...' : 'Save Project Idea'}
             </Button>
           </div>
-        )}
-      </form>
+        </form>
+      </div>
     </Card>
   )
-} 
+}
