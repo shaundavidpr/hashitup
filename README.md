@@ -1,4 +1,4 @@
-# CodeNChip - National Hackathon Platform
+# Hash 2K25 - National Hackathon Platform
 
 A comprehensive full-stack web application for managing national hackathons with Google OAuth authentication, team management, project submissions, and administrative controls.
 
@@ -45,7 +45,7 @@ A comprehensive full-stack web application for managing national hackathons with
 ### 1. Clone and Install
 \`\`\`bash
 git clone <your-repo-url>
-cd codenchip
+cd hash 2k25
 npm install
 \`\`\`
 
@@ -69,13 +69,13 @@ SMTP_HOST="smtp.gmail.com"
 SMTP_PORT=587
 SMTP_USER="your-email@gmail.com"
 SMTP_PASS="your-app-password"
-FROM_EMAIL="codenchip@yourorganization.com"
+FROM_EMAIL="hash 2k25@yourorganization.com"
 
 # Admin Configuration
 ADMIN_EMAILS="admin1@example.com,admin2@example.com"
 
 # Application Configuration
-APP_NAME="CodeNChip Hackathon"
+APP_NAME="Hash 2K25 Hackathon"
 APP_URL="http://localhost:3000"
 \`\`\`
 
@@ -252,4 +252,4 @@ For support and questions:
 
 ---
 
-**Built with ❤️ for CodeNChip National Hackathon**
+**Built with ❤️ for Hash 2K25 National Hackathon**

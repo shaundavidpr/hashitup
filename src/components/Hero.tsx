@@ -22,7 +22,7 @@ export function Hero() {
           
           <h1 className="text-4xl md:text-5xl font-extrabold mb-6 tracking-tight">
             <span className="bg-gradient-to-r from-pink-500 via-cyan-400 to-blue-500 bg-clip-text text-transparent">
-              CodeNChip Hackathon
+              Hash 2K25 Hackathon
             </span>
           </h1>
           

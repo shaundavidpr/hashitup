@@ -248,107 +248,21 @@ const HackathonLanding = () => {
         </div>
       </div>
 
-      {/* Enhanced Header with Glass Morphism */}
-      <header className={`sticky top-0 z-50 transition-all duration-500 ${
-        scrollY > 50 ? 'bg-black/90 backdrop-blur-lg shadow-lg shadow-pink-500/5' : 'bg-black/70 backdrop-blur-sm'
-      } border-b border-white/10`}>
-        <div className="max-w-7xl mx-auto px-6 py-5 flex items-center justify-between">
-          <div className="text-2xl font-bold bg-gradient-to-r from-pink-500 to-cyan-500 bg-clip-text text-transparent tracking-tight animate-float">
-            Hackathon 2025
-          </div>
-          
-          {/* Main Navigation */}
-          <div className="flex items-center">
-            {/* Desktop Navigation Links */}
-            <nav className="hidden md:flex items-center gap-6 mr-6">
-              {navItems.map((item) => (
-                <a
-                  key={item.href}
-                  href={item.href}
-                  className="nav-link"
-                >
-                  {item.label}
-                </a>
-              ))}
-            </nav>
-            
-            {/* Auth Buttons with Consistent Design */}
-            <div className="flex items-center space-x-3">
-              {session ? (
-                <>
-                  <Link
-                    href="/dashboard"
-                    className="px-4 py-2 text-sm font-medium text-white bg-gradient-to-r from-pink-500/80 to-cyan-500/80 rounded-xl transition-all duration-300 hover:shadow-lg hover:shadow-pink-500/20 hover:-translate-y-0.5"
-                  >
-                    Dashboard
-                  </Link>
-                  {isAdmin && (
-                    <>
-                      <Link
-                        href="/admin"
-                        className="px-4 py-2 text-sm font-medium text-white bg-white/5 border border-white/10 rounded-xl transition-all duration-300 hover:bg-white/10 hover:-translate-y-0.5"
-                      >
-                        Admin
-                      </Link>
-                      <Link
-                        href="/admin/manage"
-                        className="px-4 py-2 text-sm font-medium text-white bg-white/5 border border-white/10 rounded-xl transition-all duration-300 hover:bg-white/10 hover:-translate-y-0.5"
-                      >
-                        Manage
-                      </Link>
-                    </>
-                  )}
-                </>
-              ) : (
-                <div className="transform transition-transform hover:-translate-y-0.5">
-                  <LoginButton />
-                </div>
-              )}
-            </div>
-
-            {/* Mobile Menu Toggle */}
-            <button
-              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="md:hidden flex flex-col gap-1 ml-4"
-            >
-              <span className={`w-6 h-0.5 bg-white transition-all duration-300 rounded ${mobileMenuOpen ? 'rotate-45 translate-y-1.5' : ''}`} />
-              <span className={`w-6 h-0.5 bg-white transition-all duration-300 rounded ${mobileMenuOpen ? 'opacity-0' : ''}`} />
-              <span className={`w-6 h-0.5 bg-white transition-all duration-300 rounded ${mobileMenuOpen ? '-rotate-45 -translate-y-1.5' : ''}`} />
-            </button>
-          </div>
-        </div>
-
-        {/* Mobile Menu */}
-        {mobileMenuOpen && (
-          <div className="md:hidden absolute top-full left-0 right-0 bg-black/98 backdrop-blur-lg border-t border-white/10 p-6">
-            {navItems.map((item, index) => (
-              <a
-                key={item.href}
-                href={item.href}
-                className="block py-3 text-gray-300 hover:text-white hover:translate-x-1 transform transition-all duration-300"
-                onClick={() => setMobileMenuOpen(false)}
-                style={{ animationDelay: `${index * 0.1}s` }}
-              >
-                {item.label}
-              </a>
-            ))}
-          </div>
-        )}
-      </header>
+      <div className='sm:h-52'></div>
 
       {/* Hero Section */}
       <div className="max-w-6xl mx-auto px-6 py-32 text-center relative">
         {/* Decorative elements */}
         <div className="absolute -top-16 right-10 w-72 h-72 bg-pink-500/10 rounded-full blur-3xl"></div>
         <div className="absolute -bottom-8 left-10 w-80 h-80 bg-cyan-500/10 rounded-full blur-3xl"></div>
-        
-        <h1 className="text-5xl md:text-7xl font-black mb-5 leading-tight tracking-tight relative z-10">
-          Build the{' '}
+
+        <h1 className="text-5xl md:text-7xl font-black mb-5 leading-tight tracking-tight relative z-10 sm:text-3xl">
+          Push the{' '}
           <span className="bg-gradient-to-r from-pink-500 via-purple-500 to-cyan-500 bg-clip-text text-transparent">
-            Future
+            Branch.
           </span>
           <br />
-          in 12 Hours
+          Commit the <span className="bg-gradient-to-r from-pink-500 via-purple-500 to-cyan-500 bg-clip-text text-transparent">Future</span>
         </h1>
         
         <p className="text-xl md:text-2xl text-gray-300 mb-8 max-w-3xl mx-auto">
@@ -678,7 +592,7 @@ const HackathonLanding = () => {
           <p className="text-gray-600 text-sm">
             Powered by{' '}
             <span className="bg-gradient-to-r from-pink-500 to-cyan-500 bg-clip-text text-transparent font-semibold">
-              Codenchip
+              Hash 2K25
             </span>{' '}
             — See you at the hackathon! 🎉
           </p>

@@ -12,7 +12,7 @@ export function Footer() {
       <div className="max-w-6xl mx-auto relative">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-10 mb-10">
           <div>
-            <h3 className="text-2xl font-bold mb-5 bg-gradient-to-r from-pink-500 via-cyan-400 to-blue-500 bg-clip-text text-transparent">CodeNChip</h3>
+            <h3 className="text-2xl font-bold mb-5 bg-gradient-to-r from-pink-500 via-cyan-400 to-blue-500 bg-clip-text text-transparent">Hash 2K25</h3>
             <p className="text-slate-400 mb-6 max-w-sm">
               India's premier hackathon fostering innovation and technological excellence among the brightest minds in the country.
             </p> 
@@ -76,7 +76,7 @@ export function Footer() {
             <div className="space-y-4 text-slate-400">
               <p className="flex items-start">
                 <Mail className="h-5 w-5 text-cyan-500 mr-3 flex-shrink-0" />
-                <span>support@codenchip.in</span>
+                <span>support@hash 2k25.in</span>
               </p>
               <p className="flex items-start">
                 <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-pink-500 mr-3 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -96,7 +96,7 @@ export function Footer() {
         </div>
         
         <div className="pt-8 border-t border-slate-800/50 text-center text-slate-500 flex flex-col md:flex-row justify-between items-center">
-          <p>© 2025 CodeNChip Hackathon. All rights reserved.</p>
+          <p>© 2025 Hash 2K25 Hackathon. All rights reserved.</p>
           <div className="mt-4 md:mt-0 flex space-x-6 text-sm">
             <a href="#" className="text-slate-500 hover:text-slate-300 transition-colors duration-200">Privacy Policy</a>
             <a href="#" className="text-slate-500 hover:text-slate-300 transition-colors duration-200">Terms of Service</a>

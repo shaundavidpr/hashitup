@@ -246,17 +246,17 @@ export function BulkEmailForm() {
                 onClick={() => {
                   setFormData({
                     ...formData,
-                    subject: 'Welcome to CodeNChip Hackathon!',
-                    message: `<h2>Welcome to CodeNChip Hackathon!</h2>
+                    subject: 'Welcome to Hash 2K25 Hackathon!',
+                    message: `<h2>Welcome to Hash 2K25 Hackathon!</h2>
 <p>Dear Team Leader,</p>
-<p>Your team has been successfully registered for the CodeNChip National Hackathon.</p>
+<p>Your team has been successfully registered for the Hash 2K25 National Hackathon.</p>
 <p>Next steps:</p>
 <ul>
   <li>Complete your project submission</li>
   <li>Ensure all team members are registered</li>
   <li>Prepare for the hackathon event</li>
 </ul>
-<p>Best regards,<br>CodeNChip Team</p>`,
+<p>Best regards,<br>Hash 2K25 Team</p>`,
                   })
                 }}
                 variant="outline"
@@ -275,13 +275,13 @@ export function BulkEmailForm() {
                 onClick={() => {
                   setFormData({
                     ...formData,
-                    subject: 'Project Status Update - CodeNChip Hackathon',
+                    subject: 'Project Status Update - Hash 2K25 Hackathon',
                     message: `<h2>Project Status Update</h2>
 <p>Dear Team,</p>
 <p>Your project submission has been reviewed and the status has been updated.</p>
 <p>Please check your dashboard for the latest status and any additional instructions.</p>
 <p>If you have any questions, please don't hesitate to contact us.</p>
-<p>Best regards,<br>CodeNChip Team</p>`,
+<p>Best regards,<br>Hash 2K25 Team</p>`,
                   })
                 }}
                 variant="outline"

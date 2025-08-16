@@ -70,7 +70,7 @@ export default function SignOut() {
               <LogOut className="h-8 w-8 text-white" />
             </div>
             <h1 className="text-3xl font-bold text-white mb-2">Sign Out</h1>
-            <p className="text-gray-300">Are you sure you want to sign out of CodeNChip?</p>
+            <p className="text-gray-300">Are you sure you want to sign out of Hash 2K25?</p>
           </div>
 
           {/* User Info */}

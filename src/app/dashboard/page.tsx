@@ -762,12 +762,12 @@ export default async function DashboardPage() {
         <div className="pt-10 pb-6 border-t border-white/5 mt-12">
           <div className="flex flex-col md:flex-row justify-between items-center gap-4">
             <p className="text-xs text-slate-500">
-              © 2025 CodeNChip Hackathon Platform. All rights reserved.
+              © 2025 Hash 2K25 Hackathon Platform. All rights reserved.
             </p>
             <div className="flex items-center space-x-4">
               <span className="text-xs text-slate-600">Made with</span>
               <span className="text-xs bg-gradient-to-r from-pink-500 to-cyan-400 bg-clip-text text-transparent">❤️</span>
-              <span className="text-xs text-slate-600">by the CodeNChip Team</span>
+              <span className="text-xs text-slate-600">by the Hash 2K25 Team</span>
             </div>
           </div>
         </div>

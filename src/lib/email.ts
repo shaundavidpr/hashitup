@@ -72,11 +72,11 @@ export const sendBulkEmail = async (options: BulkEmailOptions): Promise<{ succes
 // Email templates
 export const emailTemplates = {
   teamCreated: (teamName: string, leaderName: string) => ({
-    subject: `Welcome to CodeNChip Hackathon - Team ${teamName} Created!`,
+    subject: `Welcome to Hash 2K25 Hackathon - Team ${teamName} Created!`,
     html: `
-      <h2>Welcome to CodeNChip Hackathon!</h2>
+      <h2>Welcome to Hash 2K25 Hackathon!</h2>
       <p>Dear ${leaderName},</p>
-      <p>Your team <strong>${teamName}</strong> has been successfully created for the CodeNChip Hackathon.</p>
+      <p>Your team <strong>${teamName}</strong> has been successfully created for the Hash 2K25 Hackathon.</p>
       <p>Next steps:</p>
       <ul>
         <li>Add your team members</li>
@@ -84,18 +84,18 @@ export const emailTemplates = {
         <li>Prepare for the hackathon</li>
       </ul>
       <p>Good luck with your submission!</p>
-      <p>Best regards,<br>CodeNChip Team</p>
+      <p>Best regards,<br>Hash 2K25 Team</p>
     `,
   }),
 
   memberAdded: (teamName: string, memberName: string) => ({
-    subject: `You've been added to Team ${teamName} - CodeNChip Hackathon`,
+    subject: `You've been added to Team ${teamName} - Hash 2K25 Hackathon`,
     html: `
       <h2>You're part of Team ${teamName}!</h2>
       <p>Dear ${memberName},</p>
-      <p>You have been added to team <strong>${teamName}</strong> for the CodeNChip Hackathon.</p>
+      <p>You have been added to team <strong>${teamName}</strong> for the Hash 2K25 Hackathon.</p>
       <p>Please log in to the platform to access your team dashboard and collaborate with your team members.</p>
-      <p>Best regards,<br>CodeNChip Team</p>
+      <p>Best regards,<br>Hash 2K25 Team</p>
     `,
   }),
 
@@ -104,9 +104,9 @@ export const emailTemplates = {
     html: `
       <h2>Submission Received!</h2>
       <p>Dear Team ${teamName},</p>
-      <p>Your project <strong>${projectName}</strong> has been successfully submitted for the CodeNChip Hackathon.</p>
+      <p>Your project <strong>${projectName}</strong> has been successfully submitted for the Hash 2K25 Hackathon.</p>
       <p>Our team will review your submission and update you on the status soon.</p>
-      <p>Best regards,<br>CodeNChip Team</p>
+      <p>Best regards,<br>Hash 2K25 Team</p>
     `,
   }),
 
@@ -118,7 +118,7 @@ export const emailTemplates = {
       <p>Your project <strong>${projectName}</strong> status has been updated to: <strong>${status}</strong></p>
       ${status === 'SELECTED' ? '<p>Congratulations! Your project has been selected for the next round.</p>' : ''}
       ${status === 'REJECTED' ? '<p>We appreciate your participation. Keep innovating!</p>' : ''}
-      <p>Best regards,<br>CodeNChip Team</p>
+      <p>Best regards,<br>Hash 2K25 Team</p>
     `,
   }),
 } 
