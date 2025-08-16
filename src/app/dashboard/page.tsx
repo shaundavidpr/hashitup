@@ -203,50 +203,87 @@ export default async function DashboardPage() {
   }
 
   // Get user with team information
-  const user = await db.user.findUnique({
-    where: { id: session.user.id },
-    include: {
-      leadingTeam: {
-        include: {
-          members: true,
-          projectIdea: {
-            select: {
-              id: true,
-              title: true,
-              description: true,
-              techStack: true,
-              problemStatement: true,
-              solution: true,
-              status: true,
-              isDraft: true
-            }
-          },
-          leader: true
-        }
-      },
-      memberOfTeam: {
-        include: {
-          members: true,
-          projectIdea: {
-            select: {
-              id: true,
-              title: true,
-              description: true,
-              techStack: true,
-              problemStatement: true,
-              solution: true,
-              status: true,
-              isDraft: true
-            }
-          },
-          leader: true
+  let user: UserWithTeam | null = null
+  let dbUnavailable = false
+  try {
+    user = await db.user.findUnique({
+      where: { id: session.user.id },
+      include: {
+        leadingTeam: {
+          include: {
+            members: true,
+            projectIdea: {
+              select: {
+                id: true,
+                title: true,
+                description: true,
+                techStack: true,
+                problemStatement: true,
+                solution: true,
+                status: true,
+                isDraft: true
+              }
+            },
+            leader: true
+          }
+        },
+        memberOfTeam: {
+          include: {
+            members: true,
+            projectIdea: {
+              select: {
+                id: true,
+                title: true,
+                description: true,
+                techStack: true,
+                problemStatement: true,
+                solution: true,
+                status: true,
+                isDraft: true
+              }
+            },
+            leader: true
+          }
         }
       }
-    }
-  }) as UserWithTeam | null
+    }) as UserWithTeam | null
+  } catch (err) {
+    console.error('Database unavailable:', err)
+    dbUnavailable = true
+  }
 
   // Check if results have been published
   const resultsPublished = await areResultsPublished()
+
+  // If DB is unavailable, render a graceful fallback
+  if (dbUnavailable) {
+    return (
+      <>
+        <style dangerouslySetInnerHTML={{ __html: styleTag }} />
+        <DashboardBackground />
+        <div className="min-h-screen text-white py-20 overflow-hidden">
+          <div className="container-custom max-w-2xl relative">
+            <div className="mb-10">
+              <h1 className="text-4xl font-bold mb-3 bg-gradient-to-r from-pink-500 via-cyan-400 to-blue-500 bg-clip-text text-transparent">
+                Welcome, {session.user.name}
+              </h1>
+              <p className="text-slate-400">
+                Our database is currently unreachable. Please check your DATABASE_URL or try again shortly.
+              </p>
+            </div>
+            <Card variant="glass" className="p-6 bg-gradient-to-br from-amber-500/10 to-red-500/10 border-amber-500/20">
+              <h2 className="text-xl font-semibold mb-2">Service temporarily unavailable</h2>
+              <ul className="list-disc list-inside text-slate-300 text-sm space-y-1">
+                <li>Ensure your Postgres server is running and accessible.</li>
+                <li>Verify DATABASE_URL (and DIRECT_URL) in your environment.</li>
+                <li>If using a remote DB, confirm network access from this machine.</li>
+              </ul>
+            </Card>
+          </div>
+        </div>
+      </>
+    )
+  }
 
   // If user has no team and is not an admin/superadmin, show team creation form
   if (!user?.leadingTeam && !user?.memberOfTeam && !['ADMIN', 'SUPERADMIN'].includes(user?.role || '')) {
