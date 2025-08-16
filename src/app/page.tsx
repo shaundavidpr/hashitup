@@ -1,7 +1,10 @@
 "use client";
 
 import React, { useState, useEffect } from 'react';
+import { LoginButton } from '@/components/LoginButton';
 import { Calendar, Trophy, Rocket, Zap, Star, Users, Award, Sparkles } from 'lucide-react';
+import Link from 'next/link';
+import { cn } from '@/lib/utils';
 
 // Add keyframe animations for enhanced visual effects
 const styleTag = `
@@ -60,6 +63,17 @@ const styleTag = `
     animation: shimmer 1.5s infinite;
   }
   
+  .animate-ping {
+    animation: ping 1.5s cubic-bezier(0, 0, 0.2, 1) infinite;
+  }
+  
+  @keyframes ping {
+    75%, 100% {
+      transform: scale(2);
+      opacity: 0;
+    }
+  }
+  
   .gradient-border {
     position: relative;
     border-radius: 1rem;
@@ -86,10 +100,18 @@ const styleTag = `
 const HackathonLanding = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [scrollY, setScrollY] = useState(0);
+  const [session, setSession] = useState(null);
+  const [isAdmin, setIsAdmin] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => setScrollY(window.scrollY);
     window.addEventListener('scroll', handleScroll);
+    
+    // Simulate session check - in a real app, you'd get this from your auth context/provider
+    // This is just a placeholder to make the code work
+    setSession(null); // Set to a user object if you want to test logged-in state
+    setIsAdmin(false); // Set to true if you want to test admin state
+    
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
@@ -216,44 +238,89 @@ const HackathonLanding = () => {
             animation: 'pulse 8s ease-in-out infinite alternate'
           }}
         />
-        <div className="absolute inset-0 bg-[url('/data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAiIGhlaWdodD0iMjAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGNpcmNsZSBjeD0iMSIgY3k9IjEiIHI9IjEiIGZpbGw9InJnYmEoMjU1LDI1NSwyNTUsMC4wNSkiLz48L3N2Zz4=')] opacity-10"></div>
+        <div className="absolute inset-0 opacity-10">
+          <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+            <pattern id="dots" x="0" y="0" width="20" height="20" patternUnits="userSpaceOnUse">
+              <circle cx="1" cy="1" r="1" fill="rgba(255,255,255,0.05)" />
+            </pattern>
+            <rect x="0" y="0" width="100%" height="100%" fill="url(#dots)" />
+          </svg>
+        </div>
       </div>
 
       {/* Enhanced Header with Glass Morphism */}
       <header className={`sticky top-0 z-50 transition-all duration-500 ${
         scrollY > 50 ? 'bg-black/90 backdrop-blur-lg shadow-lg shadow-pink-500/5' : 'bg-black/70 backdrop-blur-sm'
       } border-b border-white/10`}>
-        <div className="max-w-7xl mx-auto px-6 py-5 flex justify-between items-center">
+        <div className="max-w-7xl mx-auto px-6 py-5 flex items-center justify-between">
           <div className="text-2xl font-bold bg-gradient-to-r from-pink-500 to-cyan-500 bg-clip-text text-transparent tracking-tight animate-float">
             Hackathon 2025
           </div>
           
-          {/* Enhanced Navigation with refined hover effects */}
-          <nav className="hidden md:flex gap-8">
-            {navItems.map((item) => (
-              <a
-                key={item.href}
-                href={item.href}
-                className="nav-link"
-              >
-                {item.label}
-              </a>
-            ))}
-          </nav>
+          {/* Main Navigation */}
+          <div className="flex items-center">
+            {/* Desktop Navigation Links */}
+            <nav className="hidden md:flex items-center gap-6 mr-6">
+              {navItems.map((item) => (
+                <a
+                  key={item.href}
+                  href={item.href}
+                  className="nav-link"
+                >
+                  {item.label}
+                </a>
+              ))}
+            </nav>
+            
+            {/* Auth Buttons with Consistent Design */}
+            <div className="flex items-center space-x-3">
+              {session ? (
+                <>
+                  <Link
+                    href="/dashboard"
+                    className="px-4 py-2 text-sm font-medium text-white bg-gradient-to-r from-pink-500/80 to-cyan-500/80 rounded-xl transition-all duration-300 hover:shadow-lg hover:shadow-pink-500/20 hover:-translate-y-0.5"
+                  >
+                    Dashboard
+                  </Link>
+                  {isAdmin && (
+                    <>
+                      <Link
+                        href="/admin"
+                        className="px-4 py-2 text-sm font-medium text-white bg-white/5 border border-white/10 rounded-xl transition-all duration-300 hover:bg-white/10 hover:-translate-y-0.5"
+                      >
+                        Admin
+                      </Link>
+                      <Link
+                        href="/admin/manage"
+                        className="px-4 py-2 text-sm font-medium text-white bg-white/5 border border-white/10 rounded-xl transition-all duration-300 hover:bg-white/10 hover:-translate-y-0.5"
+                      >
+                        Manage
+                      </Link>
+                    </>
+                  )}
+                </>
+              ) : (
+                <div className="transform transition-transform hover:-translate-y-0.5">
+                  <LoginButton />
+                </div>
+              )}
+            </div>
 
-          <button
-            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="md:hidden flex flex-col gap-1"
-          >
-            <span className={`w-6 h-0.5 bg-white transition-all duration-300 rounded ${mobileMenuOpen ? 'rotate-45 translate-y-1.5' : ''}`} />
-            <span className={`w-6 h-0.5 bg-white transition-all duration-300 rounded ${mobileMenuOpen ? 'opacity-0' : ''}`} />
-            <span className={`w-6 h-0.5 bg-white transition-all duration-300 rounded ${mobileMenuOpen ? '-rotate-45 -translate-y-1.5' : ''}`} />
-          </button>
+            {/* Mobile Menu Toggle */}
+            <button
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              className="md:hidden flex flex-col gap-1 ml-4"
+            >
+              <span className={`w-6 h-0.5 bg-white transition-all duration-300 rounded ${mobileMenuOpen ? 'rotate-45 translate-y-1.5' : ''}`} />
+              <span className={`w-6 h-0.5 bg-white transition-all duration-300 rounded ${mobileMenuOpen ? 'opacity-0' : ''}`} />
+              <span className={`w-6 h-0.5 bg-white transition-all duration-300 rounded ${mobileMenuOpen ? '-rotate-45 -translate-y-1.5' : ''}`} />
+            </button>
+          </div>
         </div>
 
-        {/* Enhanced Mobile Menu with animations */}
+        {/* Mobile Menu */}
         {mobileMenuOpen && (
-          <div className="md:hidden absolute top-full left-0 right-0 bg-black/98 backdrop-blur-lg border-t border-white/10 p-6 animate-fadeIn">
+          <div className="md:hidden absolute top-full left-0 right-0 bg-black/98 backdrop-blur-lg border-t border-white/10 p-6">
             {navItems.map((item, index) => (
               <a
                 key={item.href}
@@ -277,14 +344,14 @@ const HackathonLanding = () => {
         
         <h1 className="text-5xl md:text-7xl font-black mb-5 leading-tight tracking-tight relative z-10">
           Build the{' '}
-          <span className="bg-gradient-to-r from-pink-500 via-purple-500 to-cyan-500 bg-clip-text text-transparent bg-size-200 animate-gradient-x">
+          <span className="bg-gradient-to-r from-pink-500 via-purple-500 to-cyan-500 bg-clip-text text-transparent">
             Future
           </span>
           <br />
           in 12 Hours
         </h1>
         
-        <p className="text-xl md:text-2xl text-gray-300 mb-8 max-w-3xl mx-auto animate-fadeIn">
+        <p className="text-xl md:text-2xl text-gray-300 mb-8 max-w-3xl mx-auto">
           Join 500+ innovators, developers, and creators for the most epic hackathon of 2025. 
           Transform ideas into reality, win amazing prizes, and shape tomorrow's technology.
         </p>
@@ -307,7 +374,7 @@ const HackathonLanding = () => {
         <div className="flex flex-col sm:flex-row gap-6 justify-center">
           <a
             href="#register"
-            className="inline-block px-10 py-5 bg-gradient-to-r from-pink-500 via-purple-500 to-cyan-500 bg-size-200 text-white font-semibold text-sm uppercase tracking-wide rounded-xl transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl hover:shadow-pink-500/30 relative overflow-hidden group"
+            className="inline-block px-10 py-5 bg-gradient-to-r from-pink-500 via-purple-500 to-cyan-500 text-white font-semibold text-sm uppercase tracking-wide rounded-xl transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl hover:shadow-pink-500/30 relative overflow-hidden group"
           >
             <span className="relative z-10">Register Now - Free!</span>
             <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700 ease-in-out" />
@@ -407,7 +474,7 @@ const HackathonLanding = () => {
               
               {/* Enhanced timeline node with pulse effect */}
               <div className="w-6 h-6 bg-gradient-to-br from-pink-500 to-cyan-500 rounded-full relative z-10 shadow-lg shadow-pink-500/50 group-hover:scale-125 transition-transform duration-300">
-                <div className="absolute inset-0 rounded-full bg-gradient-to-br from-pink-500 to-cyan-500 animate-ping opacity-75 group-hover:opacity-100"></div>
+                <span className="absolute inset-0 rounded-full bg-gradient-to-br from-pink-500 to-cyan-500 animate-ping opacity-75 group-hover:opacity-100"></span>
               </div>
               
               <div className="flex-1" />
@@ -416,39 +483,71 @@ const HackathonLanding = () => {
         </div>
       </section>
 
-      {/* Enhanced Prizes Section */}
-      <section id="prizes" className="max-w-6xl mx-auto px-6 py-20">
-        <div className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-3xl p-16">
-          <h2 className="text-3xl md:text-5xl font-bold text-center mb-5 tracking-tight">
+      {/* Enhanced Prizes Section with glass morphism and better card design */}
+      <section id="prizes" className="max-w-6xl mx-auto px-6 py-28 relative">
+        <div className="absolute -z-10 top-1/4 left-1/2 -translate-x-1/2 w-full max-w-3xl h-64 bg-gradient-to-r from-pink-500/20 to-cyan-500/20 blur-3xl rounded-full"></div>
+        
+        <div className="bg-white/5 backdrop-blur-lg border border-white/10 rounded-3xl p-16 shadow-2xl relative overflow-hidden">
+          {/* Decorative corner elements */}
+          <div className="absolute top-0 right-0 w-64 h-64 bg-gradient-to-br from-pink-500/10 to-transparent rounded-full blur-xl"></div>
+          <div className="absolute bottom-0 left-0 w-64 h-64 bg-gradient-to-tr from-cyan-500/10 to-transparent rounded-full blur-xl"></div>
+          
+          <h2 className="text-3xl md:text-5xl font-bold text-center mb-6 tracking-tight">
             Amazing <span className="bg-gradient-to-r from-pink-500 to-cyan-500 bg-clip-text text-transparent">Prizes</span>
           </h2>
-          <p className="text-xl text-gray-400 text-center mb-16">$50,000+ total prize pool with rewards for everyone</p>
+          <p className="text-xl text-gray-300 text-center mb-20">$50,000+ total prize pool with rewards for everyone</p>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
             {prizes.map((prize, index) => (
               <div
                 key={index}
-                className={`text-center p-12 bg-white/5 rounded-2xl border transition-all duration-300 hover:-translate-y-2 relative overflow-hidden ${
-                  index === 0 ? 'border-yellow-500/30 shadow-lg shadow-yellow-500/10' : 'border-white/10'
+                className={`text-center p-12 rounded-2xl border transition-all duration-500 hover:-translate-y-3 hover:shadow-xl relative overflow-hidden group ${
+                  index === 0 
+                    ? 'bg-gradient-to-b from-yellow-500/20 to-black/40 border-yellow-500/30 shadow-lg shadow-yellow-500/10' 
+                    : 'bg-white/5 border-white/10 hover:border-white/20'
                 }`}
               >
+                {/* Animated background */}
+                <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 bg-gradient-to-b from-white/5 to-transparent"></div>
+                
+                {/* Crown for first place */}
                 {index === 0 && (
-                  <div className="absolute -top-3 -right-3 text-3xl animate-bounce">
+                  <div className="absolute -top-3 -right-3 text-4xl animate-bounce">
                     👑
                   </div>
                 )}
-                <div className="text-5xl font-bold bg-gradient-to-r from-pink-500 to-cyan-500 bg-clip-text text-transparent mb-3">
+                
+                {/* Prize amount with gradient */}
+                <div className={`text-5xl font-bold mb-3 ${
+                  index === 0 
+                    ? 'bg-gradient-to-r from-yellow-400 to-amber-300 bg-clip-text text-transparent' 
+                    : 'bg-gradient-to-r from-pink-500 to-cyan-500 bg-clip-text text-transparent'
+                }`}>
                   {prize.amount}
                 </div>
-                <div className="text-gray-400 text-lg font-semibold mb-4">{prize.place}</div>
-                <p className="text-gray-300">{prize.description}</p>
+                
+                {/* Prize place with better typography */}
+                <div className={`text-lg font-semibold mb-5 tracking-wide ${
+                  index === 0 ? 'text-yellow-300' : 'text-gray-300'
+                }`}>
+                  {prize.place}
+                </div>
+                
+                {/* Prize description with hover effect */}
+                <p className="text-gray-400 group-hover:text-gray-200 transition-colors duration-300">
+                  {prize.description}
+                </p>
+                
+                {/* Decorative line */}
+                <div className="w-12 h-0.5 bg-gradient-to-r from-pink-500 to-cyan-500 mx-auto mt-6"></div>
               </div>
             ))}
           </div>
 
-          <div className="text-center">
-            <p className="text-lg mb-4">
-              <strong>Special Categories:</strong> Best AI/ML Project, Most Creative Solution, Social Impact Award, Best Student Team
+          <div className="text-center bg-white/5 backdrop-blur-sm rounded-2xl p-8 border border-white/10">
+            <p className="text-lg mb-5">
+              <strong className="bg-gradient-to-r from-pink-500 to-cyan-500 bg-clip-text text-transparent">Special Categories:</strong> 
+              <span className="text-gray-300 ml-2">Best AI/ML Project, Most Creative Solution, Social Impact Award, Best Student Team</span>
             </p>
             <p className="text-gray-400">
               Plus internship opportunities, startup credits, and exclusive merchandise for all participants!
@@ -457,43 +556,70 @@ const HackathonLanding = () => {
         </div>
       </section>
 
-      {/* Tips Section */}
-      <section className="max-w-6xl mx-auto px-6 py-20">
-        <h2 className="text-3xl md:text-5xl font-bold text-center mb-5 tracking-tight">
+      {/* Enhanced Tips Section with better cards and layout */}
+      <section className="max-w-6xl mx-auto px-6 py-28 relative">
+        <div className="absolute -z-10 bottom-0 right-0 w-80 h-80 bg-gradient-to-bl from-pink-500/10 to-transparent rounded-full blur-3xl"></div>
+        
+        <h2 className="text-3xl md:text-5xl font-bold text-center mb-6 tracking-tight">
           Pro Tips to <span className="bg-gradient-to-r from-pink-500 to-cyan-500 bg-clip-text text-transparent">Win</span>
         </h2>
-        <p className="text-xl text-gray-400 text-center mb-16">
+        <p className="text-xl text-gray-300 text-center mb-20">
           Insider strategies from previous winners and industry experts
         </p>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
           {tips.map((tip, index) => (
             <div
               key={index}
-              className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-3xl p-8 transition-all duration-300 hover:-translate-y-2 hover:border-white/20 hover:shadow-2xl"
+              className="bg-white/5 backdrop-blur-lg border border-white/10 rounded-3xl p-10 transition-all duration-500 hover:-translate-y-2 hover:border-white/20 hover:shadow-2xl relative overflow-hidden group"
             >
-              <span className="text-4xl mb-4 block">{tip.icon}</span>
-              <h3 className="text-xl font-bold mb-4 text-white">{tip.title}</h3>
-              <p className="text-gray-400 leading-relaxed">{tip.description}</p>
+              {/* Background gradient on hover */}
+              <div className="absolute inset-0 bg-gradient-to-br from-pink-500/5 to-cyan-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+              
+              {/* Enhanced icon presentation */}
+              <div className="flex items-center gap-6 mb-6">
+                <span className="text-5xl p-4 bg-white/5 border border-white/10 rounded-2xl group-hover:scale-110 transition-transform duration-300">{tip.icon}</span>
+                <h3 className="text-2xl font-bold text-white group-hover:bg-gradient-to-r group-hover:from-pink-500 group-hover:to-cyan-500 group-hover:bg-clip-text group-hover:text-transparent transition-all duration-300">{tip.title}</h3>
+              </div>
+              
+              {/* Enhanced description */}
+              <p className="text-gray-400 leading-relaxed group-hover:text-gray-300 transition-colors duration-300 pl-16">{tip.description}</p>
             </div>
           ))}
         </div>
       </section>
 
-      {/* Sponsors Section */}
-      <section id="sponsors" className="max-w-6xl mx-auto px-6 py-20">
-        <h2 className="text-3xl md:text-5xl font-bold text-center mb-5 tracking-tight">
+      {/* Enhanced Sponsors Section */}
+      <section id="sponsors" className="max-w-6xl mx-auto px-6 py-28 relative">
+        <div className="absolute -z-10 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-lg h-64 bg-gradient-to-r from-cyan-500/10 to-pink-500/10 blur-3xl rounded-full"></div>
+        
+        <h2 className="text-3xl md:text-5xl font-bold text-center mb-6 tracking-tight">
           Our <span className="bg-gradient-to-r from-pink-500 to-cyan-500 bg-clip-text text-transparent">Sponsors</span>
         </h2>
-        <p className="text-xl text-gray-400 text-center mb-16">
+        <p className="text-xl text-gray-300 text-center mb-16">
           Supported by industry leaders who believe in innovation
         </p>
         
-        <div className="text-center">
-          <p className="text-gray-400">
+        {/* Placeholder for sponsor logos */}
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mb-16">
+          {[1, 2, 3, 4, 5, 6, 7, 8].map((_, index) => (
+            <div 
+              key={index} 
+              className="aspect-[3/2] bg-white/5 rounded-2xl flex items-center justify-center border border-white/10 hover:border-white/20 transition-all duration-300 hover:-translate-y-1 group"
+            >
+              <div className="text-3xl opacity-30 group-hover:opacity-50 transition-opacity duration-300 group-hover:scale-110">
+                {index % 4 === 0 ? '🚀' : index % 4 === 1 ? '💻' : index % 4 === 2 ? '⚙️' : '🔍'}
+              </div>
+            </div>
+          ))}
+        </div>
+        
+        <div className="text-center px-8 py-10 bg-white/5 backdrop-blur-sm rounded-2xl border border-white/10 inline-block mx-auto">
+          <p className="text-gray-300">
             Partnership opportunities available •{' '}
-            <a href="mailto:sponsors@hackathon2025.com" className="text-cyan-400 hover:text-cyan-300 transition-colors">
+            <a href="mailto:sponsors@hackathon2025.com" className="text-cyan-400 hover:text-cyan-300 transition-colors relative group">
               Contact us
+              <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-cyan-400 group-hover:w-full transition-all duration-300"></span>
             </a>
           </p>
         </div>
@@ -509,10 +635,10 @@ const HackathonLanding = () => {
         </p>
         <a
           href="https://your-hackathon-signup-link.com"
-          className="inline-block px-12 py-6 bg-gradient-to-r from-pink-500 to-cyan-500 text-white font-semibold text-lg uppercase tracking-wide rounded-full transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl hover:shadow-pink-500/40 relative overflow-hidden group"
+          className="inline-block px-10 py-5 bg-gradient-to-r from-pink-500 via-purple-500 to-cyan-500 text-white font-semibold text-sm uppercase tracking-wide rounded-xl transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl hover:shadow-pink-500/30 relative overflow-hidden group"
         >
           <span className="relative z-10">Register Now - It's Free! 🚀</span>
-          <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-500" />
+          <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700 ease-in-out" />
         </a>
         <p className="text-gray-500 mt-5 text-sm">
           Limited spots available • First come, first served

@@ -5,9 +5,22 @@ import { HTMLAttributes, forwardRef } from 'react'
 
 export interface LoadingSpinnerProps extends HTMLAttributes<HTMLDivElement> {
   size?: 'xs' | 'sm' | 'md' | 'lg' | 'xl'
-  variant?: 'default' | 'dots' | 'pulse'
+  variant?: 'default' | 'dots' | 'pulse' | 'gradient'
 }
 
+/**
+ * LoadingSpinner component for showing loading states
+ * 
+ * @example
+ * // Default spinner
+ * <LoadingSpinner />
+ * 
+ * // Gradient spinner (our design system style)
+ * <LoadingSpinner variant="gradient" size="lg" />
+ * 
+ * // Dots spinner
+ * <LoadingSpinner variant="dots" />
+ */
 const LoadingSpinner = forwardRef<HTMLDivElement, LoadingSpinnerProps>(
   ({ className, size = 'md', variant = 'default', ...props }, ref) => {
     const sizes = {
@@ -16,6 +29,32 @@ const LoadingSpinner = forwardRef<HTMLDivElement, LoadingSpinnerProps>(
       md: 'h-5 w-5',
       lg: 'h-6 w-6',
       xl: 'h-8 w-8',
+    }
+
+    // Gradient spinner that matches our design system
+    if (variant === 'gradient') {
+      return (
+        <div
+          ref={ref}
+          className={cn('relative', sizes[size], className)}
+          {...props}
+        >
+          <div className="absolute inset-0 rounded-full bg-gradient-to-r from-pink-500 via-cyan-400 to-blue-500 animate-spin"></div>
+          <div className={cn(
+            'absolute inset-[2px] bg-slate-900 rounded-full flex items-center justify-center',
+            size === 'xs' && 'inset-[1px]'
+          )}>
+            <div className={cn(
+              'rounded-full bg-gradient-to-r from-pink-500 via-cyan-400 to-blue-500 animate-pulse',
+              size === 'xs' && 'h-1 w-1',
+              size === 'sm' && 'h-1.5 w-1.5',
+              size === 'md' && 'h-2 w-2',
+              size === 'lg' && 'h-2.5 w-2.5',
+              size === 'xl' && 'h-3 w-3',
+            )}></div>
+          </div>
+        </div>
+      )
     }
 
     if (variant === 'dots') {
@@ -59,6 +98,7 @@ const LoadingSpinner = forwardRef<HTMLDivElement, LoadingSpinnerProps>(
       )
     }
 
+    // Default spinner
     return (
       <div
         ref={ref}
@@ -94,63 +134,35 @@ LoadingSpinner.displayName = 'LoadingSpinner'
 
 export { LoadingSpinner }
 
-export function LoadingDots() {
-  return (
-    <div className="flex space-x-1">
-      <div className="w-2 h-2 bg-blue-400 rounded-full animate-bounce"></div>
-      <div className="w-2 h-2 bg-purple-400 rounded-full animate-bounce" style={{animationDelay: '0.1s'}}></div>
-      <div className="w-2 h-2 bg-cyan-400 rounded-full animate-bounce" style={{animationDelay: '0.2s'}}></div>
-    </div>
-  )
-}
-
-export function LoadingPulse() {
-  return (
-    <div className="flex space-x-2">
-      <div className="w-3 h-3 rounded-full animate-pulse" style={{
-        background: 'linear-gradient(to right, #3b82f6, #06b6d4)'
-      }}></div>
-      <div className="w-3 h-3 rounded-full animate-pulse" style={{
-        background: 'linear-gradient(to right, #8b5cf6, #ec4899)',
-        animationDelay: '0.2s'
-      }}></div>
-      <div className="w-3 h-3 rounded-full animate-pulse" style={{
-        background: 'linear-gradient(to right, #10b981, #059669)',
-        animationDelay: '0.4s'
-      }}></div>
-    </div>
-  )
-}
-
+/**
+ * Alternative loading spinner with an infinity-like animation
+ * Matches our design system with gradient colors
+ */
 export function LoadingSpinnerInfinity({ className = '', size = 'md' }: { className?: string, size?: 'sm' | 'md' | 'lg' }) {
   const sizeClasses = {
-    sm: 'w-8 h-8',
-    md: 'w-12 h-12',
-    lg: 'w-16 h-16'
+    sm: 'w-4 h-4',
+    md: 'w-6 h-6',
+    lg: 'w-8 h-8'
   }
-
+  
   return (
-    <div className={`relative ${sizeClasses[size]} ${className}`}>
-      {/* SVG Container */}
-      <svg
-        viewBox="0 0 100 50"
-        preserveAspectRatio="xMidYMid"
-        className="w-full h-full"
-      >
-        {/* Left Path (Red) */}
-        <path
-          d="M25,25 C25,15 35,15 45,25 C55,35 65,35 75,25"
-          className="stroke-[4] stroke-red-500/0 fill-none animate-infinity-left"
-          strokeLinecap="round"
-        />
-        
-        {/* Right Path (Blue) */}
-        <path
-          d="M75,25 C75,35 65,35 55,25 C45,15 35,15 25,25"
-          className="stroke-[4] stroke-blue-500/0 fill-none animate-infinity-right"
-          strokeLinecap="round"
-        />
-      </svg>
+    <div className={cn('relative', sizeClasses[size], className)}>
+      <div className="absolute w-full h-full rounded-full border-2 border-slate-700/50"></div>
+      <div className="absolute w-full h-full rounded-full border-t-2 border-r-2 border-transparent border-l-2 animate-spin"
+        style={{
+          borderTopColor: 'rgb(236, 72, 153)', // pink-500
+          borderLeftColor: 'rgb(59, 130, 246)', // blue-500
+          animationDuration: '1s',
+        }}
+      ></div>
+      <div className="absolute w-full h-full rounded-full border-b-2 border-r-2 border-l-2 border-transparent animate-spin"
+        style={{
+          borderBottomColor: 'rgb(6, 182, 212)', // cyan-500
+          borderRightColor: 'transparent',
+          animationDuration: '1.5s',
+          animationDirection: 'reverse'
+        }}
+      ></div>
     </div>
   )
 }

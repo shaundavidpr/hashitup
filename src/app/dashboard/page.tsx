@@ -1,6 +1,7 @@
 import { ProjectIdeaForm } from '@/components/dashboard/ProjectIdeaForm'
 import { TeamCreationForm } from '@/components/dashboard/TeamCreationForm'
 import { TeamOverview } from '@/components/dashboard/TeamOverview'
+import { DashboardBackground } from '@/components/dashboard/DashboardBackground'
 import { Card } from '@/components/ui/Card'
 import { User } from '@/generated/prisma'
 import { authOptions } from '@/lib/auth'
@@ -87,19 +88,22 @@ export default async function DashboardPage() {
   // If user has no team and is not an admin/superadmin, show team creation form
   if (!user?.leadingTeam && !user?.memberOfTeam && !['ADMIN', 'SUPERADMIN'].includes(user?.role || '')) {
     return (
-      <div className="min-h-screen bg-slate-950 text-white py-20">
-        <div className="container-custom max-w-2xl">
-          <div className="mb-12">
-            <h1 className="text-4xl font-bold mb-4">
-              Welcome, {session.user.name}!
-            </h1>
-            <p className="text-slate-400 text-lg">
-              Let's get started by creating your team
-            </p>
+      <>
+        <DashboardBackground />
+        <div className="min-h-screen text-white py-20">
+          <div className="container-custom max-w-2xl">
+            <div className="mb-12">
+              <h1 className="text-4xl font-bold mb-4 bg-gradient-to-r from-pink-500 via-cyan-400 to-blue-500 bg-clip-text text-transparent">
+                Welcome, {session.user.name}!
+              </h1>
+              <p className="text-slate-400 text-lg">
+                Let's get started by creating your team
+              </p>
+            </div>
+            <TeamCreationForm />
           </div>
-          <TeamCreationForm />
         </div>
-      </div>
+      </>
     )
   }
 
@@ -108,19 +112,21 @@ export default async function DashboardPage() {
 
   // For users with teams or admins, show the dashboard
   return (
-    <div className="min-h-screen bg-slate-950 text-white py-20">
-      <div className="container-custom">
-        {/* Header */}
-        <div className="mb-12">
-          <h1 className="text-4xl font-bold mb-4">
-            Welcome back, {session.user.name}
-          </h1>
-          <p className="text-slate-400 text-lg">
-            {['ADMIN', 'SUPERADMIN'].includes(user?.role || '') 
-              ? 'Manage teams and monitor progress'
-              : 'Track your hackathon progress and manage your team'}
-          </p>
-        </div>
+    <>
+      <DashboardBackground />
+      <div className="min-h-screen text-white py-20">
+        <div className="container-custom">
+          {/* Header */}
+          <div className="mb-12">
+            <h1 className="text-4xl font-bold mb-4 bg-gradient-to-r from-pink-500 via-cyan-400 to-blue-500 bg-clip-text text-transparent">
+              Welcome back, {session.user.name}
+            </h1>
+            <p className="text-slate-400 text-lg">
+              {['ADMIN', 'SUPERADMIN'].includes(user?.role || '') 
+                ? 'Manage teams and monitor progress'
+                : 'Track your hackathon progress and manage your team'}
+            </p>
+          </div>
 
         {/* Team Overview */}
         {team && (
@@ -177,7 +183,7 @@ export default async function DashboardPage() {
             <Card
               key={index}
               variant="glass"
-              className={`p-6 bg-gradient-to-br ${stat.color}`}
+              className={`p-6 bg-gradient-to-br backdrop-blur-md ${stat.color}`}
             >
               <div className="flex items-center gap-4">
                 <div className={`w-12 h-12 rounded-2xl bg-gradient-to-br ${stat.iconColor} flex items-center justify-center`}>
@@ -195,7 +201,7 @@ export default async function DashboardPage() {
         {/* Main Content Grid */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           {/* Project Status */}
-          <Card variant="glass" className="lg:col-span-2 p-8 bg-gradient-to-br from-blue-500/10 to-purple-500/10 border-blue-500/20">
+          <Card variant="glass" className="lg:col-span-2 p-8 bg-gradient-to-br from-blue-500/10 to-purple-500/10 border-blue-500/20 backdrop-blur-md">
             <h2 className="text-2xl font-bold mb-6">Project Status</h2>
             <div className="space-y-6">
               {[
@@ -221,7 +227,7 @@ export default async function DashboardPage() {
           </Card>
 
           {/* Team Activity */}
-          <Card variant="glass" className="p-8 bg-gradient-to-br from-slate-500/10 to-slate-600/10 border-slate-500/20">
+          <Card variant="glass" className="p-8 bg-gradient-to-br from-slate-500/10 to-slate-600/10 border-slate-500/20 backdrop-blur-md">
             <h2 className="text-2xl font-bold mb-6">Recent Activity</h2>
             <div className="space-y-6">
               {[
@@ -248,5 +254,6 @@ export default async function DashboardPage() {
         </div>
       </div>
     </div>
+    </>
   )
 } 

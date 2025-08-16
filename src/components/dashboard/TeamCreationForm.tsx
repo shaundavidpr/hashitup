@@ -75,86 +75,96 @@ export function TeamCreationForm() {
     } finally {
       setLoading(false)
     }
-  }
+  } 
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-6">
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <div>
-          <label className="block text-sm font-medium text-slate-300 mb-2">
-            Team Name *
-          </label>
-          <input
-            type="text"
-            required
-            value={teamData.name}
-            onChange={(e) => setTeamData({ ...teamData, name: e.target.value })}
-            className="w-full px-3 py-2 bg-slate-800/50 border border-slate-700 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-white"
-            placeholder="Enter team name"
-          />
+    <form onSubmit={handleSubmit} className="space-y-8 backdrop-blur-sm bg-slate-900/40 rounded-xl border border-slate-700/50 shadow-lg p-6 relative overflow-hidden">
+      {/* Decorative gradient elements */}
+      <div className="absolute -top-24 -right-24 w-64 h-64 bg-pink-500/10 rounded-full blur-3xl"></div>
+      <div className="absolute -bottom-24 -left-24 w-64 h-64 bg-cyan-500/10 rounded-full blur-3xl"></div>
+      
+      <div className="relative">
+        <h2 className="text-2xl font-bold mb-6 bg-gradient-to-r from-pink-500 via-cyan-400 to-blue-500 bg-clip-text text-transparent inline-block">
+          Create Your Team
+        </h2>
+        
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div>
+            <label className="block text-sm font-medium text-slate-300 mb-2">
+              Team Name *
+            </label>
+            <input
+              type="text"
+              required
+              value={teamData.name}
+              onChange={(e) => setTeamData({ ...teamData, name: e.target.value })}
+              className="w-full px-4 py-2.5 bg-slate-800/50 border border-slate-700/50 rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500/50 focus:border-cyan-400/50 text-white transition-all duration-200 placeholder-slate-500"
+              placeholder="Enter team name"
+            />
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-slate-300 mb-2">
+              College Name *
+            </label>
+            <input
+              type="text"
+              required
+              value={teamData.collegeName}
+              onChange={(e) => setTeamData({ ...teamData, collegeName: e.target.value })}
+              className="w-full px-4 py-2.5 bg-slate-800/50 border border-slate-700/50 rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500/50 focus:border-cyan-400/50 text-white transition-all duration-200 placeholder-slate-500"
+              placeholder="Enter college name"
+            />
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-slate-300 mb-2">
+              University *
+            </label>
+            <input
+              type="text"
+              required
+              value={teamData.university}
+              onChange={(e) => setTeamData({ ...teamData, university: e.target.value })}
+              className="w-full px-4 py-2.5 bg-slate-800/50 border border-slate-700/50 rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500/50 focus:border-cyan-400/50 text-white transition-all duration-200 placeholder-slate-500"
+              placeholder="Enter university name"
+            />
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-slate-300 mb-2">
+              State *
+            </label>
+            <input
+              type="text"
+              required
+              value={teamData.state}
+              onChange={(e) => setTeamData({ ...teamData, state: e.target.value })}
+              className="w-full px-4 py-2.5 bg-slate-800/50 border border-slate-700/50 rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500/50 focus:border-cyan-400/50 text-white transition-all duration-200 placeholder-slate-500"
+              placeholder="Enter state"
+            />
+          </div>
         </div>
 
-        <div>
+        <div className="mt-6">
           <label className="block text-sm font-medium text-slate-300 mb-2">
-            College Name *
+            Address *
           </label>
-          <input
-            type="text"
+          <textarea
             required
-            value={teamData.collegeName}
-            onChange={(e) => setTeamData({ ...teamData, collegeName: e.target.value })}
-            className="w-full px-3 py-2 bg-slate-800/50 border border-slate-700 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-white"
-            placeholder="Enter college name"
+            value={teamData.address}
+            onChange={(e) => setTeamData({ ...teamData, address: e.target.value })}
+            rows={3}
+            className="w-full px-4 py-2.5 bg-slate-800/50 border border-slate-700/50 rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500/50 focus:border-cyan-400/50 text-white transition-all duration-200 placeholder-slate-500"
+            placeholder="Enter complete address"
           />
         </div>
-
-        <div>
-          <label className="block text-sm font-medium text-slate-300 mb-2">
-            University *
-          </label>
-          <input
-            type="text"
-            required
-            value={teamData.university}
-            onChange={(e) => setTeamData({ ...teamData, university: e.target.value })}
-            className="w-full px-3 py-2 bg-slate-800/50 border border-slate-700 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-white"
-            placeholder="Enter university name"
-          />
-        </div>
-
-        <div>
-          <label className="block text-sm font-medium text-slate-300 mb-2">
-            State *
-          </label>
-          <input
-            type="text"
-            required
-            value={teamData.state}
-            onChange={(e) => setTeamData({ ...teamData, state: e.target.value })}
-            className="w-full px-3 py-2 bg-slate-800/50 border border-slate-700 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-white"
-            placeholder="Enter state"
-          />
-        </div>
-      </div>
-
-      <div>
-        <label className="block text-sm font-medium text-slate-300 mb-2">
-          Address *
-        </label>
-        <textarea
-          required
-          value={teamData.address}
-          onChange={(e) => setTeamData({ ...teamData, address: e.target.value })}
-          rows={3}
-          className="w-full px-3 py-2 bg-slate-800/50 border border-slate-700 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-white"
-          placeholder="Enter complete address"
-        />
       </div>
 
       <div>
         <div className="flex justify-between items-center mb-4">
-          <h3 className="text-lg font-medium text-slate-200">
-            Team Members ({members.length})
+          <h3 className="text-lg font-medium text-white">
+            Team Members <span className="text-cyan-400">({members.length})</span>
           </h3>
           <Button
             type="button"
@@ -162,7 +172,7 @@ export function TeamCreationForm() {
             disabled={members.length >= 4}
             variant="outline"
             size="sm"
-            className="flex items-center gap-2"
+            className="flex items-center gap-2 border-slate-600 text-cyan-400 hover:bg-slate-800/70 hover:text-cyan-300 hover:border-cyan-500/50 transition-all duration-200"
           >
             <Plus className="h-4 w-4" />
             Add Member
@@ -171,30 +181,39 @@ export function TeamCreationForm() {
 
         <div className="space-y-4">
           {members.map((member, index) => (
-            <div key={index} className="bg-slate-800/30 border border-slate-700 rounded-lg p-4">
-              <div className="flex justify-between items-center mb-3">
-                <h4 className="font-medium text-slate-200">Member {index + 1}</h4>
+            <div key={index} className="bg-slate-800/30 backdrop-blur-sm border border-slate-700/50 rounded-lg p-5 transition-all duration-300 hover:border-slate-600/70 group relative">
+              {/* Subtle highlight effect */}
+              <div className="absolute inset-0 bg-gradient-to-r from-pink-500/5 via-cyan-400/5 to-blue-500/5 rounded-lg opacity-0 group-hover:opacity-100 transition-all duration-300"></div>
+              
+              <div className="flex justify-between items-center mb-4 relative">
+                <h4 className="font-semibold text-slate-200">
+                  {index === 0 ? (
+                    <span className="bg-gradient-to-r from-pink-500 to-blue-500 bg-clip-text text-transparent">Team Leader</span>
+                  ) : (
+                    <span>Member {index + 1}</span>
+                  )}
+                </h4>
                 {members.length > 1 && (
                   <Button
                     type="button"
                     onClick={() => handleRemoveMember(index)}
                     variant="ghost"
                     size="sm"
-                    className="text-red-400 hover:text-red-300"
+                    className="text-red-400 hover:text-red-300 hover:bg-red-500/10 rounded-full p-1.5"
                   >
                     <Trash2 className="h-4 w-4" />
                   </Button>
                 )}
               </div>
               
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4 relative">
                 <input
                   type="text"
                   placeholder="Full Name"
                   required
                   value={member.name}
                   onChange={(e) => handleMemberChange(index, 'name', e.target.value)}
-                  className="px-3 py-2 bg-slate-800/50 border border-slate-700 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-white"
+                  className="px-4 py-2.5 bg-slate-800/50 border border-slate-700/50 rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500/50 focus:border-cyan-400/50 text-white transition-all duration-200 placeholder-slate-500"
                 />
                 <input
                   type="email"
@@ -202,7 +221,7 @@ export function TeamCreationForm() {
                   required
                   value={member.email}
                   onChange={(e) => handleMemberChange(index, 'email', e.target.value)}
-                  className="px-3 py-2 bg-slate-800/50 border border-slate-700 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-white"
+                  className="px-4 py-2.5 bg-slate-800/50 border border-slate-700/50 rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500/50 focus:border-cyan-400/50 text-white transition-all duration-200 placeholder-slate-500"
                 />
                 <input
                   type="tel"
@@ -210,7 +229,7 @@ export function TeamCreationForm() {
                   required
                   value={member.phone}
                   onChange={(e) => handleMemberChange(index, 'phone', e.target.value)}
-                  className="px-3 py-2 bg-slate-800/50 border border-slate-700 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-white"
+                  className="px-4 py-2.5 bg-slate-800/50 border border-slate-700/50 rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500/50 focus:border-cyan-400/50 text-white transition-all duration-200 placeholder-slate-500"
                 />
               </div>
             </div>
@@ -218,11 +237,15 @@ export function TeamCreationForm() {
         </div>
       </div>
 
-      <div className="flex justify-end">
-        <Button type="submit" disabled={loading}>
+      <div className="flex justify-end pt-2">
+        <Button 
+          type="submit" 
+          disabled={loading}
+          className="bg-gradient-to-r from-pink-500 via-cyan-400 to-blue-500 hover:from-pink-600 hover:via-cyan-500 hover:to-blue-600 text-white font-medium py-2.5 px-6 rounded-lg transition-all duration-300 transform hover:scale-[1.02] active:scale-[0.98] shadow-lg hover:shadow-cyan-500/25"
+        >
           {loading ? 'Creating Team...' : 'Create Team'}
         </Button>
       </div>
     </form>
   )
-} 
+}
