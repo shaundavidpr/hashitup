@@ -319,6 +319,5 @@ export function TeamCreationForm() {
         </Button>
       </div>
     </form>
-    </div>
   )
 }
