@@ -21,8 +21,10 @@ export function Navigation() {
   
   const navItems = [
     { href: '#about', label: 'About' },
-    { href: '#events', label: 'Events' },
-    { href: '#projects', label: 'Projects' },
+    { href: '#schedule', label: 'Schedule' },
+    { href: '#prizes', label: 'Prizes' },
+    { href: '/rules', label: 'Rules' },
+    { href: '#sponsors', label: 'Sponsors' },
     { href: '#contact', label: 'Contact' }
   ]
 

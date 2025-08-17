@@ -1,12 +1,11 @@
 "use client";
 
 import React, { useState, useEffect } from 'react';
-import { LoginButton } from '@/components/LoginButton';
-import { Calendar, Trophy, Rocket, Zap, Star, Users, Award, Sparkles } from 'lucide-react';
+import { Calendar, MapPin, ChevronDown, Star, Zap, Code, Clock, ArrowRight, ExternalLink } from 'lucide-react';
+import { useSession, signIn } from 'next-auth/react';
 import Link from 'next/link';
-import { cn } from '@/lib/utils';
 
-// Add keyframe animations for enhanced visual effects
+// Enhanced animations and styles
 const styleTag = `
   @keyframes float {
     0% { transform: translateY(0px); }
@@ -30,12 +29,40 @@ const styleTag = `
     0% { background-position: -468px 0; }
     100% { background-position: 468px 0; }
   }
+
+  @keyframes slideInUp {
+    0% { 
+      opacity: 0; 
+      transform: translateY(40px); 
+    }
+    100% { 
+      opacity: 1; 
+      transform: translateY(0); 
+    }
+  }
+
+  @keyframes fadeInScale {
+    0% { 
+      opacity: 0; 
+      transform: scale(0.9); 
+    }
+    100% { 
+      opacity: 1; 
+      transform: scale(1); 
+    }
+  }
+
+  @keyframes rotateGlow {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
   
   .nav-link {
     position: relative;
     color: #f1f5f9;
     text-decoration: none;
     font-weight: 500;
+    transition: all 0.3s ease;
   }
   
   .nav-link::after {
@@ -63,15 +90,16 @@ const styleTag = `
     animation: shimmer 1.5s infinite;
   }
   
-  .animate-ping {
-    animation: ping 1.5s cubic-bezier(0, 0, 0.2, 1) infinite;
+  .animate-slide-up {
+    animation: slideInUp 0.8s ease-out forwards;
   }
-  
-  @keyframes ping {
-    75%, 100% {
-      transform: scale(2);
-      opacity: 0;
-    }
+
+  .animate-fade-scale {
+    animation: fadeInScale 0.6s ease-out forwards;
+  }
+
+  .animate-rotate-glow {
+    animation: rotateGlow 20s linear infinite;
   }
   
   .gradient-border {
@@ -95,145 +123,205 @@ const styleTag = `
   .gradient-border:hover::before {
     opacity: 1;
   }
+
+  .glass-card {
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 20px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  }
+
+  .hero-glow {
+    filter: drop-shadow(0 0 20px rgba(236, 72, 153, 0.3));
+  }
+
+  .interactive-card {
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    transform-style: preserve-3d;
+  }
+
+  .interactive-card:hover {
+    transform: translateY(-8px) rotateX(5deg);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+  }
+
+  .scroll-indicator {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 4px;
+    background: linear-gradient(90deg, #ec4899, #06b6d4);
+    transform-origin: left;
+    z-index: 9999;
+  }
 `;
 
 const HackathonLanding = () => {
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [scrollY, setScrollY] = useState(0);
-  const [session, setSession] = useState(null);
-  const [isAdmin, setIsAdmin] = useState(false);
+  const { data: session, status } = useSession();
+  const [scrollProgress, setScrollProgress] = useState(0);
+  const [isSigningIn, setIsSigningIn] = useState(false);
 
   useEffect(() => {
-    const handleScroll = () => setScrollY(window.scrollY);
+    const handleScroll = () => {
+      const scrolled = window.scrollY;
+      const maxHeight = document.documentElement.scrollHeight - window.innerHeight;
+      const progress = (scrolled / maxHeight) * 100;
+      
+      setScrollProgress(progress);
+    };
+    
     window.addEventListener('scroll', handleScroll);
-    
-    // Simulate session check - in a real app, you'd get this from your auth context/provider
-    // This is just a placeholder to make the code work
-    setSession(null); // Set to a user object if you want to test logged-in state
-    setIsAdmin(false); // Set to true if you want to test admin state
-    
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  const navItems = [
-    { href: '#about', label: 'About' },
-    { href: '#schedule', label: 'Schedule' },
-    { href: '#prizes', label: 'Prizes' },
-    { href: '#sponsors', label: 'Sponsors' },
-    { href: '#contact', label: 'Contact' }
-  ];
+  const handleSignIn = async () => {
+    setIsSigningIn(true);
+    try {
+      await signIn('google', { 
+        callbackUrl: '/dashboard'
+      });
+    } catch (error) {
+      console.error('Sign-in failed:', error);
+      setIsSigningIn(false);
+    }
+  };
 
   const stats = [
-    { number: '$50K', label: 'Prize Pool' },
-    { number: '500+', label: 'Participants' },
-    { number: '12', label: 'Hours' },
-    { number: '25+', label: 'Mentors' }
+    { number: '₹1.5L', label: 'Prize Pool', icon: '💰', color: 'from-yellow-400 to-orange-500' },
+    { number: '100', label: 'Teams', icon: '👥', color: 'from-blue-400 to-purple-500' },
+    { number: '24', label: 'Hours', icon: '⏱️', color: 'from-green-400 to-teal-500' },
+    { number: '370+', label: 'Participants', icon: '🚀', color: 'from-pink-400 to-rose-500' }
   ];
 
   const features = [
     {
       icon: '🚀',
       title: 'Launch Your Ideas',
-      description: 'Turn your wildest concepts into working prototypes. Get mentorship from industry leaders and access to cutting-edge tools.'
+      description: 'Turn innovative concepts into working prototypes. No specific theme — complete creative freedom to solve real-world problems.',
+      color: 'from-pink-500/20 to-rose-500/20',
+      borderColor: 'border-pink-500/30'
     },
     {
       icon: '🤝',
       title: 'Network & Collaborate',
-      description: 'Connect with like-minded innovators, potential co-founders, and hiring managers from top tech companies.'
+      description: 'Connect with brilliant minds from engineering, arts, and science backgrounds. Form teams of 2-4 members for maximum impact.',
+      color: 'from-blue-500/20 to-cyan-500/20',
+      borderColor: 'border-blue-500/30'
     },
     {
       icon: '🏆',
-      title: 'Win Big Prizes',
-      description: 'Compete for $50,000 in prizes including cash, startup resources, internships, and exclusive tech swag.'
+      title: 'Win Amazing Prizes',
+      description: 'Compete for ₹1.5 Lakhs in total prizes! First place wins ₹75,000 plus special recognition from sponsors.',
+      color: 'from-yellow-500/20 to-amber-500/20',
+      borderColor: 'border-yellow-500/30'
     },
     {
       icon: '⚡',
-      title: 'Learn & Grow',
-      description: 'Attend workshops, masterclasses, and tech talks from industry pioneers. Level up your skills in just 12 hours.'
+      title: '24-Hour Innovation',
+      description: 'Experience the thrill of building something meaningful in just 24 hours. From 3:00 PM Day 1 to 3:00 PM Day 2.',
+      color: 'from-purple-500/20 to-indigo-500/20',
+      borderColor: 'border-purple-500/30'
     },
     {
       icon: '🌟',
-      title: 'Career Opportunities',
-      description: 'Get noticed by recruiters from Google, Microsoft, Amazon, and 50+ other companies actively seeking talent.'
+      title: 'Professional Growth',
+      description: 'Showcase your projects to industry professionals. Winners get special recognition and marketing opportunities.',
+      color: 'from-emerald-500/20 to-green-500/20',
+      borderColor: 'border-emerald-500/30'
     },
     {
       icon: '🎉',
-      title: 'Unforgettable Experience',
-      description: 'Enjoy free food, drinks, entertainment, gaming zones, and memories that will last a lifetime.'
+      title: 'Complete Experience',
+      description: 'Enjoy full facilities including food, Wi-Fi, power backup, transport assistance, and medical support throughout.',
+      color: 'from-orange-500/20 to-red-500/20',
+      borderColor: 'border-orange-500/30'
     }
   ];
 
   const timeline = [
     {
-      time: '9:00 AM - 10:00 AM',
-      title: 'Registration & Welcome',
-      description: 'Check-in, breakfast, team formation, and opening ceremony'
+      time: '3:00 PM - Day 1',
+      title: 'Hackathon Inauguration',
+      description: 'Let the games begin — officially! Check-in, welcome ceremony, and team formation',
+      icon: '🎯'
     },
     {
-      time: '10:00 AM',
-      title: 'Hacking Begins!',
-      description: 'Theme announcement and 12-hour coding marathon starts'
+      time: '3:00 PM Day 1 - 3:00 PM Day 2',
+      title: '24-Hour Hacking Marathon',
+      description: 'Code. Create. Collaborate. No specific theme — think freely and innovatively!',
+      icon: '⚡'
     },
     {
-      time: '12:00 PM - 6:00 PM',
-      title: 'Workshops & Mentoring',
-      description: 'Tech workshops, mentor sessions, and skill-building activities'
+      time: '12:00 PM - Day 2',
+      title: 'First Round of Judging',
+      description: 'Lights on, screens up — it\'s demo time! All teams present their projects',
+      icon: '👥'
     },
     {
-      time: '8:00 PM - 9:30 PM',
-      title: 'Submissions & Demos',
-      description: 'Project submissions and 3-minute demo presentations'
+      time: 'After 1:00 PM - Day 2',
+      title: 'Final Judging (Top 10 Teams)',
+      description: 'The best of the best battle it out for glory in the final evaluation round',
+      icon: '🏆'
     },
     {
-      time: '9:30 PM - 10:00 PM',
-      title: 'Awards & Closing',
-      description: 'Winner announcements, prize distribution, and celebration'
+      time: 'Around 4:00 PM - Day 2',
+      title: 'Result Declaration & Closing',
+      description: 'Cheers, applause, and maybe a few happy tears. Winner announcements and celebration!',
+      icon: '🎉'
     }
   ];
 
   const prizes = [
-    { place: '1st Place', amount: '$20,000', description: 'Grand Prize + YC Interview + Startup Resources', icon: '👑' },
-    { place: '2nd Place', amount: '$15,000', description: 'Cash Prize + Mentorship + Tech Package', icon: '🥈' },
-    { place: '3rd Place', amount: '$10,000', description: 'Cash Prize + Internship Opportunities', icon: '🥉' }
+    { place: '1st Place', amount: '₹75,000', description: 'Grand Prize + Recognition + Sponsor Opportunities', glow: 'shadow-yellow-500/50' },
+    { place: '2nd Place', amount: '₹50,000', description: 'Cash Prize + Mentorship + Tech Package', glow: 'shadow-gray-400/50' },
+    { place: '3rd Place', amount: '₹25,000', description: 'Cash Prize + Recognition + Certificates', glow: 'shadow-amber-600/50' }
   ];
 
   const tips = [
     {
       icon: '💡',
-      title: 'Solve Real Problems',
-      description: 'Focus on genuine user pain points. The best projects address real-world issues with practical, scalable solutions.'
+      title: 'Think Social Impact',
+      description: 'Focus on innovative, socially relevant, and sustainable solutions. Projects that solve real-world problems score highest.'
     },
     {
       icon: '🎯',
-      title: 'Keep It Simple',
-      description: 'Better to have a polished MVP than an incomplete complex system. Focus on core features that demonstrate your concept clearly.'
+      title: 'Open-Source Only',
+      description: 'Use only open-source tools, libraries, and APIs. Make sure to properly cite all external resources in your documentation.'
     },
     {
       icon: '📊',
-      title: 'Demo Like a Pro',
-      description: 'Practice your pitch beforehand. Tell a compelling story, show the problem, your solution, and impact in under 3 minutes.'
+      title: 'GitHub is Essential',
+      description: 'Push all code and documentation to GitHub before final submission. Include technical reports for pre-built components.'
     },
     {
       icon: '🔧',
-      title: 'Use Familiar Tech',
-      description: 'Stick to technologies you know well. Hackathons aren\'t the time to learn new frameworks—save that for after!'
+      title: 'Team Collaboration',
+      description: 'Work within your team of 2-4 members. Cross-team collaboration is not permitted, but diversity in skills is encouraged!'
     }
   ];
 
   return (
     <div className="min-h-screen bg-black text-white overflow-x-hidden">
-      {/* Add the style tag for custom animations */}
+      {/* Scroll Progress Indicator */}
+      <div 
+        className="scroll-indicator" 
+        style={{ transform: `scaleX(${scrollProgress / 100})` }}
+      />
+
+      {/* Enhanced Style Tag */}
       <style dangerouslySetInnerHTML={{ __html: styleTag }} />
       
-      {/* Enhanced Animated Background with multiple layers */}
+      {/* Enhanced Animated Background */}
       <div className="fixed inset-0 -z-10">
         <div 
           className="absolute inset-0 opacity-30"
           style={{
             background: `
-              radial-gradient(ellipse at center, rgba(255, 0, 204, 0.05) 0%, transparent 70%),
-              radial-gradient(ellipse at 80% 20%, rgba(0, 255, 255, 0.07) 0%, transparent 60%),
-              radial-gradient(ellipse at 20% 80%, rgba(255, 105, 180, 0.05) 0%, transparent 55%)
+              radial-gradient(ellipse at center, rgba(255, 0, 204, 0.08) 0%, transparent 70%),
+              radial-gradient(ellipse at 80% 20%, rgba(0, 255, 255, 0.1) 0%, transparent 60%),
+              radial-gradient(ellipse at 20% 80%, rgba(255, 105, 180, 0.08) 0%, transparent 55%)
             `,
             animation: 'pulse 8s ease-in-out infinite alternate'
           }}
@@ -246,356 +334,509 @@ const HackathonLanding = () => {
             <rect x="0" y="0" width="100%" height="100%" fill="url(#dots)" />
           </svg>
         </div>
+        {/* Animated orbs */}
+        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-gradient-to-r from-pink-500/10 to-purple-500/10 rounded-full blur-3xl animate-rotate-glow"></div>
+        <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-gradient-to-r from-cyan-500/10 to-blue-500/10 rounded-full blur-3xl animate-rotate-glow" style={{animationDelay: '10s'}}></div>
       </div>
 
-      <div className='sm:h-52'></div>
 
-      {/* Hero Section */}
-      <div className="max-w-6xl mx-auto px-6 py-32 text-center relative">
-        {/* Decorative elements */}
-        <div className="absolute -top-16 right-10 w-72 h-72 bg-pink-500/10 rounded-full blur-3xl"></div>
-        <div className="absolute -bottom-8 left-10 w-80 h-80 bg-cyan-500/10 rounded-full blur-3xl"></div>
 
-        <h1 className="text-5xl md:text-7xl font-black mb-5 leading-tight tracking-tight relative z-10 sm:text-3xl">
-          Push the{' '}
-          <span className="bg-gradient-to-r from-pink-500 via-purple-500 to-cyan-500 bg-clip-text text-transparent">
-            Branch.
-          </span>
-          <br />
-          Commit the <span className="bg-gradient-to-r from-pink-500 via-purple-500 to-cyan-500 bg-clip-text text-transparent">Future</span>
-        </h1>
-        
-        <p className="text-xl md:text-2xl text-gray-300 mb-8 max-w-3xl mx-auto">
-          Join 500+ innovators, developers, and creators for the most epic hackathon of 2025. 
-          Transform ideas into reality, win amazing prizes, and shape tomorrow's technology.
-        </p>
-
-        {/* Enhanced Hero Stats with animation */}
-        <div className="flex justify-center gap-10 my-16 flex-wrap">
-          {stats.map((stat, index) => (
-            <div key={index} className="text-center transform transition-all duration-500 hover:scale-110 animate-float" style={{animationDelay: `${index * 0.2}s`}}>
-              <span className="block text-5xl font-bold bg-gradient-to-r from-pink-500 to-cyan-500 bg-clip-text text-transparent">
-                {stat.number}
-              </span>
-              <span className="text-gray-400 text-sm font-medium uppercase tracking-widest mt-2 block">
-                {stat.label}
-              </span>
-            </div>
-          ))}
-        </div>
-
-        {/* Enhanced CTA Buttons with better hover effects */}
-        <div className="flex flex-col sm:flex-row gap-6 justify-center">
-          <a
-            href="#register"
-            className="inline-block px-10 py-5 bg-gradient-to-r from-pink-500 via-purple-500 to-cyan-500 text-white font-semibold text-sm uppercase tracking-wide rounded-xl transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl hover:shadow-pink-500/30 relative overflow-hidden group"
-          >
-            <span className="relative z-10">Register Now - Free!</span>
-            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700 ease-in-out" />
-          </a>
-          <a
-            href="#about"
-            className="inline-block px-10 py-5 bg-white/5 border border-white/20 text-white font-semibold text-sm uppercase tracking-wide rounded-xl transition-all duration-300 hover:bg-white/10 hover:-translate-y-1 hover:shadow-2xl hover:shadow-cyan-500/10 gradient-border"
-          >
-            Learn More
-          </a>
-        </div>
-      </div>
-
-      {/* Enhanced About Section with modern glass cards */}
-      <section id="about" className="max-w-6xl mx-auto px-6 py-24 relative">
-        {/* Decorative background element */}
-        <div className="absolute -z-10 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-lg h-64 bg-gradient-to-r from-pink-500/20 to-cyan-500/20 blur-3xl rounded-full"></div>
-        
-        <h2 className="text-3xl md:text-5xl font-bold text-center mb-6 tracking-tight">
-          Why <span className="bg-gradient-to-r from-pink-500 to-cyan-500 bg-clip-text text-transparent">Participate?</span>
-        </h2>
-        <p className="text-xl text-gray-300 text-center mb-20 max-w-2xl mx-auto">
-          Experience the thrill of innovation, learn from industry experts, and build solutions that matter.
-        </p>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {features.map((feature, index) => (
-            <div
-              key={index}
-              className="bg-white/5 backdrop-blur-lg border border-white/10 rounded-2xl p-8 transition-all duration-500 hover:-translate-y-2 hover:border-white/20 hover:shadow-xl hover:shadow-pink-500/5 relative overflow-hidden group"
-              style={{ 
-                animationDelay: `${index * 0.1}s`,
-                transform: `translateY(${index % 3 * 10}px)`
-              }}
-            >
-              {/* Glowing top border on hover */}
-              <div className="absolute top-0 left-0 w-full h-0.5 bg-gradient-to-r from-transparent via-pink-500 to-cyan-500 transform -translate-x-full transition-transform duration-700 group-hover:translate-x-full" />
-              
-              {/* Glass reflection effect */}
-              <div className="absolute inset-0 opacity-0 group-hover:opacity-100 bg-gradient-to-br from-white/5 to-transparent transition-opacity duration-500 pointer-events-none"></div>
-              
-              {/* Enhanced emoji with floating animation */}
-              <div className="text-5xl mb-6 group-hover:scale-110 transition-transform duration-500 bg-gradient-to-br from-pink-500/20 to-cyan-500/20 w-16 h-16 rounded-xl flex items-center justify-center">{feature.icon}</div>
-              
-              {/* Enhanced title with gradient on hover */}
-              <h3 className="text-xl font-bold mb-4 text-white group-hover:bg-gradient-to-r group-hover:from-pink-500 group-hover:to-cyan-500 group-hover:bg-clip-text group-hover:text-transparent transition-all duration-300">{feature.title}</h3>
-              
-              <p className="text-gray-400 leading-relaxed group-hover:text-gray-300 transition-colors duration-300">{feature.description}</p>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      {/* Enhanced Schedule Section with animated timeline */}
-      <section id="schedule" className="max-w-6xl mx-auto px-6 py-28 relative">
-        {/* Decorative background */}
-        <div className="absolute -z-10 top-1/2 -right-64 w-96 h-96 bg-cyan-500/10 rounded-full blur-3xl"></div>
-        <div className="absolute -z-10 bottom-0 -left-32 w-80 h-80 bg-pink-500/10 rounded-full blur-3xl"></div>
-        
-        <h2 className="text-3xl md:text-5xl font-bold text-center mb-6 tracking-tight">
-          Event <span className="bg-gradient-to-r from-pink-500 to-cyan-500 bg-clip-text text-transparent">Schedule</span>
-        </h2>
-        
-        <p className="text-xl text-gray-300 text-center mb-20">
-          <span className="px-6 py-2 rounded-full bg-white/5 border border-white/10 backdrop-blur-sm inline-block">
-            August 30, 2025 • Innovation Hub, Downtown
-          </span>
-        </p>
-
-        <div className="relative">
-          {/* Vertical timeline line with gradient */}
-          <div className="absolute left-1/2 transform -translate-x-0.5 w-1 h-full bg-gradient-to-b from-pink-500 via-purple-500 to-cyan-500 rounded-full shadow-lg shadow-pink-500/20" />
+      {/* Enhanced Hero Section */}
+      <section className="relative min-h-screen flex items-center justify-center pt-20">
+        <div className="max-w-7xl mx-auto px-6 text-center">
+          {/* Hero Badge */}
+          <div className="inline-flex items-center px-4 py-2 mb-8 rounded-full bg-gradient-to-r from-pink-500/20 to-cyan-500/20 border border-white/20 backdrop-blur-sm animate-fade-scale">
+            <Star className="h-4 w-4 mr-2 text-yellow-400" />
+            <span className="text-sm font-medium">
+              {session ? `Welcome back, ${session.user?.name?.split(' ')[0]}!` : 'National Level Hackathon 2025'}
+            </span>
+          </div>
           
-          {timeline.map((item, index) => (
-            <div 
-              key={index} 
-              className={`flex items-center mb-24 group ${index % 2 === 0 ? '' : 'flex-row-reverse'}`}
-              style={{animationDelay: `${index * 0.2}s`}}
-            >
-              <div className={`flex-1 ${index % 2 === 0 ? 'text-right pr-8' : 'text-left pl-8'}`}>
-                <div className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl p-8 transition-all duration-500 hover:-translate-y-2 hover:border-white/20 hover:shadow-xl hover:shadow-pink-500/5 relative overflow-hidden group-hover:bg-white/10">
-                  {/* Timeline decoration */}
-                  <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-br from-pink-500/5 to-cyan-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-                  
-                  <h3 className="text-2xl font-bold mb-3 group-hover:bg-gradient-to-r group-hover:from-pink-500 group-hover:to-cyan-500 group-hover:bg-clip-text group-hover:text-transparent transition-all duration-300">{item.title}</h3>
-                  
-                  <p className="text-pink-400 font-medium mb-4 flex items-center gap-2 justify-end md:justify-start">
-                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                      <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clipRule="evenodd" />
-                    </svg>
-                    {item.time}
-                  </p>
-                  
-                  <p className="text-gray-400 group-hover:text-gray-300 transition-colors duration-300">{item.description}</p>
-                </div>
-              </div>
-              
-              {/* Enhanced timeline node with pulse effect */}
-              <div className="w-6 h-6 bg-gradient-to-br from-pink-500 to-cyan-500 rounded-full relative z-10 shadow-lg shadow-pink-500/50 group-hover:scale-125 transition-transform duration-300">
-                <span className="absolute inset-0 rounded-full bg-gradient-to-br from-pink-500 to-cyan-500 animate-ping opacity-75 group-hover:opacity-100"></span>
-              </div>
-              
-              <div className="flex-1" />
-            </div>
-          ))}
-        </div>
-      </section>
-
-      {/* Enhanced Prizes Section with glass morphism and better card design */}
-      <section id="prizes" className="max-w-6xl mx-auto px-6 py-28 relative">
-        <div className="absolute -z-10 top-1/4 left-1/2 -translate-x-1/2 w-full max-w-3xl h-64 bg-gradient-to-r from-pink-500/20 to-cyan-500/20 blur-3xl rounded-full"></div>
-        
-        <div className="bg-white/5 backdrop-blur-lg border border-white/10 rounded-3xl p-16 shadow-2xl relative overflow-hidden">
-          {/* Decorative corner elements */}
-          <div className="absolute top-0 right-0 w-64 h-64 bg-gradient-to-br from-pink-500/10 to-transparent rounded-full blur-xl"></div>
-          <div className="absolute bottom-0 left-0 w-64 h-64 bg-gradient-to-tr from-cyan-500/10 to-transparent rounded-full blur-xl"></div>
+          {/* Main Title */}
+          <h1 className="text-6xl md:text-8xl font-black mb-6 leading-tight tracking-tight hero-glow animate-slide-up">
+            <span className="bg-gradient-to-r from-pink-500 via-purple-500 to-cyan-500 bg-clip-text text-transparent">
+              HASH 2K25
+            </span>
+          </h1>
           
-          <h2 className="text-3xl md:text-5xl font-bold text-center mb-6 tracking-tight">
-            Amazing <span className="bg-gradient-to-r from-pink-500 to-cyan-500 bg-clip-text text-transparent">Prizes</span>
-          </h2>
-          <p className="text-xl text-gray-300 text-center mb-20">$50,000+ total prize pool with rewards for everyone</p>
+          {/* Tagline */}
+          <p className="text-2xl md:text-3xl font-medium text-gray-300 mb-6 animate-slide-up" style={{animationDelay: '0.2s'}}>
+            "Push the Branch. Commit the Future."
+          </p>
+          
+          {/* Description */}
+          <p className="text-xl md:text-2xl text-gray-400 mb-8 max-w-4xl mx-auto animate-slide-up" style={{animationDelay: '0.4s'}}>
+            A 24-Hour National Level Hackathon hosted by <br />
+            <span className="text-white font-semibold">Mar Baselios Christian College of Engineering & Technology</span>, Kuttikkanam.
+          </p>
+          
+          {/* Event Details */}
+          <div className="flex flex-col md:flex-row items-center justify-center gap-6 mb-12 animate-slide-up" style={{animationDelay: '0.6s'}}>
+            <div className="flex items-center gap-3 glass-card px-6 py-3">
+              <MapPin className="h-5 w-5 text-pink-400" />
+              <span className="text-gray-300">Kuttikkanam, Kerala</span>
+            </div>
+            <div className="flex items-center gap-3 glass-card px-6 py-3">
+              <Calendar className="h-5 w-5 text-cyan-400" />
+              <span className="text-gray-300">September 26-27, 2025</span>
+            </div>
+          </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
-            {prizes.map((prize, index) => (
-              <div
-                key={index}
-                className={`text-center p-12 rounded-2xl border transition-all duration-500 hover:-translate-y-3 hover:shadow-xl relative overflow-hidden group ${
-                  index === 0 
-                    ? 'bg-gradient-to-b from-yellow-500/20 to-black/40 border-yellow-500/30 shadow-lg shadow-yellow-500/10' 
-                    : 'bg-white/5 border-white/10 hover:border-white/20'
-                }`}
-              >
-                {/* Animated background */}
-                <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 bg-gradient-to-b from-white/5 to-transparent"></div>
-                
-                {/* Crown for first place */}
-                {index === 0 && (
-                  <div className="absolute -top-3 -right-3 text-4xl animate-bounce">
-                    👑
-                  </div>
-                )}
-                
-                {/* Prize amount with gradient */}
-                <div className={`text-5xl font-bold mb-3 ${
-                  index === 0 
-                    ? 'bg-gradient-to-r from-yellow-400 to-amber-300 bg-clip-text text-transparent' 
-                    : 'bg-gradient-to-r from-pink-500 to-cyan-500 bg-clip-text text-transparent'
-                }`}>
-                  {prize.amount}
+          {/* Stats Section */}
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-12 animate-slide-up" style={{animationDelay: '0.8s'}}>
+            {stats.map((stat, index) => (
+              <div key={index} className="glass-card p-6 interactive-card group">
+                <div className={`text-3xl mb-2 bg-gradient-to-r ${stat.color} bg-clip-text text-transparent font-bold`}>
+                  {stat.number}
                 </div>
-                
-                {/* Prize place with better typography */}
-                <div className={`text-lg font-semibold mb-5 tracking-wide ${
-                  index === 0 ? 'text-yellow-300' : 'text-gray-300'
-                }`}>
-                  {prize.place}
+                <div className="text-2xl mb-2">{stat.icon}</div>
+                <div className="text-gray-400 text-sm font-medium uppercase tracking-wider">
+                  {stat.label}
                 </div>
-                
-                {/* Prize description with hover effect */}
-                <p className="text-gray-400 group-hover:text-gray-200 transition-colors duration-300">
-                  {prize.description}
-                </p>
-                
-                {/* Decorative line */}
-                <div className="w-12 h-0.5 bg-gradient-to-r from-pink-500 to-cyan-500 mx-auto mt-6"></div>
               </div>
             ))}
           </div>
 
-          <div className="text-center bg-white/5 backdrop-blur-sm rounded-2xl p-8 border border-white/10">
-            <p className="text-lg mb-5">
-              <strong className="bg-gradient-to-r from-pink-500 to-cyan-500 bg-clip-text text-transparent">Special Categories:</strong> 
-              <span className="text-gray-300 ml-2">Best AI/ML Project, Most Creative Solution, Social Impact Award, Best Student Team</span>
-            </p>
-            <p className="text-gray-400">
-              Plus internship opportunities, startup credits, and exclusive merchandise for all participants!
-            </p>
+          {/* CTA Buttons */}
+          <div className="flex flex-col md:flex-row gap-6 justify-center animate-slide-up" style={{animationDelay: '1s'}}>
+            {session ? (
+              <Link
+                href="/dashboard"
+                className="group px-10 py-5 bg-gradient-to-r from-pink-500 via-purple-500 to-cyan-500 text-white font-semibold text-lg rounded-xl transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl hover:shadow-pink-500/30 relative overflow-hidden"
+              >
+                <span className="relative z-10 flex items-center justify-center space-x-2">
+                  <span>Go to Dashboard</span>
+                  <ArrowRight className="h-5 w-5 group-hover:translate-x-1 transition-transform" />
+                </span>
+                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700 ease-in-out" />
+              </Link>
+            ) : (
+              <button
+                onClick={handleSignIn}
+                disabled={isSigningIn || status === 'loading'}
+                className="group px-10 py-5 bg-gradient-to-r from-pink-500 via-purple-500 to-cyan-500 text-white font-semibold text-lg rounded-xl transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl hover:shadow-pink-500/30 relative overflow-hidden disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                <span className="relative z-10 flex items-center justify-center space-x-2">
+                  {isSigningIn || status === 'loading' ? (
+                    <>
+                      <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                      <span>Signing in...</span>
+                    </>
+                  ) : (
+                    <>
+                      <span>Register Your Team Now</span>
+                      <ArrowRight className="h-5 w-5 group-hover:translate-x-1 transition-transform" />
+                    </>
+                  )}
+                </span>
+                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700 ease-in-out" />
+              </button>
+            )}
+            <a
+              href="#about"
+              className="px-10 py-5 glass-card text-white font-semibold text-lg transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl hover:shadow-cyan-500/20 gradient-border flex items-center justify-center space-x-2"
+            >
+              <span>Learn More</span>
+              <ChevronDown className="h-5 w-5" />
+            </a>
           </div>
         </div>
       </section>
 
-      {/* Enhanced Tips Section with better cards and layout */}
-      <section className="max-w-6xl mx-auto px-6 py-28 relative">
-        <div className="absolute -z-10 bottom-0 right-0 w-80 h-80 bg-gradient-to-bl from-pink-500/10 to-transparent rounded-full blur-3xl"></div>
-        
-        <h2 className="text-3xl md:text-5xl font-bold text-center mb-6 tracking-tight">
-          Pro Tips to <span className="bg-gradient-to-r from-pink-500 to-cyan-500 bg-clip-text text-transparent">Win</span>
-        </h2>
-        <p className="text-xl text-gray-300 text-center mb-20">
-          Insider strategies from previous winners and industry experts
-        </p>
+      {/* Enhanced About Section */}
+      <section id="about" className="py-32 relative">
+        <div className="max-w-7xl mx-auto px-6">
+          <div className="text-center mb-20">
+            <h2 className="text-5xl md:text-6xl font-bold mb-6 tracking-tight">
+              Why <span className="bg-gradient-to-r from-pink-500 to-cyan-500 bg-clip-text text-transparent">Participate?</span>
+            </h2>
+            <p className="text-xl text-gray-300 max-w-3xl mx-auto">
+              Experience the thrill of innovation, learn from industry experts, and build solutions that matter in just 24 hours.
+            </p>
+          </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
-          {tips.map((tip, index) => (
-            <div
-              key={index}
-              className="bg-white/5 backdrop-blur-lg border border-white/10 rounded-3xl p-10 transition-all duration-500 hover:-translate-y-2 hover:border-white/20 hover:shadow-2xl relative overflow-hidden group"
-            >
-              {/* Background gradient on hover */}
-              <div className="absolute inset-0 bg-gradient-to-br from-pink-500/5 to-cyan-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-              
-              {/* Enhanced icon presentation */}
-              <div className="flex items-center gap-6 mb-6">
-                <span className="text-5xl p-4 bg-white/5 border border-white/10 rounded-2xl group-hover:scale-110 transition-transform duration-300">{tip.icon}</span>
-                <h3 className="text-2xl font-bold text-white group-hover:bg-gradient-to-r group-hover:from-pink-500 group-hover:to-cyan-500 group-hover:bg-clip-text group-hover:text-transparent transition-all duration-300">{tip.title}</h3>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {features.map((feature, index) => (
+              <div
+                key={index}
+                className={`glass-card p-8 interactive-card group relative overflow-hidden ${feature.color} border ${feature.borderColor}`}
+                style={{ 
+                  animationDelay: `${index * 0.1}s`,
+                }}
+              >
+                {/* Hover Effect */}
+                <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                
+                {/* Icon */}
+                <div className="text-6xl mb-6 group-hover:scale-110 transition-transform duration-500">
+                  {feature.icon}
+                </div>
+                
+                {/* Title */}
+                <h3 className="text-2xl font-bold mb-4 text-white group-hover:bg-gradient-to-r group-hover:from-pink-500 group-hover:to-cyan-500 group-hover:bg-clip-text group-hover:text-transparent transition-all duration-300">
+                  {feature.title}
+                </h3>
+                
+                {/* Description */}
+                <p className="text-gray-400 leading-relaxed group-hover:text-gray-300 transition-colors duration-300">
+                  {feature.description}
+                </p>
+                
+                {/* Bottom Border */}
+                <div className="absolute bottom-0 left-0 w-full h-1 bg-gradient-to-r from-pink-500 to-cyan-500 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-500"></div>
               </div>
-              
-              {/* Enhanced description */}
-              <p className="text-gray-400 leading-relaxed group-hover:text-gray-300 transition-colors duration-300 pl-16">{tip.description}</p>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Enhanced Schedule Section */}
+      <section id="schedule" className="py-32 relative">
+        <div className="max-w-7xl mx-auto px-6">
+          <div className="text-center mb-20">
+            <h2 className="text-5xl md:text-6xl font-bold mb-6 tracking-tight">
+              Event <span className="bg-gradient-to-r from-pink-500 to-cyan-500 bg-clip-text text-transparent">Schedule</span>
+            </h2>
+            <div className="inline-flex items-center px-8 py-4 rounded-full glass-card">
+              <Calendar className="h-6 w-6 mr-3 text-cyan-400" />
+              <span className="text-xl text-gray-300">September 26-27, 2025 • MBC Kuttikkanam, Kerala</span>
             </div>
-          ))}
+          </div>
+
+          <div className="relative max-w-4xl mx-auto">
+            {/* Timeline Line */}
+            <div className="absolute left-1/2 transform -translate-x-0.5 w-1 h-full bg-gradient-to-b from-pink-500 via-purple-500 to-cyan-500 rounded-full"></div>
+            
+            {timeline.map((item, index) => (
+              <div 
+                key={index} 
+                className={`flex items-center mb-16 group ${index % 2 === 0 ? '' : 'flex-row-reverse'}`}
+              >
+                <div className={`flex-1 ${index % 2 === 0 ? 'text-right pr-12' : 'text-left pl-12'}`}>
+                  <div className="glass-card p-8 interactive-card group-hover:shadow-2xl">
+                    <div className="flex items-center gap-3 mb-4">
+                      <span className="text-3xl">{item.icon}</span>
+                      <h3 className="text-2xl font-bold text-white group-hover:bg-gradient-to-r group-hover:from-pink-500 group-hover:to-cyan-500 group-hover:bg-clip-text group-hover:text-transparent transition-all duration-300">
+                        {item.title}
+                      </h3>
+                    </div>
+                    
+                    <div className="flex items-center gap-2 mb-4 text-pink-400 font-medium">
+                      <Clock className="h-5 w-5" />
+                      {item.time}
+                    </div>
+                    
+                    <p className="text-gray-400 group-hover:text-gray-300 transition-colors duration-300">
+                      {item.description}
+                    </p>
+                  </div>
+                </div>
+                
+                {/* Timeline Node */}
+                <div className="w-8 h-8 bg-gradient-to-br from-pink-500 to-cyan-500 rounded-full relative z-10 shadow-lg shadow-pink-500/50 group-hover:scale-125 transition-transform duration-300 flex items-center justify-center">
+                  <div className="w-4 h-4 bg-white rounded-full"></div>
+                </div>
+                
+                <div className="flex-1" />
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Enhanced Prizes Section */}
+      <section id="prizes" className="py-32 relative">
+        <div className="max-w-7xl mx-auto px-6">
+          <div className="glass-card p-16 relative overflow-hidden">
+            <div className="text-center mb-20">
+              <h2 className="text-5xl md:text-6xl font-bold mb-6 tracking-tight">
+                Amazing <span className="bg-gradient-to-r from-pink-500 to-cyan-500 bg-clip-text text-transparent">Prizes</span>
+              </h2>
+              <p className="text-2xl text-gray-300">₹1,50,000 total prize pool with special recognitions from sponsors</p>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
+              {prizes.map((prize, index) => (
+                <div
+                  key={index}
+                  className={`text-center p-12 glass-card interactive-card relative overflow-hidden ${
+                    index === 0 ? 'ring-2 ring-yellow-500/50 bg-gradient-to-b from-yellow-500/10 to-transparent' : ''
+                  }`}
+                >
+                  {/* First Place Crown */}
+                  {index === 0 && (
+                    <div className="absolute -top-4 left-1/2 transform -translate-x-1/2 text-4xl">
+                      
+                    </div>
+                  )}
+                  
+                  {/* Prize Amount */}
+                  <div className={`text-6xl font-bold mb-4 ${
+                    index === 0 
+                      ? 'bg-gradient-to-r from-yellow-400 to-amber-300 bg-clip-text text-transparent' 
+                      : 'bg-gradient-to-r from-pink-500 to-cyan-500 bg-clip-text text-transparent'
+                  }`}>
+                    {prize.amount}
+                  </div>
+                  
+                  {/* Prize Place */}
+                  <div className={`text-2xl font-semibold mb-6 ${
+                    index === 0 ? 'text-yellow-300' : 'text-gray-300'
+                  }`}>
+                    {prize.place}
+                  </div>
+                  
+                  {/* Prize Description */}
+                  <p className="text-gray-400 group-hover:text-gray-200 transition-colors duration-300 text-lg">
+                    {prize.description}
+                  </p>
+                </div>
+              ))}
+            </div>
+
+            {/* Judging Criteria */}
+            <div className="text-center glass-card p-8">
+              <h3 className="text-2xl font-bold mb-6 bg-gradient-to-r from-pink-500 to-cyan-500 bg-clip-text text-transparent">
+                Judging Criteria
+              </h3>
+              <div className="grid grid-cols-1 md:grid-cols-5 gap-4 text-sm">
+                {['Innovation & Creativity', 'Sustainability & Impact', 'Social Relevance', 'Technical Execution', 'Presentation'].map((criteria, index) => (
+                  <div key={index} className="glass-card p-4 hover:bg-white/10 transition-colors">
+                    {criteria}
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Enhanced Tips Section */}
+      <section className="py-32 relative">
+        <div className="max-w-7xl mx-auto px-6">
+          <div className="text-center mb-20">
+            <h2 className="text-5xl md:text-6xl font-bold mb-6 tracking-tight">
+              Pro Tips to <span className="bg-gradient-to-r from-pink-500 to-cyan-500 bg-clip-text text-transparent">Win</span>
+            </h2>
+            <p className="text-xl text-gray-300 max-w-3xl mx-auto">
+              Insider strategies from previous winners and industry experts
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            {tips.map((tip, index) => (
+              <div
+                key={index}
+                className="glass-card p-10 interactive-card group relative overflow-hidden"
+              >
+                <div className="flex items-start gap-6">
+                  <div className="text-6xl p-4 glass-card group-hover:scale-110 transition-transform duration-300">
+                    {tip.icon}
+                  </div>
+                  <div className="flex-1">
+                    <h3 className="text-2xl font-bold mb-4 text-white group-hover:bg-gradient-to-r group-hover:from-pink-500 group-hover:to-cyan-500 group-hover:bg-clip-text group-hover:text-transparent transition-all duration-300">
+                      {tip.title}
+                    </h3>
+                    <p className="text-gray-400 leading-relaxed group-hover:text-gray-300 transition-colors duration-300">
+                      {tip.description}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
       </section>
 
       {/* Enhanced Sponsors Section */}
-      <section id="sponsors" className="max-w-6xl mx-auto px-6 py-28 relative">
-        <div className="absolute -z-10 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-lg h-64 bg-gradient-to-r from-cyan-500/10 to-pink-500/10 blur-3xl rounded-full"></div>
-        
-        <h2 className="text-3xl md:text-5xl font-bold text-center mb-6 tracking-tight">
-          Our <span className="bg-gradient-to-r from-pink-500 to-cyan-500 bg-clip-text text-transparent">Sponsors</span>
-        </h2>
-        <p className="text-xl text-gray-300 text-center mb-16">
-          Supported by industry leaders who believe in innovation
-        </p>
-        
-        {/* Placeholder for sponsor logos */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mb-16">
-          {[1, 2, 3, 4, 5, 6, 7, 8].map((_, index) => (
-            <div 
-              key={index} 
-              className="aspect-[3/2] bg-white/5 rounded-2xl flex items-center justify-center border border-white/10 hover:border-white/20 transition-all duration-300 hover:-translate-y-1 group"
-            >
-              <div className="text-3xl opacity-30 group-hover:opacity-50 transition-opacity duration-300 group-hover:scale-110">
-                {index % 4 === 0 ? '🚀' : index % 4 === 1 ? '💻' : index % 4 === 2 ? '⚙️' : '🔍'}
-              </div>
-            </div>
-          ))}
-        </div>
-        
-        <div className="text-center px-8 py-10 bg-white/5 backdrop-blur-sm rounded-2xl border border-white/10 inline-block mx-auto">
-          <p className="text-gray-300">
-            Partnership opportunities available •{' '}
-            <a href="mailto:sponsors@hackathon2025.com" className="text-cyan-400 hover:text-cyan-300 transition-colors relative group">
-              Contact us
-              <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-cyan-400 group-hover:w-full transition-all duration-300"></span>
-            </a>
-          </p>
-        </div>
-      </section>
-
-      {/* CTA Section */}
-      <section className="max-w-6xl mx-auto px-6 py-20 text-center">
-        <h2 className="text-3xl md:text-5xl font-bold mb-8 tracking-tight">
-          Ready to <span className="bg-gradient-to-r from-pink-500 to-cyan-500 bg-clip-text text-transparent">Build the Future?</span>
-        </h2>
-        <p className="text-xl text-gray-400 mb-12">
-          Join 500+ innovators for the most exciting hackathon of 2025. Registration closes soon!
-        </p>
-        <a
-          href="https://your-hackathon-signup-link.com"
-          className="inline-block px-10 py-5 bg-gradient-to-r from-pink-500 via-purple-500 to-cyan-500 text-white font-semibold text-sm uppercase tracking-wide rounded-xl transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl hover:shadow-pink-500/30 relative overflow-hidden group"
-        >
-          <span className="relative z-10">Register Now - It's Free! 🚀</span>
-          <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700 ease-in-out" />
-        </a>
-        <p className="text-gray-500 mt-5 text-sm">
-          Limited spots available • First come, first served
-        </p>
-      </section>
-
-      {/* Footer */}
-      <footer id="contact" className="border-t border-white/10 py-16">
-        <div className="max-w-6xl mx-auto px-6 text-center">
-          <h3 className="text-2xl font-bold mb-8">Stay Connected</h3>
+      <section id="sponsors" className="py-32 relative">
+        <div className="max-w-7xl mx-auto px-6">
+          <div className="text-center mb-20">
+            <h2 className="text-5xl md:text-6xl font-bold mb-6 tracking-tight">
+              Our <span className="bg-gradient-to-r from-pink-500 to-cyan-500 bg-clip-text text-transparent">Sponsors</span>
+            </h2>
+            <p className="text-xl text-gray-300">
+              Supported by industry leaders who believe in innovation
+            </p>
+          </div>
           
-          <div className="flex justify-center gap-6 mb-8">
-            {['🐦', '💼', '💬', '📸'].map((emoji, index) => (
-              <a
-                key={index}
-                href="#"
-                className="w-12 h-12 bg-white/5 border border-white/10 rounded-2xl flex items-center justify-center text-xl transition-all duration-300 hover:bg-white/10 hover:-translate-y-1"
+          {/* Sponsor Grid */}
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mb-16">
+            {[1, 2, 3, 4, 5, 6, 7, 8].map((_, index) => (
+              <div 
+                key={index} 
+                className="aspect-[3/2] glass-card flex items-center justify-center group interactive-card"
               >
-                {emoji}
-              </a>
+                <div className="text-5xl opacity-30 group-hover:opacity-70 transition-opacity duration-300 group-hover:scale-110">
+                  {index % 4 === 0 ? '🚀' : index % 4 === 1 ? '💻' : index % 4 === 2 ? '⚙️' : '🔍'}
+                </div>
+              </div>
             ))}
           </div>
           
-          <p className="text-gray-400 mb-8">
-            Questions? Email us at{' '}
-            <a href="mailto:hello@hackathon2025.com" className="text-cyan-400 hover:text-cyan-300 transition-colors">
-              hello@hackathon2025.com
-            </a>
-            <br />
-            Follow{' '}
-            <a href="#" className="text-pink-400 hover:text-pink-300 transition-colors">
-              @hackathon2025
-            </a>{' '}
-            for updates and behind-the-scenes content
-          </p>
+          <div className="text-center glass-card p-8">
+            <p className="text-lg text-gray-300">
+              Partnership opportunities available •{' '}
+              <a href="mailto:sponsors@hackathon2025.com" className="text-cyan-400 hover:text-cyan-300 transition-colors relative group">
+                Contact us
+                <ExternalLink className="inline h-4 w-4 ml-1" />
+              </a>
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* Enhanced CTA Section */}
+      <section className="py-32 relative">
+        <div className="max-w-4xl mx-auto px-6 text-center">
+          <div className="glass-card p-16 relative overflow-hidden">
+            <h2 className="text-5xl md:text-6xl font-bold mb-8 tracking-tight">
+              Ready to <span className="bg-gradient-to-r from-pink-500 to-cyan-500 bg-clip-text text-transparent">Code the Grid?</span>
+            </h2>
+            <p className="text-2xl text-gray-400 mb-8">
+              Join 370+ innovators for HASH 2K25. Registration fee: ₹400 per team (food separate).
+            </p>
+            
+            {/* Registration Details */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+              {[
+                { label: 'Registration Deadline', value: '10th September 2025', icon: '📅' },
+                { label: 'Shortlist Results', value: '15th - 17th September 2025', icon: '📋' },
+                { label: 'Max Teams', value: '100 teams only', icon: '👥' }
+              ].map((item, index) => (
+                <div key={index} className="glass-card p-6">
+                  <div className="text-3xl mb-2">{item.icon}</div>
+                  <div className="text-lg font-semibold text-white mb-1">{item.label}</div>
+                  <div className="text-gray-400">{item.value}</div>
+                </div>
+              ))}
+            </div>
+            
+            {session ? (
+              <Link
+                href="/dashboard"
+                className="group inline-flex items-center px-12 py-6 bg-gradient-to-r from-pink-500 via-purple-500 to-cyan-500 text-white font-bold text-xl rounded-xl transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl hover:shadow-pink-500/30 relative overflow-hidden"
+              >
+                <span className="relative z-10 flex items-center space-x-3">
+                  <span>Go to Dashboard</span>
+                  <Zap className="h-6 w-6 group-hover:rotate-12 transition-transform" />
+                </span>
+                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700 ease-in-out" />
+              </Link>
+            ) : (
+              <button
+                onClick={handleSignIn}
+                disabled={isSigningIn || status === 'loading'}
+                className="group inline-flex items-center px-12 py-6 bg-gradient-to-r from-pink-500 via-purple-500 to-cyan-500 text-white font-bold text-xl rounded-xl transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl hover:shadow-pink-500/30 relative overflow-hidden disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                <span className="relative z-10 flex items-center space-x-3">
+                  {isSigningIn || status === 'loading' ? (
+                    <>
+                      <div className="w-6 h-6 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                      <span>Signing in...</span>
+                    </>
+                  ) : (
+                    <>
+                      <span>Register Your Team Now</span>
+                      <Zap className="h-6 w-6 group-hover:rotate-12 transition-transform" />
+                    </>
+                  )}
+                </span>
+                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700 ease-in-out" />
+              </button>
+            )}
+            
+            <p className="text-gray-500 mt-6 text-sm">
+              ⚠️ Registration fee is non-refundable • College letterhead confirmation required
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* Enhanced Footer */}
+      <footer id="contact" className="border-t border-white/10 py-20">
+        <div className="max-w-7xl mx-auto px-6">
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-12 mb-12">
+            {/* Brand Column */}
+            <div className="md:col-span-2">
+              <div className="flex items-center space-x-3 mb-6">
+                <div className="w-12 h-12 rounded-xl bg-gradient-to-r from-pink-500 to-cyan-500 flex items-center justify-center">
+                  <Code className="h-8 w-8 text-white" />
+                </div>
+                <span className="text-3xl font-bold bg-gradient-to-r from-pink-500 via-purple-500 to-cyan-500 bg-clip-text text-transparent">
+                  HASH 2K25
+                </span>
+              </div>
+              <p className="text-gray-400 text-lg mb-6 max-w-md">
+                National Level 24-Hour Hackathon. Where innovation meets execution, and dreams become reality.
+              </p>
+              <div className="flex space-x-4">
+                {['🐦', '💼', '💬', '📸'].map((emoji, index) => (
+                  <a
+                    key={index}
+                    href="#"
+                    className="w-12 h-12 glass-card flex items-center justify-center text-xl transition-all duration-300 hover:scale-110 hover:bg-white/20"
+                  >
+                    {emoji}
+                  </a>
+                ))}
+              </div>
+            </div>
+            
+            {/* Quick Links */}
+            <div>
+              <h3 className="text-xl font-bold mb-6 text-white">Quick Links</h3>
+              <div className="space-y-3">
+                {[
+                  { href: '#about', label: 'About' },
+                  { href: '#schedule', label: 'Schedule' },
+                  { href: '#prizes', label: 'Prizes' },
+                  { href: '/rules', label: 'Rules' },
+                  { href: '#sponsors', label: 'Sponsors' },
+                  { href: '#contact', label: 'Contact' }
+                ].map((item, index) => (
+                  <a
+                    key={index}
+                    href={item.href}
+                    className="block text-gray-400 hover:text-white transition-colors"
+                  >
+                    {item.label}
+                  </a>
+                ))}
+              </div>
+            </div>
+            
+            {/* Contact Info */}
+            <div>
+              <h3 className="text-xl font-bold mb-6 text-white">Contact</h3>
+              <div className="space-y-3 text-gray-400">
+                <div className="flex items-center space-x-2">
+                  <MapPin className="h-4 w-4" />
+                  <span>Kuttikkanam, Kerala</span>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <Calendar className="h-4 w-4" />
+                  <span>Sep 26-27, 2025</span>
+                </div>
+                <p className="text-sm">
+                  Questions? Contact the organizing team
+                </p>
+              </div>
+            </div>
+          </div>
           
-          <p className="text-gray-600 text-sm">
-            Powered by{' '}
-            <span className="bg-gradient-to-r from-pink-500 to-cyan-500 bg-clip-text text-transparent font-semibold">
-              Hash 2K25
-            </span>{' '}
-            — See you at the hackathon! 🎉
-          </p>
+          {/* Bottom Footer */}
+          <div className="border-t border-white/10 pt-8 flex flex-col md:flex-row justify-between items-center">
+            <p className="text-gray-500 text-sm mb-4 md:mb-0">
+              © 2025 Hash 2K25 Hackathon Platform. All rights reserved.
+            </p>
+            <div className="flex items-center space-x-4">
+              <span className="text-sm text-gray-600">Organized by</span>
+              <span className="text-sm bg-gradient-to-r from-pink-500 to-cyan-500 bg-clip-text text-transparent font-semibold">
+                Dept. of CSE, MBC Kuttikkanam
+              </span>
+            </div>
+          </div>
         </div>
       </footer>
     </div>

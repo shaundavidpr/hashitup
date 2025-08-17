@@ -474,8 +474,8 @@ Let's innovate, collaborate, and hack for change!
 
 *(Logos of College, Department, Hackathon)*
 
-**⚡ HASH 2K25⚡**\
-*\"Code the Grid. Forge the Future.\"*\
+**HASH 2K25**\
+*\"Push the Branch. Commit the Future.\"*\
 24-Hour National Level Hackathon\
 Organized by **Department of Computer Science & Engineering**\
 **HACKATHON BROCHURE**

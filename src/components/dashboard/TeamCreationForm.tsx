@@ -1,7 +1,7 @@
 'use client'
 
 import { Button } from '@/components/ui/Button'
-import { Plus, Trash2, AlertCircle, Clock } from 'lucide-react'
+import { Plus, Trash2 } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 import { useState, useEffect } from 'react'
 
@@ -21,7 +21,7 @@ export function TeamCreationForm() {
   const router = useRouter()
   const [loading, setLoading] = useState(false)
   const [registrationStatus, setRegistrationStatus] = useState<RegistrationStatus>({ isOpen: true })
-  const [checkingStatus, setCheckingStatus] = useState(true)
+  const [_checkingStatus, _setCheckingStatus] = useState(true)
   const [teamData, setTeamData] = useState({
     name: '',
     collegeName: '',
@@ -73,7 +73,7 @@ export function TeamCreationForm() {
           message: 'Unable to verify registration status. Please try again if you encounter issues.' 
         })
       } finally {
-        setCheckingStatus(false)
+        _setCheckingStatus(false)
       }
     }
 

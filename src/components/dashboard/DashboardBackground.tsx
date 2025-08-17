@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+
 import dynamic from 'next/dynamic'
 
 // Create a completely client-side component for the animated elements

@@ -2,7 +2,7 @@
 
 import { Button } from '@/components/ui/Button'
 import { Badge } from '@/components/ui/Badge'
-import { Bell, LogOut, Menu } from 'lucide-react'
+import { Bell, LogOut } from 'lucide-react'
 import { signOut } from 'next-auth/react'
 import { useState, useEffect } from 'react'
 import Link from 'next/link'

@@ -2,7 +2,7 @@
 
 import { Button } from '@/components/ui/Button'
 import { Card } from '@/components/ui/Card'
-import { FileText, Lightbulb, Save } from 'lucide-react'
+import { Lightbulb, Save } from 'lucide-react'
 import { useState } from 'react'
 
 interface ProjectIdeaFormProps {
@@ -27,7 +27,7 @@ export function ProjectIdeaForm({ teamId, existingIdea }: ProjectIdeaFormProps) 
     solution: existingIdea?.solution || '',
   })
 
-  const isSubmitted = existingIdea && !existingIdea.isDraft
+  const _isSubmitted = existingIdea && !existingIdea.isDraft
 
   const handleSubmit = async (e: React.FormEvent, isDraft: boolean = false) => {
     e.preventDefault()
