@@ -354,11 +354,11 @@ const HackathonLanding = () => {
           
           {/* Main Title */}
           <h1 className="text-6xl md:text-8xl font-black mb-6 leading-tight tracking-tight hero-glow animate-slide-up">
-            <span className="bg-gradient-to-r from-pink-500 via-purple-500 to-cyan-500 bg-clip-text text-transparent">
-              HASH 2K25
-            </span>
-          </h1>
-          
+          <span className="bg-gradient-to-r from-pink-500 via-purple-500 to-cyan-500 bg-clip-text text-transparent">
+            HASH 2K25
+          </span>
+        </h1>
+        
           {/* Tagline */}
           <p className="text-2xl md:text-3xl font-medium text-gray-300 mb-6 animate-slide-up" style={{animationDelay: '0.2s'}}>
             "Push the Branch. Commit the Future."
@@ -373,29 +373,29 @@ const HackathonLanding = () => {
           {/* Event Details */}
           <div className="flex flex-col md:flex-row items-center justify-center gap-6 mb-12 animate-slide-up" style={{animationDelay: '0.6s'}}>
             <div className="flex items-center gap-3 glass-card px-6 py-3">
-              <MapPin className="h-5 w-5 text-pink-400" />
+            <MapPin className="h-5 w-5 text-pink-400" />
               <span className="text-gray-300">Kuttikkanam, Kerala</span>
-            </div>
+          </div>
             <div className="flex items-center gap-3 glass-card px-6 py-3">
-              <Calendar className="h-5 w-5 text-cyan-400" />
+            <Calendar className="h-5 w-5 text-cyan-400" />
               <span className="text-gray-300">September 26-27, 2025</span>
             </div>
-          </div>
+        </div>
 
           {/* Stats Section */}
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-12 animate-slide-up" style={{animationDelay: '0.8s'}}>
-            {stats.map((stat, index) => (
+          {stats.map((stat, index) => (
               <div key={index} className="glass-card p-6 interactive-card group">
                 <div className={`text-3xl mb-2 bg-gradient-to-r ${stat.color} bg-clip-text text-transparent font-bold`}>
-                  {stat.number}
+                {stat.number}
                 </div>
                 <div className="text-2xl mb-2">{stat.icon}</div>
                 <div className="text-gray-400 text-sm font-medium uppercase tracking-wider">
-                  {stat.label}
+                {stat.label}
                 </div>
-              </div>
-            ))}
-          </div>
+            </div>
+          ))}
+        </div>
 
           {/* CTA Buttons */}
           <div className="flex flex-col md:flex-row gap-6 justify-center animate-slide-up" style={{animationDelay: '1s'}}>
@@ -429,18 +429,18 @@ const HackathonLanding = () => {
                     </>
                   )}
                 </span>
-                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700 ease-in-out" />
+            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700 ease-in-out" />
               </button>
             )}
-            <a
-              href="#about"
+          <a
+            href="#about"
               className="px-10 py-5 glass-card text-white font-semibold text-lg transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl hover:shadow-cyan-500/20 gradient-border flex items-center justify-center space-x-2"
-            >
+          >
               <span>Learn More</span>
               <ChevronDown className="h-5 w-5" />
-            </a>
-          </div>
+          </a>
         </div>
+      </div>
       </section>
 
       {/* Enhanced About Section */}
@@ -448,20 +448,20 @@ const HackathonLanding = () => {
         <div className="max-w-7xl mx-auto px-6">
           <div className="text-center mb-20">
             <h2 className="text-5xl md:text-6xl font-bold mb-6 tracking-tight">
-              Why <span className="bg-gradient-to-r from-pink-500 to-cyan-500 bg-clip-text text-transparent">Participate?</span>
-            </h2>
+          Why <span className="bg-gradient-to-r from-pink-500 to-cyan-500 bg-clip-text text-transparent">Participate?</span>
+        </h2>
             <p className="text-xl text-gray-300 max-w-3xl mx-auto">
               Experience the thrill of innovation, learn from industry experts, and build solutions that matter in just 24 hours.
-            </p>
+        </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {features.map((feature, index) => (
-              <div
-                key={index}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {features.map((feature, index) => (
+            <div
+              key={index}
                 className={`glass-card p-8 interactive-card group relative overflow-hidden ${feature.color} border ${feature.borderColor}`}
-                style={{ 
-                  animationDelay: `${index * 0.1}s`,
+              style={{ 
+                animationDelay: `${index * 0.1}s`,
                 }}
               >
                 {/* Hover Effect */}
@@ -484,8 +484,8 @@ const HackathonLanding = () => {
                 
                 {/* Bottom Border */}
                 <div className="absolute bottom-0 left-0 w-full h-1 bg-gradient-to-r from-pink-500 to-cyan-500 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-500"></div>
-              </div>
-            ))}
+            </div>
+          ))}
           </div>
         </div>
       </section>
@@ -495,8 +495,8 @@ const HackathonLanding = () => {
         <div className="max-w-7xl mx-auto px-6">
           <div className="text-center mb-20">
             <h2 className="text-5xl md:text-6xl font-bold mb-6 tracking-tight">
-              Event <span className="bg-gradient-to-r from-pink-500 to-cyan-500 bg-clip-text text-transparent">Schedule</span>
-            </h2>
+          Event <span className="bg-gradient-to-r from-pink-500 to-cyan-500 bg-clip-text text-transparent">Schedule</span>
+        </h2>
             <div className="inline-flex items-center px-8 py-4 rounded-full glass-card">
               <Calendar className="h-6 w-6 mr-3 text-cyan-400" />
               <span className="text-xl text-gray-300">September 26-27, 2025 • MBC Kuttikkanam, Kerala</span>
@@ -506,10 +506,10 @@ const HackathonLanding = () => {
           <div className="relative max-w-4xl mx-auto">
             {/* Timeline Line */}
             <div className="absolute left-1/2 transform -translate-x-0.5 w-1 h-full bg-gradient-to-b from-pink-500 via-purple-500 to-cyan-500 rounded-full"></div>
-            
-            {timeline.map((item, index) => (
-              <div 
-                key={index} 
+          
+          {timeline.map((item, index) => (
+            <div 
+              key={index} 
                 className={`flex items-center mb-16 group ${index % 2 === 0 ? '' : 'flex-row-reverse'}`}
               >
                 <div className={`flex-1 ${index % 2 === 0 ? 'text-right pr-12' : 'text-left pl-12'}`}>
@@ -530,16 +530,16 @@ const HackathonLanding = () => {
                       {item.description}
                     </p>
                   </div>
-                </div>
-                
+              </div>
+              
                 {/* Timeline Node */}
                 <div className="w-8 h-8 bg-gradient-to-br from-pink-500 to-cyan-500 rounded-full relative z-10 shadow-lg shadow-pink-500/50 group-hover:scale-125 transition-transform duration-300 flex items-center justify-center">
                   <div className="w-4 h-4 bg-white rounded-full"></div>
-                </div>
-                
-                <div className="flex-1" />
               </div>
-            ))}
+              
+              <div className="flex-1" />
+            </div>
+          ))}
           </div>
         </div>
       </section>
@@ -550,49 +550,49 @@ const HackathonLanding = () => {
           <div className="glass-card p-16 relative overflow-hidden">
             <div className="text-center mb-20">
               <h2 className="text-5xl md:text-6xl font-bold mb-6 tracking-tight">
-                Amazing <span className="bg-gradient-to-r from-pink-500 to-cyan-500 bg-clip-text text-transparent">Prizes</span>
-              </h2>
+            Amazing <span className="bg-gradient-to-r from-pink-500 to-cyan-500 bg-clip-text text-transparent">Prizes</span>
+          </h2>
               <p className="text-2xl text-gray-300">₹1,50,000 total prize pool with special recognitions from sponsors</p>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
-              {prizes.map((prize, index) => (
-                <div
-                  key={index}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
+            {prizes.map((prize, index) => (
+              <div
+                key={index}
                   className={`text-center p-12 glass-card interactive-card relative overflow-hidden ${
                     index === 0 ? 'ring-2 ring-yellow-500/50 bg-gradient-to-b from-yellow-500/10 to-transparent' : ''
                   }`}
                 >
                   {/* First Place Crown */}
-                  {index === 0 && (
+                {index === 0 && (
                     <div className="absolute -top-4 left-1/2 transform -translate-x-1/2 text-4xl">
-                      👑
-                    </div>
-                  )}
-                  
+                    👑
+                  </div>
+                )}
+                
                   {/* Prize Amount */}
                   <div className={`text-6xl font-bold mb-4 ${
-                    index === 0 
-                      ? 'bg-gradient-to-r from-yellow-400 to-amber-300 bg-clip-text text-transparent' 
-                      : 'bg-gradient-to-r from-pink-500 to-cyan-500 bg-clip-text text-transparent'
-                  }`}>
-                    {prize.amount}
-                  </div>
-                  
+                  index === 0 
+                    ? 'bg-gradient-to-r from-yellow-400 to-amber-300 bg-clip-text text-transparent' 
+                    : 'bg-gradient-to-r from-pink-500 to-cyan-500 bg-clip-text text-transparent'
+                }`}>
+                  {prize.amount}
+                </div>
+                
                   {/* Prize Place */}
                   <div className={`text-2xl font-semibold mb-6 ${
-                    index === 0 ? 'text-yellow-300' : 'text-gray-300'
-                  }`}>
-                    {prize.place}
-                  </div>
-                  
+                  index === 0 ? 'text-yellow-300' : 'text-gray-300'
+                }`}>
+                  {prize.place}
+                </div>
+                
                   {/* Prize Description */}
                   <p className="text-gray-400 group-hover:text-gray-200 transition-colors duration-300 text-lg">
-                    {prize.description}
-                  </p>
-                </div>
-              ))}
-            </div>
+                  {prize.description}
+                </p>
+              </div>
+            ))}
+          </div>
 
             {/* Judging Criteria */}
             <div className="text-center glass-card p-8">
@@ -616,17 +616,17 @@ const HackathonLanding = () => {
         <div className="max-w-7xl mx-auto px-6">
           <div className="text-center mb-20">
             <h2 className="text-5xl md:text-6xl font-bold mb-6 tracking-tight">
-              Pro Tips to <span className="bg-gradient-to-r from-pink-500 to-cyan-500 bg-clip-text text-transparent">Win</span>
-            </h2>
+          Pro Tips to <span className="bg-gradient-to-r from-pink-500 to-cyan-500 bg-clip-text text-transparent">Win</span>
+        </h2>
             <p className="text-xl text-gray-300 max-w-3xl mx-auto">
-              Insider strategies from previous winners and industry experts
-            </p>
+          Insider strategies from previous winners and industry experts
+        </p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            {tips.map((tip, index) => (
-              <div
-                key={index}
+          {tips.map((tip, index) => (
+            <div
+              key={index}
                 className="glass-card p-10 interactive-card group relative overflow-hidden"
               >
                 <div className="flex items-start gap-6">
@@ -644,7 +644,7 @@ const HackathonLanding = () => {
                 </div>
               </div>
             ))}
-          </div>
+            </div>
         </div>
       </section>
 
@@ -653,35 +653,35 @@ const HackathonLanding = () => {
         <div className="max-w-7xl mx-auto px-6">
           <div className="text-center mb-20">
             <h2 className="text-5xl md:text-6xl font-bold mb-6 tracking-tight">
-              Our <span className="bg-gradient-to-r from-pink-500 to-cyan-500 bg-clip-text text-transparent">Sponsors</span>
-            </h2>
+          Our <span className="bg-gradient-to-r from-pink-500 to-cyan-500 bg-clip-text text-transparent">Sponsors</span>
+        </h2>
             <p className="text-xl text-gray-300">
-              Supported by industry leaders who believe in innovation
-            </p>
+          Supported by industry leaders who believe in innovation
+        </p>
           </div>
-          
+        
           {/* Sponsor Grid */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mb-16">
-            {[1, 2, 3, 4, 5, 6, 7, 8].map((_, index) => (
-              <div 
-                key={index} 
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mb-16">
+          {[1, 2, 3, 4, 5, 6, 7, 8].map((_, index) => (
+            <div 
+              key={index} 
                 className="aspect-[3/2] glass-card flex items-center justify-center group interactive-card"
-              >
+            >
                 <div className="text-5xl opacity-30 group-hover:opacity-70 transition-opacity duration-300 group-hover:scale-110">
-                  {index % 4 === 0 ? '🚀' : index % 4 === 1 ? '💻' : index % 4 === 2 ? '⚙️' : '🔍'}
-                </div>
+                {index % 4 === 0 ? '🚀' : index % 4 === 1 ? '💻' : index % 4 === 2 ? '⚙️' : '🔍'}
               </div>
-            ))}
-          </div>
-          
+            </div>
+          ))}
+        </div>
+        
           <div className="text-center glass-card p-8">
             <p className="text-lg text-gray-300">
-              Partnership opportunities available •{' '}
-              <a href="mailto:sponsors@hackathon2025.com" className="text-cyan-400 hover:text-cyan-300 transition-colors relative group">
-                Contact us
+            Partnership opportunities available •{' '}
+            <a href="mailto:sponsors@hackathon2025.com" className="text-cyan-400 hover:text-cyan-300 transition-colors relative group">
+              Contact us
                 <ExternalLink className="inline h-4 w-4 ml-1" />
-              </a>
-            </p>
+            </a>
+          </p>
           </div>
         </div>
       </section>
@@ -691,8 +691,8 @@ const HackathonLanding = () => {
         <div className="max-w-4xl mx-auto px-6 text-center">
           <div className="glass-card p-16 relative overflow-hidden">
             <h2 className="text-5xl md:text-6xl font-bold mb-8 tracking-tight">
-              Ready to <span className="bg-gradient-to-r from-pink-500 to-cyan-500 bg-clip-text text-transparent">Code the Grid?</span>
-            </h2>
+          Ready to <span className="bg-gradient-to-r from-pink-500 to-cyan-500 bg-clip-text text-transparent">Code the Grid?</span>
+        </h2>
             <p className="text-2xl text-gray-400 mb-8">
               Join 370+ innovators for HASH 2K25. Registration fee: ₹400 per team (food separate).
             </p>
@@ -710,11 +710,11 @@ const HackathonLanding = () => {
                   <div className="text-gray-400">{item.value}</div>
                 </div>
               ))}
-            </div>
+        </div>
             
             {session ? (
               <Link
-                href="/dashboard"
+          href="/dashboard"
                 className="group inline-flex items-center px-12 py-6 bg-gradient-to-r from-pink-500 via-purple-500 to-cyan-500 text-white font-bold text-xl rounded-xl transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl hover:shadow-pink-500/30 relative overflow-hidden"
               >
                 <span className="relative z-10 flex items-center space-x-3">
@@ -742,13 +742,13 @@ const HackathonLanding = () => {
                     </>
                   )}
                 </span>
-                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700 ease-in-out" />
+          <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700 ease-in-out" />
               </button>
             )}
             
             <p className="text-gray-500 mt-6 text-sm">
-              ⚠️ Registration fee is non-refundable • College letterhead confirmation required
-            </p>
+          ⚠️ Registration fee is non-refundable • College letterhead confirmation required
+        </p>
           </div>
         </div>
       </section>
@@ -771,18 +771,18 @@ const HackathonLanding = () => {
                 National Level 24-Hour Hackathon. Where innovation meets execution, and dreams become reality.
               </p>
               <div className="flex space-x-4">
-                {['🐦', '💼', '💬', '📸'].map((emoji, index) => (
-                  <a
-                    key={index}
-                    href="#"
+            {['🐦', '💼', '💬', '📸'].map((emoji, index) => (
+              <a
+                key={index}
+                href="#"
                     className="w-12 h-12 glass-card flex items-center justify-center text-xl transition-all duration-300 hover:scale-110 hover:bg-white/20"
-                  >
-                    {emoji}
-                  </a>
-                ))}
+              >
+                {emoji}
+              </a>
+            ))}
               </div>
-            </div>
-            
+          </div>
+          
             {/* Quick Links */}
             <div>
               <h3 className="text-xl font-bold mb-6 text-white">Quick Links</h3>
