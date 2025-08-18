@@ -54,7 +54,7 @@ services:
       - postgres_data:/var/lib/postgresql/data
       - ./docker/postgres/init.sql:/docker-entrypoint-initdb.d/init.sql:ro
     ports:
-      - "5432:5432"
+      - "5433:5432"
     networks:
       - hash2k25-network
     restart: unless-stopped
@@ -85,7 +85,7 @@ services:
     image: redis:7-alpine
     container_name: hash2k25-redis
     ports:
-      - "6379:6379"
+      - "6380:6379"
     volumes:
       - redis_data:/data
     networks:
