@@ -2,29 +2,43 @@
 
 import { LoginButton } from '@/components/LoginButton'
 import { cn } from '@/lib/utils'
-import { useSession } from 'next-auth/react'
+import { useSession, signOut } from 'next-auth/react'
 import Link from 'next/link'
 import { useState, useEffect } from 'react'
+import { LogOut, User, ChevronDown } from 'lucide-react'
 
 export function Navigation() {
   const { data: session } = useSession()
   const [scrolled, setScrolled] = useState(false)
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+  const [userMenuOpen, setUserMenuOpen] = useState(false)
 
   const isAdmin = session?.user?.role === 'ADMIN' || session?.user?.role === 'SUPERADMIN'
   
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 20)
     window.addEventListener('scroll', handleScroll)
-    return () => window.removeEventListener('scroll', handleScroll)
+    
+    // Close user menu when clicking outside
+    const handleClickOutside = (event: MouseEvent) => {
+      const target = event.target as Element
+      if (!target.closest('.user-menu-container')) {
+        setUserMenuOpen(false)
+      }
+    }
+    
+    document.addEventListener('click', handleClickOutside)
+    
+    return () => {
+      window.removeEventListener('scroll', handleScroll)
+      document.removeEventListener('click', handleClickOutside)
+    }
   }, [])
   
   const navItems = [
     { href: '#about', label: 'About' },
-    { href: '#schedule', label: 'Schedule' },
-    { href: '#prizes', label: 'Prizes' },
-    { href: '/rules', label: 'Rules' },
-    { href: '#sponsors', label: 'Sponsors' },
+    { href: '#events', label: 'Events' },
+    { href: '#projects', label: 'Projects' },
     { href: '#contact', label: 'Contact' }
   ]
 
@@ -71,7 +85,7 @@ export function Navigation() {
       )}>
         <div className="max-w-7xl mx-auto px-6 py-5 flex items-center justify-between">
           <Link href="/" className="flex items-center space-x-2">
-            <span className="text-2xl font-bold bg-gradient-to-r from-pink-500 to-cyan-500 bg-clip-text text-transparent tracking-tight animate-float">Hash 2K25</span>
+            <span className="text-2xl font-bold bg-gradient-to-r from-pink-500 to-cyan-500 bg-clip-text text-transparent tracking-tight animate-float">CodeNChip</span>
           </Link>
 
           <div className="flex items-center">
@@ -114,6 +128,57 @@ export function Navigation() {
                       </Link>
                     </>
                   )}
+                  
+                  {/* User Menu Dropdown */}
+                  <div className="relative user-menu-container"
+                    onClick={(e) => e.stopPropagation()}
+                  >
+                    <button
+                      onClick={() => setUserMenuOpen(!userMenuOpen)}
+                      className="flex items-center space-x-2 px-3 py-2 text-sm font-medium text-white bg-white/5 border border-white/10 rounded-xl transition-all duration-300 hover:bg-white/10 hover:-translate-y-0.5"
+                    >
+                      {session.user?.image ? (
+                        <img
+                          src={session.user.image}
+                          alt={session.user.name || 'User'}
+                          className="w-6 h-6 rounded-full object-cover"
+                        />
+                      ) : (
+                        <User className="w-4 h-4" />
+                      )}
+                      <span className="hidden sm:block">{session.user?.name?.split(' ')[0] || 'User'}</span>
+                      <ChevronDown className={`w-4 h-4 transition-transform ${userMenuOpen ? 'rotate-180' : ''}`} />
+                    </button>
+                    
+                    {userMenuOpen && (
+                      <div className="absolute right-0 mt-2 w-48 bg-black/90 backdrop-blur-xl rounded-xl shadow-xl border border-white/10 py-1 z-50">
+                        <div className="px-4 py-3 border-b border-white/10">
+                          <p className="text-sm font-medium text-white">{session.user?.name}</p>
+                          <p className="text-xs text-slate-400 truncate">{session.user?.email}</p>
+                        </div>
+                        
+                        <Link
+                          href="/dashboard"
+                          className="flex items-center px-4 py-2 text-sm text-white/80 hover:bg-white/5 transition-colors"
+                          onClick={() => setUserMenuOpen(false)}
+                        >
+                          <User className="w-4 h-4 mr-3" />
+                          Profile
+                        </Link>
+                        
+                        <button
+                          onClick={() => {
+                            setUserMenuOpen(false)
+                            signOut()
+                          }}
+                          className="w-full flex items-center px-4 py-2 text-sm text-rose-400 hover:bg-white/5 transition-colors"
+                        >
+                          <LogOut className="w-4 h-4 mr-3" />
+                          Sign out
+                        </button>
+                      </div>
+                    )}
+                  </div>
                 </>
               ) : (
                 <div className="transform transition-transform hover:-translate-y-0.5">
@@ -152,6 +217,24 @@ export function Navigation() {
             {/* Add session links to mobile menu as well */}
             {session && (
               <>
+                <div className="border-t border-white/10 mt-4 pt-4">
+                  <div className="flex items-center space-x-3 mb-4 px-3 py-2 bg-white/5 rounded-lg">
+                    {session.user?.image ? (
+                      <img
+                        src={session.user.image}
+                        alt={session.user.name || 'User'}
+                        className="w-8 h-8 rounded-full object-cover"
+                      />
+                    ) : (
+                      <User className="w-6 h-6 text-white/60" />
+                    )}
+                    <div>
+                      <p className="text-sm font-medium text-white">{session.user?.name}</p>
+                      <p className="text-xs text-slate-400 truncate">{session.user?.email}</p>
+                    </div>
+                  </div>
+                </div>
+                
                 <Link
                   href="/dashboard"
                   className="block py-3 text-gray-300 hover:text-white hover:translate-x-1 transform transition-all duration-300"
@@ -177,6 +260,17 @@ export function Navigation() {
                     </Link>
                   </>
                 )}
+                
+                <button
+                  onClick={() => {
+                    setMobileMenuOpen(false)
+                    signOut()
+                  }}
+                  className="flex items-center w-full py-3 text-rose-400 hover:text-rose-300 hover:translate-x-1 transform transition-all duration-300"
+                >
+                  <LogOut className="w-4 h-4 mr-2" />
+                  Sign out
+                </button>
               </>
             )}
           </div>
