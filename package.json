@@ -1,6 +1,6 @@
 {
   "name": "hash 2k25",
-  "version": "1.13.5",
+  "version": "1.13.6",
   "private": true,
   "engines": {
     "node": ">=18.17.0",
