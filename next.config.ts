@@ -1,6 +1,9 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  // Enable standalone output for Docker
+  output: 'standalone',
+  
   experimental: {
     forceSwcTransforms: true,
   },
@@ -15,6 +18,15 @@ const nextConfig: NextConfig = {
   // Ensure proper static generation
   trailingSlash: false,
   generateEtags: false,
+  
+  // Docker optimization
+  poweredByHeader: false,
+  
+  // Image optimization for Docker
+  images: {
+    domains: ['localhost'],
+    unoptimized: process.env.NODE_ENV === 'development',
+  },
 };
 
 export default nextConfig;

@@ -1,0 +1,37 @@
+# HASH 2K25 - Development Dockerfile
+# Optimized for development with hot reloading
+
+FROM node:18-alpine AS development
+
+# Set working directory
+WORKDIR /app
+
+# Install dependencies for native modules
+RUN apk add --no-cache libc6-compat
+
+# Copy package files
+COPY package*.json ./
+
+# Install all dependencies (including dev dependencies)
+RUN npm ci
+
+# Copy source code
+COPY . .
+
+# Set development environment
+ENV NODE_ENV=development
+ENV NEXT_TELEMETRY_DISABLED=1
+
+# Generate Prisma client
+RUN npx prisma generate
+
+# Expose port
+EXPOSE 3000
+
+# Create non-root user
+RUN addgroup --system --gid 1001 nodejs
+RUN adduser --system --uid 1001 nextjs
+USER nextjs
+
+# Start development server with hot reloading
+CMD ["npm", "run", "dev"]

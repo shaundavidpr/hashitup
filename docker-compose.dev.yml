@@ -1,0 +1,78 @@
+version: '3.8'
+
+services:
+  # Development Next.js Application
+  hash2k25-dev:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+      target: development
+    container_name: hash2k25-dev
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=development
+      - DATABASE_URL=${DATABASE_URL}
+      - DIRECT_URL=${DIRECT_URL}
+      - NEXTAUTH_SECRET=${NEXTAUTH_SECRET}
+      - NEXTAUTH_URL=${NEXTAUTH_URL}
+      - GOOGLE_CLIENT_ID=${GOOGLE_CLIENT_ID}
+      - GOOGLE_CLIENT_SECRET=${GOOGLE_CLIENT_SECRET}
+      - SMTP_HOST=${SMTP_HOST}
+      - SMTP_PORT=${SMTP_PORT}
+      - SMTP_USER=${SMTP_USER}
+      - SMTP_PASS=${SMTP_PASS}
+      - FROM_EMAIL=${FROM_EMAIL}
+      - ADMIN_EMAILS=${ADMIN_EMAILS}
+      - APP_NAME=${APP_NAME}
+      - APP_URL=${APP_URL}
+    env_file:
+      - .env
+    volumes:
+      - .:/app
+      - /app/node_modules
+      - /app/.next
+    networks:
+      - hash2k25-dev-network
+    restart: unless-stopped
+    depends_on:
+      - postgres-dev
+
+  # PostgreSQL Database for Development
+  postgres-dev:
+    image: postgres:15-alpine
+    container_name: hash2k25-postgres-dev
+    environment:
+      POSTGRES_DB: hash2k25_dev
+      POSTGRES_USER: ${DB_USER:-hash2k25}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-hash2k25password}
+    volumes:
+      - postgres_dev_data:/var/lib/postgresql/data
+      - ./docker/postgres/init.sql:/docker-entrypoint-initdb.d/init.sql:ro
+    ports:
+      - "5433:5432"
+    networks:
+      - hash2k25-dev-network
+    restart: unless-stopped
+
+  # Redis for Development
+  redis-dev:
+    image: redis:7-alpine
+    container_name: hash2k25-redis-dev
+    ports:
+      - "6380:6379"
+    volumes:
+      - redis_dev_data:/data
+    networks:
+      - hash2k25-dev-network
+    restart: unless-stopped
+
+volumes:
+  postgres_dev_data:
+    driver: local
+  redis_dev_data:
+    driver: local
+
+networks:
+  hash2k25-dev-network:
+    driver: bridge
