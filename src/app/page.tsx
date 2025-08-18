@@ -366,7 +366,7 @@ const HackathonLanding = () => {
           
           {/* Description */}
           <p className="text-xl md:text-2xl text-gray-400 mb-8 max-w-4xl mx-auto animate-slide-up" style={{animationDelay: '0.4s'}}>
-            A 24-Hour National Level Hackathon hosted by <br />
+            A 24-Hour National Level Hackathon hosted by <br /> <span className="text-white font-semibold">Department of Computer Science and Engineering</span> of{' '} <br />
             <span className="text-white font-semibold">Mar Baselios Christian College of Engineering & Technology</span>, Kuttikkanam.
           </p>
           
@@ -566,7 +566,7 @@ const HackathonLanding = () => {
                   {/* First Place Crown */}
                   {index === 0 && (
                     <div className="absolute -top-4 left-1/2 transform -translate-x-1/2 text-4xl">
-                      
+                      👑
                     </div>
                   )}
                   
