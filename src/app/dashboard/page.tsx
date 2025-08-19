@@ -1,6 +1,6 @@
 import { ProjectIdeaForm } from '@/components/dashboard/ProjectIdeaForm'
 import { ProjectResults } from '@/components/dashboard/ProjectResults'
-import { RulesAndRegulations } from '@/components/RulesAndRegulations'
+// import { RulesAndRegulations } from '@/components/RulesAndRegulations'
 import { TeamCreationForm } from '@/components/dashboard/TeamCreationForm'
 
 import { DashboardBackground } from '@/components/dashboard/DashboardBackground'
@@ -11,30 +11,16 @@ import { authOptions } from '@/lib/auth'
 import { db } from '@/lib/db'
 import { areResultsPublished } from '@/lib/results'
 import { 
-  Code, 
-  FileCode, 
-  GitBranch, 
-  Users, 
-  Zap, 
-  Award, 
-  Star, 
-  TrendingUp, 
-  Clock, 
-  Target, 
-  Lightbulb, 
-  Rocket, 
+  Users,
+  Zap,
+  Award,
+  Star,
+  TrendingUp,
+  Clock,
+  Lightbulb,
+  Rocket,
+  Target,
   Calendar,
-  Palette,
-  Settings,
-  Database,
-  TestTube,
-  Shield,
-  BookOpen,
-  HelpCircle,
-  MessageCircle,
-  FileText,
-  ExternalLink,
-  Activity,
   Edit,
   CheckCircle,
   Heart
