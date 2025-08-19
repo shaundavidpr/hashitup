@@ -163,7 +163,7 @@ export function Navigation() {
               <span className="text-white font-bold text-sm lg:text-base">H</span>
             </div>
             <span className="text-base sm:text-lg md:text-xl lg:text-2xl xl:text-3xl font-bold shimmer-text tracking-tight animate-float">
-              HASHITUP
+              GEN 201
             </span>
           </Link>
 

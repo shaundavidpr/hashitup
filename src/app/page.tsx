@@ -5,7 +5,7 @@ import { Calendar, MapPin, ChevronDown, Star, Zap, Code, Clock, ArrowRight, Exte
 import { useSession, signIn } from 'next-auth/react';
 import Link from 'next/link';
 
-// Enhanced animations and styles
+// Enhanced animations and styles with new color scheme
 const styleTag = `
   @keyframes float {
     0% { transform: translateY(0px); }
@@ -72,7 +72,7 @@ const styleTag = `
     height: 2px;
     bottom: -4px;
     left: 0;
-    background: linear-gradient(90deg, #ec4899, #06b6d4);
+    background: linear-gradient(90deg, #10b981, #3b82f6);
     transition: width 0.3s ease;
   }
   
@@ -112,7 +112,7 @@ const styleTag = `
     position: absolute;
     inset: -2px;
     border-radius: 1.1rem;
-    background: linear-gradient(45deg, #ec4899, #06b6d4, #ec4899);
+    background: linear-gradient(45deg, #10b981, #3b82f6, #10b981);
     background-size: 200% 200%;
     animation: gradientFlow 3s linear infinite;
     z-index: -1;
@@ -133,7 +133,7 @@ const styleTag = `
   }
 
   .hero-glow {
-    filter: drop-shadow(0 0 20px rgba(236, 72, 153, 0.3));
+    filter: drop-shadow(0 0 20px rgba(16, 185, 129, 0.3));
   }
 
   .interactive-card {
@@ -152,7 +152,7 @@ const styleTag = `
     left: 0;
     width: 100%;
     height: 4px;
-    background: linear-gradient(90deg, #ec4899, #06b6d4);
+    background: linear-gradient(90deg, #10b981, #3b82f6);
     transform-origin: left;
     z-index: 9999;
   }
@@ -189,10 +189,10 @@ const HackathonLanding = () => {
   };
 
   const stats = [
-    { number: '₹1.5L', label: 'Prize Pool', icon: DollarSign, color: 'from-yellow-400 to-orange-500' },
-    { number: '100', label: 'Teams', icon: Users, color: 'from-blue-400 to-purple-500' },
-    { number: '24', label: 'Hours', icon: Timer, color: 'from-green-400 to-teal-500' },
-    { number: '370+', label: 'Participants', icon: Rocket, color: 'from-pink-400 to-rose-500' }
+    { number: '₹50K', label: 'Prize Pool', icon: DollarSign, color: 'from-emerald-400 to-green-500' },
+    { number: '100+', label: 'Teams', icon: Users, color: 'from-blue-400 to-indigo-500' },
+    { number: '24', label: 'Hours', icon: Timer, color: 'from-teal-400 to-cyan-500' },
+    { number: '500+', label: 'Participants', icon: Rocket, color: 'from-green-400 to-emerald-500' }
   ];
 
   const features = [
@@ -200,43 +200,43 @@ const HackathonLanding = () => {
       icon: Rocket,
       title: 'Launch Ideas',
       description: 'Turn concepts into working prototypes with complete creative freedom.',
-      color: 'from-pink-500/20 to-rose-500/20',
-      borderColor: 'border-pink-500/30'
+      color: 'from-emerald-500/20 to-green-500/20',
+      borderColor: 'border-emerald-500/30'
     },
     {
       icon: HandHeart,
       title: 'Network & Collaborate',
       description: 'Connect with brilliant minds. Form teams of 2-4 members for maximum impact.',
-      color: 'from-blue-500/20 to-cyan-500/20',
+      color: 'from-blue-500/20 to-indigo-500/20',
       borderColor: 'border-blue-500/30'
     },
     {
       icon: Trophy,
       title: 'Win Amazing Prizes',
-      description: 'Compete for ₹1.5 Lakhs total prize pool with special sponsor recognition.',
-      color: 'from-yellow-500/20 to-amber-500/20',
-      borderColor: 'border-yellow-500/30'
+      description: 'Compete for ₹50K total prize pool with special sponsor recognition.',
+      color: 'from-teal-500/20 to-cyan-500/20',
+      borderColor: 'border-teal-500/30'
     },
     {
       icon: Zap,
       title: '24-Hour Innovation',
       description: 'Build something meaningful in 24 hours. From 3 PM Day 1 to 3 PM Day 2.',
-      color: 'from-purple-500/20 to-indigo-500/20',
-      borderColor: 'border-purple-500/30'
+      color: 'from-indigo-500/20 to-blue-500/20',
+      borderColor: 'border-indigo-500/30'
     },
     {
       icon: Star,
       title: 'Professional Growth',
       description: 'Showcase projects to industry professionals and gain marketing opportunities.',
-      color: 'from-emerald-500/20 to-green-500/20',
-      borderColor: 'border-emerald-500/30'
+      color: 'from-green-500/20 to-emerald-500/20',
+      borderColor: 'border-green-500/30'
     },
     {
       icon: CheckCircle,
       title: 'Complete Support',
       description: 'Full facilities: food, Wi-Fi, power backup, transport, and medical support.',
-      color: 'from-orange-500/20 to-red-500/20',
-      borderColor: 'border-orange-500/30'
+      color: 'from-cyan-500/20 to-teal-500/20',
+      borderColor: 'border-cyan-500/30'
     }
   ];
 
@@ -274,9 +274,9 @@ const HackathonLanding = () => {
   ];
 
   const prizes = [
-    { place: '1st Place', amount: '₹75,000', description: 'Grand Prize + Recognition + Sponsor Opportunities', glow: 'shadow-yellow-500/50' },
-    { place: '2nd Place', amount: '₹50,000', description: 'Cash Prize + Mentorship + Tech Package', glow: 'shadow-gray-400/50' },
-    { place: '3rd Place', amount: '₹25,000', description: 'Cash Prize + Recognition + Certificates', glow: 'shadow-amber-600/50' }
+    { place: '1st Place', amount: '₹25,000', description: 'Grand Prize + Recognition + Sponsor Opportunities', glow: 'shadow-emerald-500/50' },
+    { place: '2nd Place', amount: '₹15,000', description: 'Cash Prize + Mentorship + Tech Package', glow: 'shadow-blue-400/50' },
+    { place: '3rd Place', amount: '₹10,000', description: 'Cash Prize + Recognition + Certificates', glow: 'shadow-teal-600/50' }
   ];
 
   const tips = [
@@ -313,15 +313,15 @@ const HackathonLanding = () => {
       {/* Enhanced Style Tag */}
       <style dangerouslySetInnerHTML={{ __html: styleTag }} />
       
-      {/* Enhanced Animated Background */}
+      {/* Enhanced Animated Background with new colors */}
       <div className="fixed inset-0 -z-10">
         <div 
           className="absolute inset-0 opacity-30"
           style={{
             background: `
-              radial-gradient(ellipse at center, rgba(255, 0, 204, 0.08) 0%, transparent 70%),
-              radial-gradient(ellipse at 80% 20%, rgba(0, 255, 255, 0.1) 0%, transparent 60%),
-              radial-gradient(ellipse at 20% 80%, rgba(255, 105, 180, 0.08) 0%, transparent 55%)
+              radial-gradient(ellipse at center, rgba(16, 185, 129, 0.08) 0%, transparent 70%),
+              radial-gradient(ellipse at 80% 20%, rgba(59, 130, 246, 0.1) 0%, transparent 60%),
+              radial-gradient(ellipse at 20% 80%, rgba(20, 184, 166, 0.08) 0%, transparent 55%)
             `,
             animation: 'pulse 8s ease-in-out infinite alternate'
           }}
@@ -334,19 +334,17 @@ const HackathonLanding = () => {
             <rect x="0" y="0" width="100%" height="100%" fill="url(#dots)" />
           </svg>
         </div>
-        {/* Animated orbs */}
-        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-gradient-to-r from-pink-500/10 to-purple-500/10 rounded-full blur-3xl animate-rotate-glow"></div>
-        <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-gradient-to-r from-cyan-500/10 to-blue-500/10 rounded-full blur-3xl animate-rotate-glow" style={{animationDelay: '10s'}}></div>
+        {/* Animated orbs with new colors */}
+        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-gradient-to-r from-emerald-500/10 to-green-500/10 rounded-full blur-3xl animate-rotate-glow"></div>
+        <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-gradient-to-r from-blue-500/10 to-indigo-500/10 rounded-full blur-3xl animate-rotate-glow" style={{animationDelay: '10s'}}></div>
       </div>
-
-
 
       {/* Enhanced Hero Section */}
       <section className="relative min-h-screen flex items-center justify-center pt-12 sm:pt-16 lg:pt-14 px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto text-center">
           {/* Hero Badge */}
-          <div className="inline-flex items-center px-4 py-2 sm:px-5 sm:py-3 mb-6 sm:mb-8 lg:mb-10 rounded-full bg-gradient-to-r from-pink-500/20 to-cyan-500/20 border border-white/20 backdrop-blur-sm animate-fade-scale">
-            <Star className="h-4 w-4 sm:h-5 sm:w-5 mr-2 sm:mr-3 text-yellow-400" />
+          <div className="inline-flex items-center px-4 py-2 sm:px-5 sm:py-3 mb-6 sm:mb-8 lg:mb-10 rounded-full bg-gradient-to-r from-emerald-500/20 to-blue-500/20 border border-white/20 backdrop-blur-sm animate-fade-scale">
+            <Star className="h-4 w-4 sm:h-5 sm:w-5 mr-2 sm:mr-3 text-emerald-400" />
             <span className="text-sm sm:text-base font-medium">
               {session ? `Welcome back, ${session.user?.name?.split(' ')[0]}!` : 'National Level Hackathon 2025'}
             </span>
@@ -354,30 +352,30 @@ const HackathonLanding = () => {
           
           {/* Main Title */}
           <h1 className="text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-black mb-3 sm:mb-4 lg:mb-6 leading-tight tracking-tight hero-glow animate-slide-up" style={{fontFamily: 'Clash Display, system-ui, -apple-system, sans-serif'}}>
-          <span className="bg-gradient-to-r from-pink-500 via-purple-500 to-cyan-500 bg-clip-text text-transparent">
-            HASHITUP
+          <span className="bg-gradient-to-r from-emerald-500 via-blue-500 to-teal-500 bg-clip-text text-transparent">
+            GEN 201
           </span>
         </h1>
         
           {/* Tagline */}
           <p className="text-lg sm:text-xl lg:text-2xl xl:text-3xl font-medium text-gray-300 mb-3 sm:mb-4 animate-slide-up px-4" style={{animationDelay: '0.2s'}}>
-            "Push the Branch. Commit the Future."
+            "Creating the Next Gen Makers"
           </p>
           
           {/* Description */}
           <p className="text-base sm:text-lg lg:text-xl text-gray-400 mb-6 sm:mb-8 lg:mb-10 max-w-4xl mx-auto animate-slide-up px-4 leading-relaxed" style={{animationDelay: '0.4s'}}>
-            A 24-Hour National Level Hackathon hosted by <br className="hidden sm:block" /> <span className="text-white font-semibold">Department of Computer Science and Engineering</span> of{' '} <br className="hidden sm:block" />
+            A 24-Hour National Level Hackathon hosted by <br className="hidden sm:block" /> <span className="text-white font-semibold">Department of Artificial Intelligence</span> of{' '} <br className="hidden sm:block" />
             <span className="text-white font-semibold">Mar Baselios Christian College of Engineering & Technology</span>, Kuttikkanam.
           </p>
           
           {/* Event Details */}
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-6 lg:gap-8 mb-8 sm:mb-10 lg:mb-12 animate-slide-up px-4" style={{animationDelay: '0.6s'}}>
             <div className="flex items-center gap-3 lg:gap-4 glass-card px-4 py-2 sm:px-6 sm:py-3 w-full sm:w-auto justify-center">
-            <MapPin className="h-4 w-4 sm:h-5 sm:w-5 text-pink-400" />
+            <MapPin className="h-4 w-4 sm:h-5 sm:w-5 text-emerald-400" />
               <span className="text-sm sm:text-base lg:text-lg font-medium text-gray-300">Kuttikkanam, Kerala</span>
           </div>
             <div className="flex items-center gap-3 lg:gap-4 glass-card px-4 py-2 sm:px-6 sm:py-3 w-full sm:w-auto justify-center">
-            <Calendar className="h-4 w-4 sm:h-5 sm:w-5 text-cyan-400" />
+            <Calendar className="h-4 w-4 sm:h-5 sm:w-5 text-blue-400" />
               <span className="text-sm sm:text-base lg:text-lg font-medium text-gray-300">September 26-27, 2025</span>
             </div>
         </div>
@@ -402,7 +400,7 @@ const HackathonLanding = () => {
             {session ? (
               <Link
                 href="/dashboard"
-                className="group px-6 py-3 sm:px-8 sm:py-4 lg:px-10 lg:py-5 bg-gradient-to-r from-pink-500 via-purple-500 to-cyan-500 text-white font-semibold text-base sm:text-lg lg:text-xl rounded-xl transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl hover:shadow-pink-500/30 relative overflow-hidden"
+                className="group px-6 py-3 sm:px-8 sm:py-4 lg:px-10 lg:py-5 bg-gradient-to-r from-emerald-500 via-blue-500 to-teal-500 text-white font-semibold text-base sm:text-lg lg:text-xl rounded-xl transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl hover:shadow-emerald-500/30 relative overflow-hidden"
               >
                 <span className="relative z-10 flex items-center justify-center space-x-2 lg:space-x-3">
                   <span>Go to Dashboard</span>
@@ -414,7 +412,7 @@ const HackathonLanding = () => {
               <button
                 onClick={handleSignIn}
                 disabled={isSigningIn || status === 'loading'}
-                className="group px-6 py-3 sm:px-8 sm:py-4 lg:px-10 lg:py-5 bg-gradient-to-r from-pink-500 via-purple-500 to-cyan-500 text-white font-semibold text-base sm:text-lg lg:text-xl rounded-xl transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl hover:shadow-pink-500/30 relative overflow-hidden disabled:opacity-50 disabled:cursor-not-allowed"
+                className="group px-6 py-3 sm:px-8 sm:py-4 lg:px-10 lg:py-5 bg-gradient-to-r from-emerald-500 via-blue-500 to-teal-500 text-white font-semibold text-base sm:text-lg lg:text-xl rounded-xl transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl hover:shadow-emerald-500/30 relative overflow-hidden disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 <span className="relative z-10 flex items-center justify-center space-x-2 lg:space-x-3">
                   {isSigningIn || status === 'loading' ? (
@@ -434,7 +432,7 @@ const HackathonLanding = () => {
             )}
           <a
             href="#about"
-              className="px-6 py-3 sm:px-8 sm:py-4 lg:px-10 lg:py-5 glass-card text-white font-semibold text-base sm:text-lg lg:text-xl transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl hover:shadow-cyan-500/20 gradient-border flex items-center justify-center space-x-2 lg:space-x-3"
+              className="px-6 py-3 sm:px-8 sm:py-4 lg:px-10 lg:py-5 glass-card text-white font-semibold text-base sm:text-lg lg:text-xl transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl hover:shadow-blue-500/20 gradient-border flex items-center justify-center space-x-2 lg:space-x-3"
           >
               <span>Learn More</span>
               <ChevronDown className="h-4 w-4 sm:h-5 sm:w-5 lg:h-6 lg:w-6" />
@@ -448,7 +446,7 @@ const HackathonLanding = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-8 sm:mb-12 lg:mb-16">
             <h2 className="text-3xl sm:text-4xl lg:text-5xl xl:text-6xl font-bold mb-4 sm:mb-6 tracking-tight">
-          Why <span className="bg-gradient-to-r from-pink-500 to-cyan-500 bg-clip-text text-transparent">Participate?</span>
+          Why <span className="bg-gradient-to-r from-emerald-500 to-blue-500 bg-clip-text text-transparent">Participate?</span>
         </h2>
             <p className="text-lg sm:text-xl lg:text-2xl text-gray-300 max-w-3xl mx-auto px-4 leading-relaxed">
               Experience the thrill of innovation, learn from industry experts, and build solutions that matter in just 24 hours.
@@ -473,7 +471,7 @@ const HackathonLanding = () => {
                 </div>
                 
                 {/* Title */}
-                <h3 className="text-base sm:text-lg lg:text-xl font-bold mb-2 sm:mb-3 text-white group-hover:bg-gradient-to-r group-hover:from-pink-500 group-hover:to-cyan-500 group-hover:bg-clip-text group-hover:text-transparent transition-all duration-300">
+                <h3 className="text-base sm:text-lg lg:text-xl font-bold mb-2 sm:mb-3 text-white group-hover:bg-gradient-to-r group-hover:from-emerald-500 group-hover:to-blue-500 group-hover:bg-clip-text group-hover:text-transparent transition-all duration-300">
                   {feature.title}
                 </h3>
                 
@@ -483,7 +481,7 @@ const HackathonLanding = () => {
                 </p>
                 
                 {/* Bottom Border */}
-                <div className="absolute bottom-0 left-0 w-full h-1 bg-gradient-to-r from-pink-500 to-cyan-500 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-500"></div>
+                <div className="absolute bottom-0 left-0 w-full h-1 bg-gradient-to-r from-emerald-500 to-blue-500 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-500"></div>
             </div>
           ))}
           </div>
@@ -495,17 +493,17 @@ const HackathonLanding = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
           <div className="text-center mb-8 sm:mb-12 lg:mb-16">
             <h2 className="text-3xl sm:text-5xl md:text-6xl font-bold mb-4 sm:mb-6 tracking-tight">
-          Event <span className="bg-gradient-to-r from-pink-500 to-cyan-500 bg-clip-text text-transparent">Schedule</span>
+          Event <span className="bg-gradient-to-r from-emerald-500 to-blue-500 bg-clip-text text-transparent">Schedule</span>
         </h2>
             <div className="inline-flex items-center px-4 py-2 sm:px-8 sm:py-4 rounded-full glass-card">
-              <Calendar className="h-4 w-4 sm:h-6 sm:w-6 mr-2 sm:mr-3 text-cyan-400" />
+              <Calendar className="h-4 w-4 sm:h-6 sm:w-6 mr-2 sm:mr-3 text-blue-400" />
               <span className="text-sm sm:text-xl text-gray-300">September 26-27, 2025 • MBC Kuttikkanam, Kerala</span>
             </div>
           </div>
 
           <div className="relative max-w-4xl mx-auto">
             {/* Timeline Line - Hidden on mobile for cleaner look */}
-            <div className="hidden md:block absolute left-1/2 transform -translate-x-0.5 w-1 h-full bg-gradient-to-b from-pink-500 via-purple-500 to-cyan-500 rounded-full"></div>
+            <div className="hidden md:block absolute left-1/2 transform -translate-x-0.5 w-1 h-full bg-gradient-to-b from-emerald-500 via-blue-500 to-teal-500 rounded-full"></div>
           
           {timeline.map((item, index) => (
             <div 
@@ -515,13 +513,13 @@ const HackathonLanding = () => {
                 <div className={`flex-1 w-full ${index % 2 === 0 ? 'md:text-right md:pr-12' : 'md:text-left md:pl-12'} mb-4 md:mb-0`}>
                   <div className="glass-card p-4 sm:p-8 interactive-card group-hover:shadow-2xl">
                     <div className="flex items-center gap-3 mb-3 sm:mb-4 justify-center md:justify-start">
-                      <item.icon className="h-6 w-6 sm:h-8 sm:w-8 text-pink-400" />
-                      <h3 className="text-lg sm:text-2xl font-bold text-white group-hover:bg-gradient-to-r group-hover:from-pink-500 group-hover:to-cyan-500 group-hover:bg-clip-text group-hover:text-transparent transition-all duration-300">
+                      <item.icon className="h-6 w-6 sm:h-8 sm:w-8 text-emerald-400" />
+                      <h3 className="text-lg sm:text-2xl font-bold text-white group-hover:bg-gradient-to-r group-hover:from-emerald-500 group-hover:to-blue-500 group-hover:bg-clip-text group-hover:text-transparent transition-all duration-300">
                         {item.title}
                       </h3>
                     </div>
                     
-                    <div className="flex items-center gap-2 mb-3 sm:mb-4 text-pink-400 font-medium justify-center md:justify-start">
+                    <div className="flex items-center gap-2 mb-3 sm:mb-4 text-emerald-400 font-medium justify-center md:justify-start">
                       <Clock className="h-4 w-4 sm:h-5 sm:w-5" />
                       <span className="text-sm sm:text-base">{item.time}</span>
                     </div>
@@ -533,7 +531,7 @@ const HackathonLanding = () => {
               </div>
               
                 {/* Timeline Node - Hidden on mobile */}
-                <div className="hidden md:flex w-8 h-8 bg-gradient-to-br from-pink-500 to-cyan-500 rounded-full relative z-10 shadow-lg shadow-pink-500/50 group-hover:scale-125 transition-transform duration-300 items-center justify-center">
+                <div className="hidden md:flex w-8 h-8 bg-gradient-to-br from-emerald-500 to-blue-500 rounded-full relative z-10 shadow-lg shadow-emerald-500/50 group-hover:scale-125 transition-transform duration-300 items-center justify-center">
                   <div className="w-4 h-4 bg-white rounded-full"></div>
               </div>
               
@@ -550,9 +548,9 @@ const HackathonLanding = () => {
           <div className="glass-card p-6 sm:p-12 lg:p-16 relative overflow-hidden">
             <div className="text-center mb-8 sm:mb-12 lg:mb-16">
               <h2 className="text-3xl sm:text-5xl md:text-6xl font-bold mb-4 sm:mb-6 tracking-tight">
-            Amazing <span className="bg-gradient-to-r from-pink-500 to-cyan-500 bg-clip-text text-transparent">Prizes</span>
+            Amazing <span className="bg-gradient-to-r from-emerald-500 to-blue-500 bg-clip-text text-transparent">Prizes</span>
           </h2>
-              <p className="text-lg sm:text-2xl text-gray-300">₹1,50,000 total prize pool with special recognitions from sponsors</p>
+              <p className="text-lg sm:text-2xl text-gray-300">₹50,000 total prize pool with special recognitions from sponsors</p>
             </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-8 mb-8 sm:mb-16">
@@ -560,28 +558,28 @@ const HackathonLanding = () => {
               <div
                 key={index}
                   className={`text-center p-6 sm:p-12 glass-card interactive-card relative overflow-hidden ${
-                    index === 0 ? 'ring-2 ring-yellow-500/50 bg-gradient-to-b from-yellow-500/10 to-transparent lg:col-span-1 sm:col-span-2' : ''
+                    index === 0 ? 'ring-2 ring-emerald-500/50 bg-gradient-to-b from-emerald-500/10 to-transparent lg:col-span-1 sm:col-span-2' : ''
                   }`}
                 >
                   {/* First Place Crown */}
                 {index === 0 && (
                     <div className="absolute -top-2 sm:-top-4 left-1/2 transform -translate-x-1/2">
-                    <Trophy className="h-6 w-6 sm:h-10 sm:w-10 text-yellow-400" />
+                    <Trophy className="h-6 w-6 sm:h-10 sm:w-10 text-emerald-400" />
                   </div>
                 )}
                 
                   {/* Prize Amount */}
                   <div className={`text-3xl sm:text-6xl font-bold mb-2 sm:mb-4 ${
                   index === 0 
-                    ? 'bg-gradient-to-r from-yellow-400 to-amber-300 bg-clip-text text-transparent' 
-                    : 'bg-gradient-to-r from-pink-500 to-cyan-500 bg-clip-text text-transparent'
+                    ? 'bg-gradient-to-r from-emerald-400 to-green-300 bg-clip-text text-transparent' 
+                    : 'bg-gradient-to-r from-emerald-500 to-blue-500 bg-clip-text text-transparent'
                 }`}>
                   {prize.amount}
                 </div>
                 
                   {/* Prize Place */}
                   <div className={`text-lg sm:text-2xl font-semibold mb-3 sm:mb-6 ${
-                  index === 0 ? 'text-yellow-300' : 'text-gray-300'
+                  index === 0 ? 'text-emerald-300' : 'text-gray-300'
                 }`}>
                   {prize.place}
                 </div>
@@ -596,7 +594,7 @@ const HackathonLanding = () => {
 
             {/* Judging Criteria */}
             <div className="text-center glass-card p-4 sm:p-8">
-              <h3 className="text-lg sm:text-2xl font-bold mb-4 sm:mb-6 bg-gradient-to-r from-pink-500 to-cyan-500 bg-clip-text text-transparent">
+              <h3 className="text-lg sm:text-2xl font-bold mb-4 sm:mb-6 bg-gradient-to-r from-emerald-500 to-blue-500 bg-clip-text text-transparent">
                 Judging Criteria
               </h3>
               <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 gap-3 sm:gap-4 text-xs sm:text-sm">
@@ -616,7 +614,7 @@ const HackathonLanding = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
           <div className="text-center mb-8 sm:mb-12 lg:mb-16">
             <h2 className="text-3xl sm:text-5xl md:text-6xl font-bold mb-4 sm:mb-6 tracking-tight">
-          Pro Tips to <span className="bg-gradient-to-r from-pink-500 to-cyan-500 bg-clip-text text-transparent">Win</span>
+          Pro Tips to <span className="bg-gradient-to-r from-emerald-500 to-blue-500 bg-clip-text text-transparent">Win</span>
         </h2>
             <p className="text-lg sm:text-xl text-gray-300 max-w-3xl mx-auto px-4">
           Insider strategies from previous winners and industry experts
@@ -634,7 +632,7 @@ const HackathonLanding = () => {
                     <tip.icon className="h-6 w-6 sm:h-8 sm:w-8 lg:h-10 lg:w-10 text-gray-400 group-hover:text-white transition-colors" />
                   </div>
                   <div className="flex-1 text-center sm:text-left">
-                    <h3 className="text-base sm:text-lg lg:text-xl font-bold mb-2 sm:mb-3 text-white group-hover:bg-gradient-to-r group-hover:from-pink-500 group-hover:to-cyan-500 group-hover:bg-clip-text group-hover:text-transparent transition-all duration-300">
+                    <h3 className="text-base sm:text-lg lg:text-xl font-bold mb-2 sm:mb-3 text-white group-hover:bg-gradient-to-r group-hover:from-emerald-500 group-hover:to-blue-500 group-hover:bg-clip-text group-hover:text-transparent transition-all duration-300">
                       {tip.title}
                     </h3>
                     <p className="text-xs sm:text-sm lg:text-base text-gray-400 leading-relaxed group-hover:text-gray-300 transition-colors duration-300">
@@ -653,7 +651,7 @@ const HackathonLanding = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
           <div className="text-center mb-8 sm:mb-12 lg:mb-16">
             <h2 className="text-3xl sm:text-5xl md:text-6xl font-bold mb-4 sm:mb-6 tracking-tight">
-          Our <span className="bg-gradient-to-r from-pink-500 to-cyan-500 bg-clip-text text-transparent">Sponsors</span>
+          Our <span className="bg-gradient-to-r from-emerald-500 to-blue-500 bg-clip-text text-transparent">Sponsors</span>
         </h2>
             <p className="text-lg sm:text-xl text-gray-300 px-4">
           Supported by industry leaders who believe in innovation
@@ -675,7 +673,7 @@ const HackathonLanding = () => {
           <div className="text-center glass-card p-8">
             <p className="text-lg text-gray-300">
             Partnership opportunities available •{' '}
-            <a href="mailto:sponsors@hackathon2025.com" className="text-cyan-400 hover:text-cyan-300 transition-colors relative group">
+            <a href="mailto:sponsors@gen201.com" className="text-blue-400 hover:text-blue-300 transition-colors relative group">
               Contact us
                 <ExternalLink className="inline h-4 w-4 ml-1" />
             </a>
@@ -689,10 +687,10 @@ const HackathonLanding = () => {
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <div className="glass-card p-8 sm:p-12 lg:p-20 relative overflow-hidden">
             <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-4 sm:mb-6 tracking-tight">
-          Ready to <span className="bg-gradient-to-r from-pink-500 to-cyan-500 bg-clip-text text-transparent">Code the Grid?</span>
+          Ready to <span className="bg-gradient-to-r from-emerald-500 to-blue-500 bg-clip-text text-transparent">Create the Future?</span>
         </h2>
             <p className="text-base sm:text-lg md:text-xl lg:text-2xl text-gray-400 mb-6 sm:mb-8 lg:mb-10 px-2 sm:px-4 max-w-3xl mx-auto leading-relaxed">
-              Join 370+ innovators for HASHITUP. Registration fee: ₹400 per team (food separate).
+              Join 500+ innovators for GEN 201. Registration fee: ₹400 per team (food separate).
             </p>
             
             {/* Registration Details */}
@@ -700,10 +698,10 @@ const HackathonLanding = () => {
               {[
                 { label: 'Registration Deadline', value: '10th September 2025', icon: Calendar },
                 { label: 'Shortlist Results', value: '15th - 17th September 2025', icon: CheckCircle },
-                { label: 'Max Teams', value: '100 teams only', icon: Users }
+                { label: 'Max Teams', value: '100+ teams only', icon: Users }
               ].map((item, index) => (
                 <div key={index} className="glass-card p-4 sm:p-6 hover:scale-105 transition-transform duration-300">
-                  <item.icon className="h-6 w-6 sm:h-8 sm:w-8 mb-2 sm:mb-3 text-pink-400 mx-auto" />
+                  <item.icon className="h-6 w-6 sm:h-8 sm:w-8 mb-2 sm:mb-3 text-emerald-400 mx-auto" />
                   <div className="text-sm sm:text-base font-semibold text-white mb-1">{item.label}</div>
                   <div className="text-xs sm:text-sm text-gray-400">{item.value}</div>
                 </div>
@@ -713,7 +711,7 @@ const HackathonLanding = () => {
             {session ? (
               <Link
           href="/dashboard"
-                className="group inline-flex items-center px-6 py-3 sm:px-8 sm:py-4 lg:px-10 lg:py-5 bg-gradient-to-r from-pink-500 via-purple-500 to-cyan-500 text-white font-bold text-base sm:text-lg lg:text-xl rounded-xl transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl hover:shadow-pink-500/30 relative overflow-hidden mb-4 sm:mb-6"
+                className="group inline-flex items-center px-6 py-3 sm:px-8 sm:py-4 lg:px-10 lg:py-5 bg-gradient-to-r from-emerald-500 via-blue-500 to-teal-500 text-white font-bold text-base sm:text-lg lg:text-xl rounded-xl transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl hover:shadow-emerald-500/30 relative overflow-hidden mb-4 sm:mb-6"
               >
                 <span className="relative z-10 flex items-center space-x-2 lg:space-x-3">
                   <span>Go to Dashboard</span>
@@ -725,12 +723,12 @@ const HackathonLanding = () => {
               <button
                 onClick={handleSignIn}
                 disabled={isSigningIn || status === 'loading'}
-                className="group inline-flex items-center px-6 py-3 sm:px-8 sm:py-4 lg:px-10 lg:py-5 bg-gradient-to-r from-pink-500 via-purple-500 to-cyan-500 text-white font-bold text-base sm:text-lg lg:text-xl rounded-xl transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl hover:shadow-pink-500/30 relative overflow-hidden disabled:opacity-50 disabled:cursor-not-allowed mb-4 sm:mb-6"
+                className="group inline-flex items-center px-6 py-3 sm:px-8 sm:py-4 lg:px-10 lg:py-5 bg-gradient-to-r from-emerald-500 via-blue-500 to-teal-500 text-white font-bold text-base sm:text-lg lg:text-xl rounded-xl transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl hover:shadow-emerald-500/30 relative overflow-hidden disabled:opacity-50 disabled:cursor-not-allowed mb-4 sm:mb-6"
               >
                 <span className="relative z-10 flex items-center space-x-2 lg:space-x-3">
                   {isSigningIn || status === 'loading' ? (
                     <>
-                      <div className="w-4 h-4 sm:w-5 sm:h-5 lg:w-6 lg:h-6 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                      <div className="w-4 h-4 sm:w-5 sm:h-5 lg:w-6 lg:w-6 border-2 border-white/30 border-t-white rounded-full animate-spin" />
                       <span>Signing in...</span>
                     </>
                   ) : (
@@ -758,15 +756,15 @@ const HackathonLanding = () => {
             {/* Brand Column */}
             <div className="sm:col-span-2 lg:col-span-2 text-center sm:text-left">
               <div className="flex items-center justify-center sm:justify-start space-x-3 sm:space-x-4 mb-6 sm:mb-8">
-                <div className="w-12 h-12 sm:w-14 sm:h-14 lg:w-16 lg:h-16 rounded-xl bg-gradient-to-r from-pink-500 to-cyan-500 flex items-center justify-center">
+                <div className="w-12 h-12 sm:w-14 sm:h-14 lg:w-16 lg:h-16 rounded-xl bg-gradient-to-r from-emerald-500 to-blue-500 flex items-center justify-center">
                   <Code className="h-6 w-6 sm:h-8 sm:w-8 lg:h-10 lg:w-10 text-white" />
                 </div>
-                <span className="text-2xl sm:text-3xl lg:text-4xl font-bold bg-gradient-to-r from-pink-500 via-purple-500 to-cyan-500 bg-clip-text text-transparent">
-                  HASHITUP
+                <span className="text-2xl sm:text-3xl lg:text-4xl font-bold bg-gradient-to-r from-emerald-500 via-blue-500 to-teal-500 bg-clip-text text-transparent">
+                  GEN 201
                 </span>
               </div>
               <p className="text-gray-400 text-base sm:text-lg lg:text-xl mb-6 sm:mb-8 max-w-lg mx-auto sm:mx-0 leading-relaxed">
-                National Level 24-Hour Hackathon. Where innovation meets execution, and dreams become reality.
+                National Level 24-Hour Hackathon. Creating the Next Gen Makers through innovation and execution.
               </p>
               <div className="flex space-x-4 sm:space-x-6 justify-center sm:justify-start">
             {[Twitter, Linkedin, MessageCircle, Instagram].map((IconComponent, index) => (
@@ -809,11 +807,11 @@ const HackathonLanding = () => {
               <h3 className="text-lg sm:text-xl lg:text-2xl font-bold mb-4 sm:mb-6 lg:mb-8 text-white">Contact</h3>
               <div className="space-y-3 sm:space-y-4 text-gray-400">
                 <div className="flex items-center justify-center sm:justify-start space-x-3">
-                  <MapPin className="h-4 w-4 sm:h-5 sm:w-5 lg:h-6 lg:w-6 text-pink-400" />
+                  <MapPin className="h-4 w-4 sm:h-5 sm:w-5 lg:h-6 lg:w-6 text-emerald-400" />
                   <span className="text-sm sm:text-base lg:text-lg">Kuttikkanam, Kerala</span>
                 </div>
                 <div className="flex items-center justify-center sm:justify-start space-x-3">
-                  <Calendar className="h-4 w-4 sm:h-5 sm:w-5 lg:h-6 lg:w-6 text-pink-400" />
+                  <Calendar className="h-4 w-4 sm:h-5 sm:w-5 lg:h-6 lg:w-6 text-emerald-400" />
                   <span className="text-sm sm:text-base lg:text-lg">Sep 26-27, 2025</span>
                 </div>
                 <p className="text-xs sm:text-sm lg:text-base leading-relaxed">
@@ -826,12 +824,12 @@ const HackathonLanding = () => {
           {/* Bottom Footer */}
           <div className="border-t border-white/10 pt-6 sm:pt-8 lg:pt-12 flex flex-col items-center space-y-6 sm:space-y-8 lg:flex-row lg:justify-between lg:space-y-0">
             <p className="text-gray-500 text-sm sm:text-base lg:text-lg text-center order-2 lg:order-1">
-              © 2025 HASHITUP Hackathon Platform. All rights reserved.
+              © 2025 GEN 201 Hackathon Platform. All rights reserved.
             </p>
             <div className="flex flex-col sm:flex-row items-center space-y-2 sm:space-y-0 sm:space-x-4 lg:space-x-6 order-1 lg:order-2">
               <span className="text-sm sm:text-base lg:text-lg text-gray-600">Organized by</span>
-              <span className="text-sm sm:text-base lg:text-lg bg-gradient-to-r from-pink-500 to-cyan-500 bg-clip-text text-transparent font-semibold text-center">
-                Dept. of CSE, MBC Kuttikkanam
+              <span className="text-sm sm:text-base lg:text-lg bg-gradient-to-r from-emerald-500 to-blue-500 bg-clip-text text-transparent font-semibold text-center">
+                Dept. of AI, MBC Kuttikkanam
               </span>
             </div>
           </div>

@@ -15,8 +15,8 @@ const inter = Inter({
 })
 
 export const metadata: Metadata = {
-  title: 'Hash 2K25 - National Hackathon Platform',
-  description: "Join India's most innovative hackathon platform. Create solutions that matter.",
+  title: 'GEN 201 - National Hackathon Platform',
+  description: "Join India's most innovative hackathon platform. Creating the Next Gen Makers.",
   icons: {
     icon: '/favicon.ico',
   },
