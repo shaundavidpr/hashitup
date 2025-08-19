@@ -717,12 +717,12 @@ export default async function DashboardPage() {
           <div className="flex flex-col md:flex-row justify-between items-center gap-3 sm:gap-6">
             <div className="text-center md:text-left">
               <p className="text-slate-500 mb-1 text-xs sm:text-base">
-                © 2025 Hash 2K25 Hackathon Platform. All rights reserved.
+                © 2025 HASHITUP Hackathon Platform. All rights reserved.
               </p>
               <div className="flex items-center justify-center md:justify-start space-x-1 sm:space-x-4">
                 <span className="text-xs sm:text-sm text-slate-600">Made with</span>
                 <Heart className="w-4 h-4 sm:w-5 sm:h-5 text-pink-500 fill-current" />
-                <span className="text-xs sm:text-sm text-slate-600">by the Hash 2K25 Team</span>
+                <span className="text-xs sm:text-sm text-slate-600">by the HASHITUP Team</span>
               </div>
             </div>
             <div className="flex items-center gap-1 sm:gap-4 mt-2 md:mt-0">

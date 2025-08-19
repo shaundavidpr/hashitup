@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from 'react';
-import { Calendar, MapPin, ChevronDown, Star, Zap, Code, Clock, ArrowRight, ExternalLink } from 'lucide-react';
+import { Calendar, MapPin, ChevronDown, Star, Zap, Code, Clock, ArrowRight, ExternalLink, DollarSign, Users, Timer, Rocket, Target, HandHeart, Trophy, Lightbulb, CheckCircle, GitBranch, Settings, Twitter, Linkedin, MessageCircle, Instagram, Mail } from 'lucide-react';
 import { useSession, signIn } from 'next-auth/react';
 import Link from 'next/link';
 
@@ -189,52 +189,52 @@ const HackathonLanding = () => {
   };
 
   const stats = [
-    { number: '₹1.5L', label: 'Prize Pool', icon: '💰', color: 'from-yellow-400 to-orange-500' },
-    { number: '100', label: 'Teams', icon: '👥', color: 'from-blue-400 to-purple-500' },
-    { number: '24', label: 'Hours', icon: '⏱️', color: 'from-green-400 to-teal-500' },
-    { number: '370+', label: 'Participants', icon: '🚀', color: 'from-pink-400 to-rose-500' }
+    { number: '₹1.5L', label: 'Prize Pool', icon: DollarSign, color: 'from-yellow-400 to-orange-500' },
+    { number: '100', label: 'Teams', icon: Users, color: 'from-blue-400 to-purple-500' },
+    { number: '24', label: 'Hours', icon: Timer, color: 'from-green-400 to-teal-500' },
+    { number: '370+', label: 'Participants', icon: Rocket, color: 'from-pink-400 to-rose-500' }
   ];
 
   const features = [
     {
-      icon: '🚀',
-      title: 'Launch Your Ideas',
-      description: 'Turn innovative concepts into working prototypes. No specific theme — complete creative freedom to solve real-world problems.',
+      icon: Rocket,
+      title: 'Launch Ideas',
+      description: 'Turn concepts into working prototypes with complete creative freedom.',
       color: 'from-pink-500/20 to-rose-500/20',
       borderColor: 'border-pink-500/30'
     },
     {
-      icon: '🤝',
+      icon: HandHeart,
       title: 'Network & Collaborate',
-      description: 'Connect with brilliant minds from engineering, arts, and science backgrounds. Form teams of 2-4 members for maximum impact.',
+      description: 'Connect with brilliant minds. Form teams of 2-4 members for maximum impact.',
       color: 'from-blue-500/20 to-cyan-500/20',
       borderColor: 'border-blue-500/30'
     },
     {
-      icon: '🏆',
+      icon: Trophy,
       title: 'Win Amazing Prizes',
-      description: 'Compete for ₹1.5 Lakhs in total prizes! First place wins ₹75,000 plus special recognition from sponsors.',
+      description: 'Compete for ₹1.5 Lakhs total prize pool with special sponsor recognition.',
       color: 'from-yellow-500/20 to-amber-500/20',
       borderColor: 'border-yellow-500/30'
     },
     {
-      icon: '⚡',
+      icon: Zap,
       title: '24-Hour Innovation',
-      description: 'Experience the thrill of building something meaningful in just 24 hours. From 3:00 PM Day 1 to 3:00 PM Day 2.',
+      description: 'Build something meaningful in 24 hours. From 3 PM Day 1 to 3 PM Day 2.',
       color: 'from-purple-500/20 to-indigo-500/20',
       borderColor: 'border-purple-500/30'
     },
     {
-      icon: '🌟',
+      icon: Star,
       title: 'Professional Growth',
-      description: 'Showcase your projects to industry professionals. Winners get special recognition and marketing opportunities.',
+      description: 'Showcase projects to industry professionals and gain marketing opportunities.',
       color: 'from-emerald-500/20 to-green-500/20',
       borderColor: 'border-emerald-500/30'
     },
     {
-      icon: '🎉',
-      title: 'Complete Experience',
-      description: 'Enjoy full facilities including food, Wi-Fi, power backup, transport assistance, and medical support throughout.',
+      icon: CheckCircle,
+      title: 'Complete Support',
+      description: 'Full facilities: food, Wi-Fi, power backup, transport, and medical support.',
       color: 'from-orange-500/20 to-red-500/20',
       borderColor: 'border-orange-500/30'
     }
@@ -244,32 +244,32 @@ const HackathonLanding = () => {
     {
       time: '3:00 PM - Day 1',
       title: 'Hackathon Inauguration',
-      description: 'Let the games begin — officially! Check-in, welcome ceremony, and team formation',
-      icon: '🎯'
+      description: 'Check-in, welcome ceremony, and team formation begins!',
+      icon: Target
     },
     {
       time: '3:00 PM Day 1 - 3:00 PM Day 2',
       title: '24-Hour Hacking Marathon',
-      description: 'Code. Create. Collaborate. No specific theme — think freely and innovatively!',
-      icon: '⚡'
+      description: 'Code. Create. Collaborate. No specific theme — innovate freely!',
+      icon: Zap
     },
     {
       time: '12:00 PM - Day 2',
-      title: 'First Round of Judging',
-      description: 'Lights on, screens up — it\'s demo time! All teams present their projects',
-      icon: '👥'
+      title: 'First Round Judging',
+      description: 'Demo time! All teams present their projects to judges.',
+      icon: Users
     },
     {
       time: 'After 1:00 PM - Day 2',
-      title: 'Final Judging (Top 10 Teams)',
-      description: 'The best of the best battle it out for glory in the final evaluation round',
-      icon: '🏆'
+      title: 'Final Judging (Top 10)',
+      description: 'The best teams compete for glory in the final round.',
+      icon: Trophy
     },
     {
       time: 'Around 4:00 PM - Day 2',
-      title: 'Result Declaration & Closing',
-      description: 'Cheers, applause, and maybe a few happy tears. Winner announcements and celebration!',
-      icon: '🎉'
+      title: 'Results & Closing',
+      description: 'Winner announcements and celebration ceremony!',
+      icon: Star
     }
   ];
 
@@ -281,24 +281,24 @@ const HackathonLanding = () => {
 
   const tips = [
     {
-      icon: '💡',
+      icon: Lightbulb,
       title: 'Think Social Impact',
-      description: 'Focus on innovative, socially relevant, and sustainable solutions. Projects that solve real-world problems score highest.'
+      description: 'Focus on socially relevant and sustainable solutions that solve real-world problems.'
     },
     {
-      icon: '🎯',
+      icon: Target,
       title: 'Open-Source Only',
-      description: 'Use only open-source tools, libraries, and APIs. Make sure to properly cite all external resources in your documentation.'
+      description: 'Use open-source tools and APIs. Properly cite external resources in documentation.'
     },
     {
-      icon: '📊',
-      title: 'GitHub is Essential',
-      description: 'Push all code and documentation to GitHub before final submission. Include technical reports for pre-built components.'
+      icon: GitBranch,
+      title: 'GitHub Essential',
+      description: 'Push code and docs to GitHub before submission. Include technical reports.'
     },
     {
-      icon: '🔧',
+      icon: Settings,
       title: 'Team Collaboration',
-      description: 'Work within your team of 2-4 members. Cross-team collaboration is not permitted, but diversity in skills is encouraged!'
+      description: 'Work within your 2-4 member team. Diversity in skills is encouraged!'
     }
   ];
 
@@ -342,55 +342,55 @@ const HackathonLanding = () => {
 
 
       {/* Enhanced Hero Section */}
-      <section className="relative min-h-screen flex items-center justify-center pt-20">
-        <div className="max-w-7xl mx-auto px-6 text-center">
+      <section className="relative min-h-screen flex items-center justify-center pt-12 sm:pt-16 lg:pt-14 px-4 sm:px-6 lg:px-8">
+        <div className="max-w-7xl mx-auto text-center">
           {/* Hero Badge */}
-          <div className="inline-flex items-center px-4 py-2 mb-8 rounded-full bg-gradient-to-r from-pink-500/20 to-cyan-500/20 border border-white/20 backdrop-blur-sm animate-fade-scale">
-            <Star className="h-4 w-4 mr-2 text-yellow-400" />
-            <span className="text-sm font-medium">
+          <div className="inline-flex items-center px-4 py-2 sm:px-5 sm:py-3 mb-6 sm:mb-8 lg:mb-10 rounded-full bg-gradient-to-r from-pink-500/20 to-cyan-500/20 border border-white/20 backdrop-blur-sm animate-fade-scale">
+            <Star className="h-4 w-4 sm:h-5 sm:w-5 mr-2 sm:mr-3 text-yellow-400" />
+            <span className="text-sm sm:text-base font-medium">
               {session ? `Welcome back, ${session.user?.name?.split(' ')[0]}!` : 'National Level Hackathon 2025'}
             </span>
           </div>
           
           {/* Main Title */}
-          <h1 className="text-6xl md:text-8xl font-black mb-6 leading-tight tracking-tight hero-glow animate-slide-up">
+          <h1 className="text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-black mb-3 sm:mb-4 lg:mb-6 leading-tight tracking-tight hero-glow animate-slide-up" style={{fontFamily: 'Clash Display, system-ui, -apple-system, sans-serif'}}>
           <span className="bg-gradient-to-r from-pink-500 via-purple-500 to-cyan-500 bg-clip-text text-transparent">
-            HASH 2K25
+            HASHITUP
           </span>
         </h1>
         
           {/* Tagline */}
-          <p className="text-2xl md:text-3xl font-medium text-gray-300 mb-6 animate-slide-up" style={{animationDelay: '0.2s'}}>
+          <p className="text-lg sm:text-xl lg:text-2xl xl:text-3xl font-medium text-gray-300 mb-3 sm:mb-4 animate-slide-up px-4" style={{animationDelay: '0.2s'}}>
             "Push the Branch. Commit the Future."
           </p>
           
           {/* Description */}
-          <p className="text-xl md:text-2xl text-gray-400 mb-8 max-w-4xl mx-auto animate-slide-up" style={{animationDelay: '0.4s'}}>
-            A 24-Hour National Level Hackathon hosted by <br /> <span className="text-white font-semibold">Department of Computer Science and Engineering</span> of{' '} <br />
+          <p className="text-base sm:text-lg lg:text-xl text-gray-400 mb-6 sm:mb-8 lg:mb-10 max-w-4xl mx-auto animate-slide-up px-4 leading-relaxed" style={{animationDelay: '0.4s'}}>
+            A 24-Hour National Level Hackathon hosted by <br className="hidden sm:block" /> <span className="text-white font-semibold">Department of Computer Science and Engineering</span> of{' '} <br className="hidden sm:block" />
             <span className="text-white font-semibold">Mar Baselios Christian College of Engineering & Technology</span>, Kuttikkanam.
           </p>
           
           {/* Event Details */}
-          <div className="flex flex-col md:flex-row items-center justify-center gap-6 mb-12 animate-slide-up" style={{animationDelay: '0.6s'}}>
-            <div className="flex items-center gap-3 glass-card px-6 py-3">
-            <MapPin className="h-5 w-5 text-pink-400" />
-              <span className="text-gray-300">Kuttikkanam, Kerala</span>
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-6 lg:gap-8 mb-8 sm:mb-10 lg:mb-12 animate-slide-up px-4" style={{animationDelay: '0.6s'}}>
+            <div className="flex items-center gap-3 lg:gap-4 glass-card px-4 py-2 sm:px-6 sm:py-3 w-full sm:w-auto justify-center">
+            <MapPin className="h-4 w-4 sm:h-5 sm:w-5 text-pink-400" />
+              <span className="text-sm sm:text-base lg:text-lg font-medium text-gray-300">Kuttikkanam, Kerala</span>
           </div>
-            <div className="flex items-center gap-3 glass-card px-6 py-3">
-            <Calendar className="h-5 w-5 text-cyan-400" />
-              <span className="text-gray-300">September 26-27, 2025</span>
+            <div className="flex items-center gap-3 lg:gap-4 glass-card px-4 py-2 sm:px-6 sm:py-3 w-full sm:w-auto justify-center">
+            <Calendar className="h-4 w-4 sm:h-5 sm:w-5 text-cyan-400" />
+              <span className="text-sm sm:text-base lg:text-lg font-medium text-gray-300">September 26-27, 2025</span>
             </div>
         </div>
 
           {/* Stats Section */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-12 animate-slide-up" style={{animationDelay: '0.8s'}}>
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 lg:gap-8 mb-8 sm:mb-10 lg:mb-12 animate-slide-up px-4" style={{animationDelay: '0.8s'}}>
           {stats.map((stat, index) => (
-              <div key={index} className="glass-card p-6 interactive-card group">
-                <div className={`text-3xl mb-2 bg-gradient-to-r ${stat.color} bg-clip-text text-transparent font-bold`}>
+              <div key={index} className="glass-card p-3 sm:p-4 lg:p-6 interactive-card group">
+                <div className={`text-lg sm:text-xl lg:text-2xl mb-2 bg-gradient-to-r ${stat.color} bg-clip-text text-transparent font-bold`}>
                 {stat.number}
                 </div>
-                <div className="text-2xl mb-2">{stat.icon}</div>
-                <div className="text-gray-400 text-sm font-medium uppercase tracking-wider">
+                <stat.icon className="h-5 w-5 sm:h-6 sm:w-6 lg:h-8 lg:w-8 mb-2 text-gray-400 group-hover:text-white transition-colors mx-auto" />
+                <div className="text-gray-400 text-xs sm:text-sm font-medium uppercase tracking-wider">
                 {stat.label}
                 </div>
             </div>
@@ -398,15 +398,15 @@ const HackathonLanding = () => {
         </div>
 
           {/* CTA Buttons */}
-          <div className="flex flex-col md:flex-row gap-6 justify-center animate-slide-up" style={{animationDelay: '1s'}}>
+          <div className="flex flex-col gap-4 sm:gap-6 justify-center animate-slide-up px-4 max-w-2xl mx-auto" style={{animationDelay: '1s'}}>
             {session ? (
               <Link
                 href="/dashboard"
-                className="group px-10 py-5 bg-gradient-to-r from-pink-500 via-purple-500 to-cyan-500 text-white font-semibold text-lg rounded-xl transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl hover:shadow-pink-500/30 relative overflow-hidden"
+                className="group px-6 py-3 sm:px-8 sm:py-4 lg:px-10 lg:py-5 bg-gradient-to-r from-pink-500 via-purple-500 to-cyan-500 text-white font-semibold text-base sm:text-lg lg:text-xl rounded-xl transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl hover:shadow-pink-500/30 relative overflow-hidden"
               >
-                <span className="relative z-10 flex items-center justify-center space-x-2">
+                <span className="relative z-10 flex items-center justify-center space-x-2 lg:space-x-3">
                   <span>Go to Dashboard</span>
-                  <ArrowRight className="h-5 w-5 group-hover:translate-x-1 transition-transform" />
+                  <ArrowRight className="h-4 w-4 sm:h-5 sm:w-5 lg:h-6 lg:w-6 group-hover:translate-x-1 transition-transform" />
                 </span>
                 <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700 ease-in-out" />
               </Link>
@@ -414,18 +414,18 @@ const HackathonLanding = () => {
               <button
                 onClick={handleSignIn}
                 disabled={isSigningIn || status === 'loading'}
-                className="group px-10 py-5 bg-gradient-to-r from-pink-500 via-purple-500 to-cyan-500 text-white font-semibold text-lg rounded-xl transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl hover:shadow-pink-500/30 relative overflow-hidden disabled:opacity-50 disabled:cursor-not-allowed"
+                className="group px-6 py-3 sm:px-8 sm:py-4 lg:px-10 lg:py-5 bg-gradient-to-r from-pink-500 via-purple-500 to-cyan-500 text-white font-semibold text-base sm:text-lg lg:text-xl rounded-xl transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl hover:shadow-pink-500/30 relative overflow-hidden disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                <span className="relative z-10 flex items-center justify-center space-x-2">
+                <span className="relative z-10 flex items-center justify-center space-x-2 lg:space-x-3">
                   {isSigningIn || status === 'loading' ? (
                     <>
-                      <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                      <div className="w-4 h-4 sm:w-5 sm:h-5 lg:w-6 lg:h-6 border-2 border-white/30 border-t-white rounded-full animate-spin" />
                       <span>Signing in...</span>
                     </>
                   ) : (
                     <>
                       <span>Register Your Team Now</span>
-                      <ArrowRight className="h-5 w-5 group-hover:translate-x-1 transition-transform" />
+                      <ArrowRight className="h-4 w-4 sm:h-5 sm:w-5 lg:h-6 lg:w-6 group-hover:translate-x-1 transition-transform" />
                     </>
                   )}
                 </span>
@@ -434,32 +434,32 @@ const HackathonLanding = () => {
             )}
           <a
             href="#about"
-              className="px-10 py-5 glass-card text-white font-semibold text-lg transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl hover:shadow-cyan-500/20 gradient-border flex items-center justify-center space-x-2"
+              className="px-6 py-3 sm:px-8 sm:py-4 lg:px-10 lg:py-5 glass-card text-white font-semibold text-base sm:text-lg lg:text-xl transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl hover:shadow-cyan-500/20 gradient-border flex items-center justify-center space-x-2 lg:space-x-3"
           >
               <span>Learn More</span>
-              <ChevronDown className="h-5 w-5" />
+              <ChevronDown className="h-4 w-4 sm:h-5 sm:w-5 lg:h-6 lg:w-6" />
           </a>
         </div>
       </div>
       </section>
 
       {/* Enhanced About Section */}
-      <section id="about" className="py-32 relative">
-        <div className="max-w-7xl mx-auto px-6">
-          <div className="text-center mb-20">
-            <h2 className="text-5xl md:text-6xl font-bold mb-6 tracking-tight">
+      <section id="about" className="py-12 sm:py-20 lg:py-24 relative">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-8 sm:mb-12 lg:mb-16">
+            <h2 className="text-3xl sm:text-4xl lg:text-5xl xl:text-6xl font-bold mb-4 sm:mb-6 tracking-tight">
           Why <span className="bg-gradient-to-r from-pink-500 to-cyan-500 bg-clip-text text-transparent">Participate?</span>
         </h2>
-            <p className="text-xl text-gray-300 max-w-3xl mx-auto">
+            <p className="text-lg sm:text-xl lg:text-2xl text-gray-300 max-w-3xl mx-auto px-4 leading-relaxed">
               Experience the thrill of innovation, learn from industry experts, and build solutions that matter in just 24 hours.
         </p>
           </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
           {features.map((feature, index) => (
             <div
               key={index}
-                className={`glass-card p-8 interactive-card group relative overflow-hidden ${feature.color} border ${feature.borderColor}`}
+                className={`glass-card p-4 sm:p-5 lg:p-6 interactive-card group relative overflow-hidden ${feature.color} border ${feature.borderColor}`}
               style={{ 
                 animationDelay: `${index * 0.1}s`,
                 }}
@@ -468,17 +468,17 @@ const HackathonLanding = () => {
                 <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
                 
                 {/* Icon */}
-                <div className="text-6xl mb-6 group-hover:scale-110 transition-transform duration-500">
-                  {feature.icon}
+                <div className="mb-3 sm:mb-4 group-hover:scale-110 transition-transform duration-500">
+                  <feature.icon className="h-8 w-8 sm:h-10 sm:w-10 lg:h-12 lg:w-12 text-gray-400 group-hover:text-white transition-colors" />
                 </div>
                 
                 {/* Title */}
-                <h3 className="text-2xl font-bold mb-4 text-white group-hover:bg-gradient-to-r group-hover:from-pink-500 group-hover:to-cyan-500 group-hover:bg-clip-text group-hover:text-transparent transition-all duration-300">
+                <h3 className="text-base sm:text-lg lg:text-xl font-bold mb-2 sm:mb-3 text-white group-hover:bg-gradient-to-r group-hover:from-pink-500 group-hover:to-cyan-500 group-hover:bg-clip-text group-hover:text-transparent transition-all duration-300">
                   {feature.title}
                 </h3>
                 
                 {/* Description */}
-                <p className="text-gray-400 leading-relaxed group-hover:text-gray-300 transition-colors duration-300">
+                <p className="text-xs sm:text-sm lg:text-base text-gray-400 leading-relaxed group-hover:text-gray-300 transition-colors duration-300">
                   {feature.description}
                 </p>
                 
@@ -491,53 +491,53 @@ const HackathonLanding = () => {
       </section>
 
       {/* Enhanced Schedule Section */}
-      <section id="schedule" className="py-32 relative">
-        <div className="max-w-7xl mx-auto px-6">
-          <div className="text-center mb-20">
-            <h2 className="text-5xl md:text-6xl font-bold mb-6 tracking-tight">
+      <section id="schedule" className="py-12 sm:py-20 lg:py-24 relative">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6">
+          <div className="text-center mb-8 sm:mb-12 lg:mb-16">
+            <h2 className="text-3xl sm:text-5xl md:text-6xl font-bold mb-4 sm:mb-6 tracking-tight">
           Event <span className="bg-gradient-to-r from-pink-500 to-cyan-500 bg-clip-text text-transparent">Schedule</span>
         </h2>
-            <div className="inline-flex items-center px-8 py-4 rounded-full glass-card">
-              <Calendar className="h-6 w-6 mr-3 text-cyan-400" />
-              <span className="text-xl text-gray-300">September 26-27, 2025 • MBC Kuttikkanam, Kerala</span>
+            <div className="inline-flex items-center px-4 py-2 sm:px-8 sm:py-4 rounded-full glass-card">
+              <Calendar className="h-4 w-4 sm:h-6 sm:w-6 mr-2 sm:mr-3 text-cyan-400" />
+              <span className="text-sm sm:text-xl text-gray-300">September 26-27, 2025 • MBC Kuttikkanam, Kerala</span>
             </div>
           </div>
 
           <div className="relative max-w-4xl mx-auto">
-            {/* Timeline Line */}
-            <div className="absolute left-1/2 transform -translate-x-0.5 w-1 h-full bg-gradient-to-b from-pink-500 via-purple-500 to-cyan-500 rounded-full"></div>
+            {/* Timeline Line - Hidden on mobile for cleaner look */}
+            <div className="hidden md:block absolute left-1/2 transform -translate-x-0.5 w-1 h-full bg-gradient-to-b from-pink-500 via-purple-500 to-cyan-500 rounded-full"></div>
           
           {timeline.map((item, index) => (
             <div 
               key={index} 
-                className={`flex items-center mb-16 group ${index % 2 === 0 ? '' : 'flex-row-reverse'}`}
+                className={`flex flex-col md:flex-row items-center mb-8 sm:mb-16 group ${index % 2 === 0 ? '' : 'md:flex-row-reverse'}`}
               >
-                <div className={`flex-1 ${index % 2 === 0 ? 'text-right pr-12' : 'text-left pl-12'}`}>
-                  <div className="glass-card p-8 interactive-card group-hover:shadow-2xl">
-                    <div className="flex items-center gap-3 mb-4">
-                      <span className="text-3xl">{item.icon}</span>
-                      <h3 className="text-2xl font-bold text-white group-hover:bg-gradient-to-r group-hover:from-pink-500 group-hover:to-cyan-500 group-hover:bg-clip-text group-hover:text-transparent transition-all duration-300">
+                <div className={`flex-1 w-full ${index % 2 === 0 ? 'md:text-right md:pr-12' : 'md:text-left md:pl-12'} mb-4 md:mb-0`}>
+                  <div className="glass-card p-4 sm:p-8 interactive-card group-hover:shadow-2xl">
+                    <div className="flex items-center gap-3 mb-3 sm:mb-4 justify-center md:justify-start">
+                      <item.icon className="h-6 w-6 sm:h-8 sm:w-8 text-pink-400" />
+                      <h3 className="text-lg sm:text-2xl font-bold text-white group-hover:bg-gradient-to-r group-hover:from-pink-500 group-hover:to-cyan-500 group-hover:bg-clip-text group-hover:text-transparent transition-all duration-300">
                         {item.title}
                       </h3>
                     </div>
                     
-                    <div className="flex items-center gap-2 mb-4 text-pink-400 font-medium">
-                      <Clock className="h-5 w-5" />
-                      {item.time}
+                    <div className="flex items-center gap-2 mb-3 sm:mb-4 text-pink-400 font-medium justify-center md:justify-start">
+                      <Clock className="h-4 w-4 sm:h-5 sm:w-5" />
+                      <span className="text-sm sm:text-base">{item.time}</span>
                     </div>
                     
-                    <p className="text-gray-400 group-hover:text-gray-300 transition-colors duration-300">
+                    <p className="text-sm sm:text-base text-gray-400 group-hover:text-gray-300 transition-colors duration-300 text-center md:text-left">
                       {item.description}
                     </p>
                   </div>
               </div>
               
-                {/* Timeline Node */}
-                <div className="w-8 h-8 bg-gradient-to-br from-pink-500 to-cyan-500 rounded-full relative z-10 shadow-lg shadow-pink-500/50 group-hover:scale-125 transition-transform duration-300 flex items-center justify-center">
+                {/* Timeline Node - Hidden on mobile */}
+                <div className="hidden md:flex w-8 h-8 bg-gradient-to-br from-pink-500 to-cyan-500 rounded-full relative z-10 shadow-lg shadow-pink-500/50 group-hover:scale-125 transition-transform duration-300 items-center justify-center">
                   <div className="w-4 h-4 bg-white rounded-full"></div>
               </div>
               
-              <div className="flex-1" />
+              <div className="hidden md:block flex-1" />
             </div>
           ))}
           </div>
@@ -545,33 +545,33 @@ const HackathonLanding = () => {
       </section>
 
       {/* Enhanced Prizes Section */}
-      <section id="prizes" className="py-32 relative">
-        <div className="max-w-7xl mx-auto px-6">
-          <div className="glass-card p-16 relative overflow-hidden">
-            <div className="text-center mb-20">
-              <h2 className="text-5xl md:text-6xl font-bold mb-6 tracking-tight">
+      <section id="prizes" className="py-12 sm:py-20 lg:py-24 relative">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6">
+          <div className="glass-card p-6 sm:p-12 lg:p-16 relative overflow-hidden">
+            <div className="text-center mb-8 sm:mb-12 lg:mb-16">
+              <h2 className="text-3xl sm:text-5xl md:text-6xl font-bold mb-4 sm:mb-6 tracking-tight">
             Amazing <span className="bg-gradient-to-r from-pink-500 to-cyan-500 bg-clip-text text-transparent">Prizes</span>
           </h2>
-              <p className="text-2xl text-gray-300">₹1,50,000 total prize pool with special recognitions from sponsors</p>
+              <p className="text-lg sm:text-2xl text-gray-300">₹1,50,000 total prize pool with special recognitions from sponsors</p>
             </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-8 mb-8 sm:mb-16">
             {prizes.map((prize, index) => (
               <div
                 key={index}
-                  className={`text-center p-12 glass-card interactive-card relative overflow-hidden ${
-                    index === 0 ? 'ring-2 ring-yellow-500/50 bg-gradient-to-b from-yellow-500/10 to-transparent' : ''
+                  className={`text-center p-6 sm:p-12 glass-card interactive-card relative overflow-hidden ${
+                    index === 0 ? 'ring-2 ring-yellow-500/50 bg-gradient-to-b from-yellow-500/10 to-transparent lg:col-span-1 sm:col-span-2' : ''
                   }`}
                 >
                   {/* First Place Crown */}
                 {index === 0 && (
-                    <div className="absolute -top-4 left-1/2 transform -translate-x-1/2 text-4xl">
-                    👑
+                    <div className="absolute -top-2 sm:-top-4 left-1/2 transform -translate-x-1/2">
+                    <Trophy className="h-6 w-6 sm:h-10 sm:w-10 text-yellow-400" />
                   </div>
                 )}
                 
                   {/* Prize Amount */}
-                  <div className={`text-6xl font-bold mb-4 ${
+                  <div className={`text-3xl sm:text-6xl font-bold mb-2 sm:mb-4 ${
                   index === 0 
                     ? 'bg-gradient-to-r from-yellow-400 to-amber-300 bg-clip-text text-transparent' 
                     : 'bg-gradient-to-r from-pink-500 to-cyan-500 bg-clip-text text-transparent'
@@ -580,14 +580,14 @@ const HackathonLanding = () => {
                 </div>
                 
                   {/* Prize Place */}
-                  <div className={`text-2xl font-semibold mb-6 ${
+                  <div className={`text-lg sm:text-2xl font-semibold mb-3 sm:mb-6 ${
                   index === 0 ? 'text-yellow-300' : 'text-gray-300'
                 }`}>
                   {prize.place}
                 </div>
                 
                   {/* Prize Description */}
-                  <p className="text-gray-400 group-hover:text-gray-200 transition-colors duration-300 text-lg">
+                  <p className="text-sm sm:text-lg text-gray-400 group-hover:text-gray-200 transition-colors duration-300">
                   {prize.description}
                 </p>
               </div>
@@ -595,13 +595,13 @@ const HackathonLanding = () => {
           </div>
 
             {/* Judging Criteria */}
-            <div className="text-center glass-card p-8">
-              <h3 className="text-2xl font-bold mb-6 bg-gradient-to-r from-pink-500 to-cyan-500 bg-clip-text text-transparent">
+            <div className="text-center glass-card p-4 sm:p-8">
+              <h3 className="text-lg sm:text-2xl font-bold mb-4 sm:mb-6 bg-gradient-to-r from-pink-500 to-cyan-500 bg-clip-text text-transparent">
                 Judging Criteria
               </h3>
-              <div className="grid grid-cols-1 md:grid-cols-5 gap-4 text-sm">
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 gap-3 sm:gap-4 text-xs sm:text-sm">
                 {['Innovation & Creativity', 'Sustainability & Impact', 'Social Relevance', 'Technical Execution', 'Presentation'].map((criteria, index) => (
-                  <div key={index} className="glass-card p-4 hover:bg-white/10 transition-colors">
+                  <div key={index} className="glass-card p-3 sm:p-4 hover:bg-white/10 transition-colors">
                     {criteria}
                   </div>
                 ))}
@@ -612,32 +612,32 @@ const HackathonLanding = () => {
       </section>
 
       {/* Enhanced Tips Section */}
-      <section className="py-32 relative">
-        <div className="max-w-7xl mx-auto px-6">
-          <div className="text-center mb-20">
-            <h2 className="text-5xl md:text-6xl font-bold mb-6 tracking-tight">
+      <section className="py-12 sm:py-20 lg:py-24 relative">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6">
+          <div className="text-center mb-8 sm:mb-12 lg:mb-16">
+            <h2 className="text-3xl sm:text-5xl md:text-6xl font-bold mb-4 sm:mb-6 tracking-tight">
           Pro Tips to <span className="bg-gradient-to-r from-pink-500 to-cyan-500 bg-clip-text text-transparent">Win</span>
         </h2>
-            <p className="text-xl text-gray-300 max-w-3xl mx-auto">
+            <p className="text-lg sm:text-xl text-gray-300 max-w-3xl mx-auto px-4">
           Insider strategies from previous winners and industry experts
         </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
           {tips.map((tip, index) => (
             <div
               key={index}
-                className="glass-card p-10 interactive-card group relative overflow-hidden"
+                className="glass-card p-4 sm:p-6 lg:p-8 interactive-card group relative overflow-hidden"
               >
-                <div className="flex items-start gap-6">
-                  <div className="text-6xl p-4 glass-card group-hover:scale-110 transition-transform duration-300">
-                    {tip.icon}
+                <div className="flex flex-col sm:flex-row items-center sm:items-start gap-3 sm:gap-4">
+                  <div className="p-2 sm:p-3 glass-card group-hover:scale-110 transition-transform duration-300">
+                    <tip.icon className="h-6 w-6 sm:h-8 sm:w-8 lg:h-10 lg:w-10 text-gray-400 group-hover:text-white transition-colors" />
                   </div>
-                  <div className="flex-1">
-                    <h3 className="text-2xl font-bold mb-4 text-white group-hover:bg-gradient-to-r group-hover:from-pink-500 group-hover:to-cyan-500 group-hover:bg-clip-text group-hover:text-transparent transition-all duration-300">
+                  <div className="flex-1 text-center sm:text-left">
+                    <h3 className="text-base sm:text-lg lg:text-xl font-bold mb-2 sm:mb-3 text-white group-hover:bg-gradient-to-r group-hover:from-pink-500 group-hover:to-cyan-500 group-hover:bg-clip-text group-hover:text-transparent transition-all duration-300">
                       {tip.title}
                     </h3>
-                    <p className="text-gray-400 leading-relaxed group-hover:text-gray-300 transition-colors duration-300">
+                    <p className="text-xs sm:text-sm lg:text-base text-gray-400 leading-relaxed group-hover:text-gray-300 transition-colors duration-300">
                       {tip.description}
                     </p>
                   </div>
@@ -649,27 +649,25 @@ const HackathonLanding = () => {
       </section>
 
       {/* Enhanced Sponsors Section */}
-      <section id="sponsors" className="py-32 relative">
-        <div className="max-w-7xl mx-auto px-6">
-          <div className="text-center mb-20">
-            <h2 className="text-5xl md:text-6xl font-bold mb-6 tracking-tight">
+      <section id="sponsors" className="py-12 sm:py-20 lg:py-24 relative">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6">
+          <div className="text-center mb-8 sm:mb-12 lg:mb-16">
+            <h2 className="text-3xl sm:text-5xl md:text-6xl font-bold mb-4 sm:mb-6 tracking-tight">
           Our <span className="bg-gradient-to-r from-pink-500 to-cyan-500 bg-clip-text text-transparent">Sponsors</span>
         </h2>
-            <p className="text-xl text-gray-300">
+            <p className="text-lg sm:text-xl text-gray-300 px-4">
           Supported by industry leaders who believe in innovation
         </p>
           </div>
         
           {/* Sponsor Grid */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mb-16">
-          {[1, 2, 3, 4, 5, 6, 7, 8].map((_, index) => (
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4 sm:gap-8 mb-8 sm:mb-16">
+          {[Rocket, Code, Settings, Target, Zap, Trophy, Star, Lightbulb].map((IconComponent, index) => (
             <div 
               key={index} 
                 className="aspect-[3/2] glass-card flex items-center justify-center group interactive-card"
             >
-                <div className="text-5xl opacity-30 group-hover:opacity-70 transition-opacity duration-300 group-hover:scale-110">
-                {index % 4 === 0 ? '🚀' : index % 4 === 1 ? '💻' : index % 4 === 2 ? '⚙️' : '🔍'}
-              </div>
+                <IconComponent className="h-8 w-8 sm:h-12 sm:w-12 text-gray-500 opacity-30 group-hover:opacity-70 group-hover:text-white transition-all duration-300 group-hover:scale-110" />
             </div>
           ))}
         </div>
@@ -687,27 +685,27 @@ const HackathonLanding = () => {
       </section>
 
       {/* Enhanced CTA Section */}
-      <section className="py-32 relative">
-        <div className="max-w-4xl mx-auto px-6 text-center">
-          <div className="glass-card p-16 relative overflow-hidden">
-            <h2 className="text-5xl md:text-6xl font-bold mb-8 tracking-tight">
+      <section className="py-12 sm:py-20 lg:py-24 relative">
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <div className="glass-card p-8 sm:p-12 lg:p-20 relative overflow-hidden">
+            <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-4 sm:mb-6 tracking-tight">
           Ready to <span className="bg-gradient-to-r from-pink-500 to-cyan-500 bg-clip-text text-transparent">Code the Grid?</span>
         </h2>
-            <p className="text-2xl text-gray-400 mb-8">
-              Join 370+ innovators for HASH 2K25. Registration fee: ₹400 per team (food separate).
+            <p className="text-base sm:text-lg md:text-xl lg:text-2xl text-gray-400 mb-6 sm:mb-8 lg:mb-10 px-2 sm:px-4 max-w-3xl mx-auto leading-relaxed">
+              Join 370+ innovators for HASHITUP. Registration fee: ₹400 per team (food separate).
             </p>
             
             {/* Registration Details */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 mb-8 sm:mb-10">
               {[
-                { label: 'Registration Deadline', value: '10th September 2025', icon: '📅' },
-                { label: 'Shortlist Results', value: '15th - 17th September 2025', icon: '📋' },
-                { label: 'Max Teams', value: '100 teams only', icon: '👥' }
+                { label: 'Registration Deadline', value: '10th September 2025', icon: Calendar },
+                { label: 'Shortlist Results', value: '15th - 17th September 2025', icon: CheckCircle },
+                { label: 'Max Teams', value: '100 teams only', icon: Users }
               ].map((item, index) => (
-                <div key={index} className="glass-card p-6">
-                  <div className="text-3xl mb-2">{item.icon}</div>
-                  <div className="text-lg font-semibold text-white mb-1">{item.label}</div>
-                  <div className="text-gray-400">{item.value}</div>
+                <div key={index} className="glass-card p-4 sm:p-6 hover:scale-105 transition-transform duration-300">
+                  <item.icon className="h-6 w-6 sm:h-8 sm:w-8 mb-2 sm:mb-3 text-pink-400 mx-auto" />
+                  <div className="text-sm sm:text-base font-semibold text-white mb-1">{item.label}</div>
+                  <div className="text-xs sm:text-sm text-gray-400">{item.value}</div>
                 </div>
               ))}
         </div>
@@ -715,11 +713,11 @@ const HackathonLanding = () => {
             {session ? (
               <Link
           href="/dashboard"
-                className="group inline-flex items-center px-12 py-6 bg-gradient-to-r from-pink-500 via-purple-500 to-cyan-500 text-white font-bold text-xl rounded-xl transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl hover:shadow-pink-500/30 relative overflow-hidden"
+                className="group inline-flex items-center px-6 py-3 sm:px-8 sm:py-4 lg:px-10 lg:py-5 bg-gradient-to-r from-pink-500 via-purple-500 to-cyan-500 text-white font-bold text-base sm:text-lg lg:text-xl rounded-xl transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl hover:shadow-pink-500/30 relative overflow-hidden mb-4 sm:mb-6"
               >
-                <span className="relative z-10 flex items-center space-x-3">
+                <span className="relative z-10 flex items-center space-x-2 lg:space-x-3">
                   <span>Go to Dashboard</span>
-                  <Zap className="h-6 w-6 group-hover:rotate-12 transition-transform" />
+                  <Zap className="h-4 w-4 sm:h-5 sm:w-5 lg:h-6 lg:w-6 group-hover:rotate-12 transition-transform" />
                 </span>
                 <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700 ease-in-out" />
               </Link>
@@ -727,18 +725,18 @@ const HackathonLanding = () => {
               <button
                 onClick={handleSignIn}
                 disabled={isSigningIn || status === 'loading'}
-                className="group inline-flex items-center px-12 py-6 bg-gradient-to-r from-pink-500 via-purple-500 to-cyan-500 text-white font-bold text-xl rounded-xl transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl hover:shadow-pink-500/30 relative overflow-hidden disabled:opacity-50 disabled:cursor-not-allowed"
+                className="group inline-flex items-center px-6 py-3 sm:px-8 sm:py-4 lg:px-10 lg:py-5 bg-gradient-to-r from-pink-500 via-purple-500 to-cyan-500 text-white font-bold text-base sm:text-lg lg:text-xl rounded-xl transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl hover:shadow-pink-500/30 relative overflow-hidden disabled:opacity-50 disabled:cursor-not-allowed mb-4 sm:mb-6"
               >
-                <span className="relative z-10 flex items-center space-x-3">
+                <span className="relative z-10 flex items-center space-x-2 lg:space-x-3">
                   {isSigningIn || status === 'loading' ? (
                     <>
-                      <div className="w-6 h-6 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                      <div className="w-4 h-4 sm:w-5 sm:h-5 lg:w-6 lg:h-6 border-2 border-white/30 border-t-white rounded-full animate-spin" />
                       <span>Signing in...</span>
                     </>
                   ) : (
                     <>
                       <span>Register Your Team Now</span>
-                      <Zap className="h-6 w-6 group-hover:rotate-12 transition-transform" />
+                      <Zap className="h-4 w-4 sm:h-5 sm:w-5 lg:h-6 lg:w-6 group-hover:rotate-12 transition-transform" />
                     </>
                   )}
                 </span>
@@ -746,7 +744,7 @@ const HackathonLanding = () => {
               </button>
             )}
             
-            <p className="text-gray-500 mt-6 text-sm">
+            <p className="text-gray-500 mt-3 sm:mt-4 text-xs sm:text-sm lg:text-base px-4 sm:px-6 max-w-2xl mx-auto leading-relaxed">
           ⚠️ Registration fee is non-refundable • College letterhead confirmation required
         </p>
           </div>
@@ -754,39 +752,39 @@ const HackathonLanding = () => {
       </section>
 
       {/* Enhanced Footer */}
-      <footer id="contact" className="border-t border-white/10 py-20">
-        <div className="max-w-7xl mx-auto px-6">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-12 mb-12">
+      <footer id="contact" className="border-t border-white/10 py-12 sm:py-16 lg:py-20">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 sm:gap-12 lg:gap-16 mb-8 sm:mb-12 lg:mb-16">
             {/* Brand Column */}
-            <div className="md:col-span-2">
-              <div className="flex items-center space-x-3 mb-6">
-                <div className="w-12 h-12 rounded-xl bg-gradient-to-r from-pink-500 to-cyan-500 flex items-center justify-center">
-                  <Code className="h-8 w-8 text-white" />
+            <div className="sm:col-span-2 lg:col-span-2 text-center sm:text-left">
+              <div className="flex items-center justify-center sm:justify-start space-x-3 sm:space-x-4 mb-6 sm:mb-8">
+                <div className="w-12 h-12 sm:w-14 sm:h-14 lg:w-16 lg:h-16 rounded-xl bg-gradient-to-r from-pink-500 to-cyan-500 flex items-center justify-center">
+                  <Code className="h-6 w-6 sm:h-8 sm:w-8 lg:h-10 lg:w-10 text-white" />
                 </div>
-                <span className="text-3xl font-bold bg-gradient-to-r from-pink-500 via-purple-500 to-cyan-500 bg-clip-text text-transparent">
-                  HASH 2K25
+                <span className="text-2xl sm:text-3xl lg:text-4xl font-bold bg-gradient-to-r from-pink-500 via-purple-500 to-cyan-500 bg-clip-text text-transparent">
+                  HASHITUP
                 </span>
               </div>
-              <p className="text-gray-400 text-lg mb-6 max-w-md">
+              <p className="text-gray-400 text-base sm:text-lg lg:text-xl mb-6 sm:mb-8 max-w-lg mx-auto sm:mx-0 leading-relaxed">
                 National Level 24-Hour Hackathon. Where innovation meets execution, and dreams become reality.
               </p>
-              <div className="flex space-x-4">
-            {['🐦', '💼', '💬', '📸'].map((emoji, index) => (
+              <div className="flex space-x-4 sm:space-x-6 justify-center sm:justify-start">
+            {[Twitter, Linkedin, MessageCircle, Instagram].map((IconComponent, index) => (
               <a
                 key={index}
                 href="#"
-                    className="w-12 h-12 glass-card flex items-center justify-center text-xl transition-all duration-300 hover:scale-110 hover:bg-white/20"
+                    className="w-12 h-12 sm:w-14 sm:h-14 lg:w-16 lg:h-16 glass-card flex items-center justify-center transition-all duration-300 hover:scale-110 hover:bg-white/20"
               >
-                {emoji}
+                <IconComponent className="h-5 w-5 sm:h-6 sm:w-6 lg:h-7 lg:w-7 text-gray-400 hover:text-white transition-colors" />
               </a>
             ))}
               </div>
           </div>
           
             {/* Quick Links */}
-            <div>
-              <h3 className="text-xl font-bold mb-6 text-white">Quick Links</h3>
-              <div className="space-y-3">
+            <div className="text-center sm:text-left">
+              <h3 className="text-lg sm:text-xl lg:text-2xl font-bold mb-4 sm:mb-6 lg:mb-8 text-white">Quick Links</h3>
+              <div className="space-y-3 sm:space-y-4">
                 {[
                   { href: '#about', label: 'About' },
                   { href: '#schedule', label: 'Schedule' },
@@ -798,7 +796,7 @@ const HackathonLanding = () => {
                   <a
                     key={index}
                     href={item.href}
-                    className="block text-gray-400 hover:text-white transition-colors"
+                    className="block text-sm sm:text-base lg:text-lg text-gray-400 hover:text-white transition-colors duration-300 hover:pl-2"
                   >
                     {item.label}
                   </a>
@@ -807,18 +805,18 @@ const HackathonLanding = () => {
             </div>
             
             {/* Contact Info */}
-            <div>
-              <h3 className="text-xl font-bold mb-6 text-white">Contact</h3>
-              <div className="space-y-3 text-gray-400">
-                <div className="flex items-center space-x-2">
-                  <MapPin className="h-4 w-4" />
-                  <span>Kuttikkanam, Kerala</span>
+            <div className="text-center sm:text-left">
+              <h3 className="text-lg sm:text-xl lg:text-2xl font-bold mb-4 sm:mb-6 lg:mb-8 text-white">Contact</h3>
+              <div className="space-y-3 sm:space-y-4 text-gray-400">
+                <div className="flex items-center justify-center sm:justify-start space-x-3">
+                  <MapPin className="h-4 w-4 sm:h-5 sm:w-5 lg:h-6 lg:w-6 text-pink-400" />
+                  <span className="text-sm sm:text-base lg:text-lg">Kuttikkanam, Kerala</span>
                 </div>
-                <div className="flex items-center space-x-2">
-                  <Calendar className="h-4 w-4" />
-                  <span>Sep 26-27, 2025</span>
+                <div className="flex items-center justify-center sm:justify-start space-x-3">
+                  <Calendar className="h-4 w-4 sm:h-5 sm:w-5 lg:h-6 lg:w-6 text-pink-400" />
+                  <span className="text-sm sm:text-base lg:text-lg">Sep 26-27, 2025</span>
                 </div>
-                <p className="text-sm">
+                <p className="text-xs sm:text-sm lg:text-base leading-relaxed">
                   Questions? Contact the organizing team
                 </p>
               </div>
@@ -826,13 +824,13 @@ const HackathonLanding = () => {
           </div>
           
           {/* Bottom Footer */}
-          <div className="border-t border-white/10 pt-8 flex flex-col md:flex-row justify-between items-center">
-            <p className="text-gray-500 text-sm mb-4 md:mb-0">
-              © 2025 Hash 2K25 Hackathon Platform. All rights reserved.
+          <div className="border-t border-white/10 pt-6 sm:pt-8 lg:pt-12 flex flex-col items-center space-y-6 sm:space-y-8 lg:flex-row lg:justify-between lg:space-y-0">
+            <p className="text-gray-500 text-sm sm:text-base lg:text-lg text-center order-2 lg:order-1">
+              © 2025 HASHITUP Hackathon Platform. All rights reserved.
             </p>
-            <div className="flex items-center space-x-4">
-              <span className="text-sm text-gray-600">Organized by</span>
-              <span className="text-sm bg-gradient-to-r from-pink-500 to-cyan-500 bg-clip-text text-transparent font-semibold">
+            <div className="flex flex-col sm:flex-row items-center space-y-2 sm:space-y-0 sm:space-x-4 lg:space-x-6 order-1 lg:order-2">
+              <span className="text-sm sm:text-base lg:text-lg text-gray-600">Organized by</span>
+              <span className="text-sm sm:text-base lg:text-lg bg-gradient-to-r from-pink-500 to-cyan-500 bg-clip-text text-transparent font-semibold text-center">
                 Dept. of CSE, MBC Kuttikkanam
               </span>
             </div>
