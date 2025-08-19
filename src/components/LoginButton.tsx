@@ -94,7 +94,7 @@ export function LoginButton() {
       size="lg"
       onClick={handleLogin}
       isLoading={isLoading}
-      className="bg-gradient-to-r from-pink-500 via-purple-500 to-cyan-500 hover:-translate-y-0.5 transition-all duration-300 shadow-lg shadow-pink-500/30 px-6 py-2 text-sm font-medium rounded-xl relative overflow-hidden group"
+      className="bg-gradient-to-r from-emerald-500 via-blue-500 to-teal-500 hover:-translate-y-0.5 transition-all duration-300 shadow-lg shadow-emerald-500/30 px-6 py-2 text-sm font-medium rounded-xl relative overflow-hidden group"
     >
       <span className="relative z-10">{isLoading ? 'Signing in...' : 'Get Started'}</span>
       <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700 ease-in-out" />

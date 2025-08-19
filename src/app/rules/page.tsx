@@ -359,13 +359,13 @@ export default function RulesPage() {
         {/* Call to Action */}
         <div className="mt-16 text-center">
           <div className="bg-gradient-to-r from-slate-800/50 to-slate-700/50 border border-slate-600 rounded-2xl p-8">
-            <h3 className="text-2xl font-bold mb-4">Ready to Join HASH 2K25?</h3>
+            <h3 className="text-2xl font-bold mb-4">Ready to Join GEN 201?</h3>
             <p className="text-gray-400 mb-6">
-              Register your team and be part of this amazing 24-hour innovation journey!
+              Register your team and be part of creating the next generation of makers!
             </p>
             <Link
               href="/dashboard"
-              className="inline-block px-8 py-4 bg-gradient-to-r from-pink-500 via-purple-500 to-cyan-500 text-white font-semibold rounded-xl transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl hover:shadow-pink-500/30"
+              className="inline-block px-8 py-4 bg-gradient-to-r from-emerald-500 via-blue-500 to-teal-500 text-white font-semibold rounded-xl transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl hover:shadow-emerald-500/30"
             >
               Register Your Team Now ⚡
             </Link>

@@ -113,7 +113,7 @@
 
 /* Gradient Text */
 .gradient-text {
-  @apply bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent;
+  @apply bg-gradient-to-r from-emerald-400 to-blue-400 bg-clip-text text-transparent;
 }
 
 /* Animations */

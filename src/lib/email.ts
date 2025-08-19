@@ -118,7 +118,7 @@ export const emailTemplates = {
       <p>Your project <strong>${projectName}</strong> status has been updated to: <strong>${status}</strong></p>
       ${status === 'SELECTED' ? '<p>Congratulations! Your project has been selected for the next round.</p>' : ''}
       ${status === 'REJECTED' ? '<p>We appreciate your participation. Keep innovating!</p>' : ''}
-      <p>Best regards,<br>Hash 2K25 Team</p>
+      <p>Best regards,<br>GEN 201 Team</p>
     `,
   }),
 } 

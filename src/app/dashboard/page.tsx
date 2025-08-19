@@ -721,8 +721,13 @@ export default async function DashboardPage() {
             </div>
           </div>
         </div>
-      </div>
-    </div>
-    </>
-  )
-}
+            <div className="text-center md:text-left">
+              <p className="text-slate-500 mb-1 text-xs sm:text-base">
+                © 2025 GEN 201 Hackathon Platform. All rights reserved.
+              </p>
+              <div className="flex items-center justify-center md:justify-start space-x-1 sm:space-x-4">
+                <span className="text-xs sm:text-sm text-slate-600">Made with</span>
+                <Heart className="w-4 h-4 sm:w-5 sm:h-5 text-emerald-500 fill-current" />
+                <span className="text-xs sm:text-sm text-slate-600">by the GEN 201 Team</span>
+              </div>
+            </div>

@@ -42,7 +42,7 @@ export function AdminHeader({ user }: AdminHeaderProps) {
         <div className="flex justify-between items-center h-16">
           <div className="flex items-center">
             <h1 className="text-2xl font-bold text-gray-900">
-              Code<span className="text-blue-600">N</span>Chip
+              GEN<span className="text-emerald-600">201</span>
             </h1>
             <span className="ml-4 text-sm text-gray-500">
               Admin Panel

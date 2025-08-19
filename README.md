@@ -75,7 +75,7 @@ FROM_EMAIL="hash 2k25@yourorganization.com"
 ADMIN_EMAILS="admin1@example.com,admin2@example.com"
 
 # Application Configuration
-APP_NAME="Hash 2K25 Hackathon"
+APP_NAME="GEN 201 Hackathon"
 APP_URL="http://localhost:3000"
 \`\`\`
 

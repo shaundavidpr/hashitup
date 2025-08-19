@@ -275,13 +275,13 @@ export function BulkEmailForm() {
                 onClick={() => {
                   setFormData({
                     ...formData,
-                    subject: 'Project Status Update - Hash 2K25 Hackathon',
+                    subject: 'Project Status Update - GEN 201 Hackathon',
                     message: `<h2>Project Status Update</h2>
 <p>Dear Team,</p>
 <p>Your project submission has been reviewed and the status has been updated.</p>
 <p>Please check your dashboard for the latest status and any additional instructions.</p>
 <p>If you have any questions, please don't hesitate to contact us.</p>
-<p>Best regards,<br>Hash 2K25 Team</p>`,
+<p>Best regards,<br>GEN 201 Team</p>`,
                   })
                 }}
                 variant="outline"

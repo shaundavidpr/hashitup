@@ -1,11 +1,11 @@
 {
-  "name": "Hash 2K25 - National Hackathon",
-  "short_name": "Hash 2K25",
+  "name": "GEN 201 - National Hackathon",
+  "short_name": "GEN 201",
   "description": "India's premier national hackathon fostering innovation and technological excellence",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#0f172a",
-  "theme_color": "#3b82f6",
+  "theme_color": "#10b981",
   "orientation": "portrait-primary",
   "icons": [
     {

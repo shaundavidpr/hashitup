@@ -106,7 +106,7 @@ export function DashboardHeader({ user }: DashboardHeaderProps) {
             <div className="flex items-center space-x-4">
               <Link href="/" className="flex items-center">
                 <h1 className="text-2xl font-bold bg-gradient-to-r from-pink-500 via-cyan-400 to-blue-500 bg-clip-text text-transparent animate-float">
-                  Code<span className="font-extrabold">N</span>Chip
+                  GEN<span className="font-extrabold">201</span>
                 </h1>
               </Link>
               
